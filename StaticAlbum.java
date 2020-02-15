@@ -25,7 +25,7 @@ public class StaticAlbum {
 	
 	// A class can have any number of constructors with different parameter lists.
 	/**
-	 * Constructs an Album with the given title, artist, and release year, and 0 sales.
+	 * Constructs an Album with the given title, artist, and release year, and zero sales.
 	 */
 	public StaticAlbum(String title, String artist, int releaseYear) {
 		this(title, artist, releaseYear, 0);

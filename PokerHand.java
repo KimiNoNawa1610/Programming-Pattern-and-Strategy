@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author votha
+ * @author Nhan Vo
  */
 public class PokerHand {
     public enum HandType{
