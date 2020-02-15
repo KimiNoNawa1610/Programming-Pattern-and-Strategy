@@ -7,7 +7,7 @@ package lab3;
 
 /**
  *
- * @author votha
+ * @author Nhan Vo
  */
 public class Card {
     private Cardsuit CardSuit;
