@@ -7,7 +7,7 @@ public class Album {
 	private int mReleaseYear;
 	private int mSales;
 	
-	// An "enum" stands for "enumeration": a type where the only valid values of the type
+	// An "enum" stands for "enumeration": A type where the only valid values of the type
 	// are explicitly listed and named.
 	public enum RiaaCertifications {
 		NONE,
