@@ -49,8 +49,8 @@ public class Elevator {
         return number_of_elevator;
     }
    
-    public Elevator(){
-        number_of_elevator=building.getElevators().size();
+    public Elevator(int ele){
+        number_of_elevator=ele;
         current_floor=1;
         current_state=Current_state.IDLE_STATE;
         current_direction=Current_direction.NOT_MOVING;
