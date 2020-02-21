@@ -6,7 +6,6 @@
 package project1;
 
 import java.util.ArrayList;
-import java.util.Random;
 import static project1.Simulation.getRandom;
 
 /**
@@ -26,15 +25,26 @@ public class Building{
     public ArrayList<Elevator> getElevators(){
         return Elevators;
     }
-    
-    public String getElevatoroffloor(){
-        return "x";
+    public Building(int numele,int floor){
+        for(int i=0;i<numele;i++){
+            Elevators.add(new Elevator(i));
+        }
+        for(int i=0;i<floor;i++){
+            floors.add(new ArrayList<Integer>());
+        }
     }
+   
+                
     
     public void tick(){
-        Random random=new Random();
         for(int i=1;i<floors.size();i++){
-            ;
+            int pass=getRandom().nextInt(19);
+            if(pass==0){
+                ArrayList<Integer> floorlist=new ArrayList<>();
+                floorlist.add(getRandom().nextInt(floors.size()));
+                floors.add(i, floorlist);
+                break;
+            }
         }
     }
     @Override
@@ -42,14 +52,16 @@ public class Building{
         String x=" x |";
         int i=1;
         String z= i+"|";
-        while(i<floors.size()){
+        while(i<floors.size()-1){
             i++;
             for(int j=0;j<Elevators.size();j++){
                 z=z+x;     
-            }     
+            }    
+            
 }
          return z+getFloor(i);
     }
 }
+
         
     
