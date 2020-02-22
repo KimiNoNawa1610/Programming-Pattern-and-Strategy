@@ -45,7 +45,13 @@ public class Building{
                 floors.add(i, floorlist);
                 break;
             }
+            
         }
+        for(Elevator i: Elevators){
+            i.tick();
+        }
+        
+        
     }
     @Override
     public String toString(){
