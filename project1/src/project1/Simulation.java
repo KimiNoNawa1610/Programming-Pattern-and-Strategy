@@ -28,12 +28,25 @@ public static void main(String[] args){
         
         System.out.println("Please enter the number of floor: ");
         int numfloor=scan.nextInt();
+                
         
         System.out.println("Please enter the number of elevator: ");
         int numele=scan.nextInt();
         
-        Building building= new Building(numele,numfloor);
-        System.out.println(building);
+        Building building1= new Building(numele,numfloor);
+        System.out.println(building1);
+        scan.nextLine();
+        System.out.println("Simulate how many steps ?");
+        int i=0;
+        while(true){
+            i++;
+            System.out.println("Step: "+i);
+            scan.nextLine();
+            building1.tick();
+            System.out.println(building1);
+            
+        }
+        
         
     }
     
