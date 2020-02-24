@@ -46,7 +46,7 @@ public class Building{
         for(int i=0;i<floors.size();i++){
             int floorNum=i+1;
             int randInt=rand.nextInt(20);
-            boolean already =false;
+            boolean check =false;
             if(randInt==0){
                 int randPassenger;
                 while(true){
@@ -55,12 +55,12 @@ public class Building{
                         floors.get(i).add(randPassenger);
                         System.out.println("Adding person with destination "+randPassenger+" to floor "+floorNum);
                         
-                        already= true;
+                        check= true;
                         break;
                     }
                 }
             }
-            if(already==true){
+            if(check==true){
                 break;
             }
             
