@@ -6,6 +6,7 @@
 package project1;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  *
@@ -58,36 +59,208 @@ public class Elevator {
     }
     
     public void tick(){
+        ArrayList<Integer> Pickup=new ArrayList<>();
+        ArrayList<Integer> Drop=new ArrayList<>();
         
-        if(current_state==Current_state.LOADING_PASSENGERS){
-            for( int i:building.getFloor(current_floor)){
-                passengers.add(i);
-                building.getFloor(current_floor).remove(i);
+        int execution=1;    
+        
+        
+        if(current_state==Current_state.UNLOADING_PASSENGERS){
+            if(execution==1){
+                if(building.getFloor(current_floor).isEmpty()){
+                    current_state=Current_state.DOORS_CLOSING;
+                    execution=0;
+                }
+                for(int i=0;i<passengers.size();i++){
+                    if(passengers.get(i)==current_floor+1){
+                        Drop.add(passengers.get(i));
+                        current_state=Current_state.DOORS_CLOSING;
+                        execution=0;
+                    }
+                }
+                for(int j=0;j<Drop.size();j++){
+                    passengers.remove(Drop.get(j));
+                }
+                Drop.clear();
+                if(passengers.isEmpty()){
+                    current_direction=Current_direction.NOT_MOVING;
+                    if(!building.getFloor(current_floor).isEmpty()){
+                        current_state=Current_state.LOADING_PASSENGERS;
+                        execution=0;
+                    }
+                }
+                if(!passengers.isEmpty()){
+                    for(int i=0;i<building.getFloor(current_floor).size();i++){
+                            if(current_direction==Current_direction.DOWN){
+                                if(building.getFloor(current_floor).get(i)<current_floor+1){
+                                    current_state=Current_state.LOADING_PASSENGERS;
+                                        execution=0;
+                    }
+                }
+                            if(current_direction==Current_direction.UP){
+                                if(building.getFloor(current_floor).get(i)>current_floor+1){
+                                    current_state=Current_state.LOADING_PASSENGERS;
+                                        execution=0;
+                    }
+                }
+            }
+                }
+                
+                
+        }
+        }
+        
+        if(current_state==Current_state.DECELERATING){
+            if(execution==1){
+            if(passengers.isEmpty()){
+                current_direction=Current_direction.NOT_MOVING;
+                execution=0;
+            }
+            else{
+                current_state=Current_state.DOORS_OPENING;
+                execution=0;
+                    
+                }
+                
             }
         }
         
+        
+        if(current_state==Current_state.MOVING){
+            if(execution==1){
+            if(current_direction==Current_direction.UP){
+                current_floor+=1;
+            }
+            if(current_direction==Current_direction.DOWN){
+                current_floor-=1;
+            }
+            for(int i=0;i<passengers.size();i++){
+                if(passengers.get(i)==current_floor+1){
+                    current_state=Current_state.DECELERATING;
+                    execution=0;
+                }
+                for(int sameway:building.getFloor(current_floor)){
+                    if(passengers.get(i)==sameway){
+                        current_state=Current_state.DECELERATING;
+                        execution=0;
+                        
+                    } 
+                }
+            }
+        }
+        }
+        
+        if(current_state==Current_state.ACCELERATING){
+            if(execution==1){
+            current_state=Current_state.MOVING;
+            execution=0;
+            }
+        }
+        
+        if(current_state==Current_state.DOORS_CLOSING){
+            if(execution==1){
+            if(!passengers.isEmpty()){
+                current_state=Current_state.ACCELERATING;
+                execution=0;
+            }
+            else{
+                current_state=Current_state.IDLE_STATE;
+                execution=0;
+            }
+            
+            }
+        }
+        
+        if(current_state==Current_state.LOADING_PASSENGERS){
+            if(execution==1){
+            if(current_direction==Current_direction.NOT_MOVING && !building.getFloor(current_floor).isEmpty()){
+                passengers.add(building.getFloor(current_floor).get(0));
+                building.getFloor(current_floor).remove(0);
+                if(passengers.get(0)>current_floor+1){
+                    current_direction=Current_direction.UP;
+                    current_state=Current_state.DOORS_CLOSING;
+                    execution=0;
+                }
+            
+                else if(passengers.get(0)<current_floor+1){
+                    current_direction=Current_direction.DOWN;
+                    current_state=Current_state.DOORS_CLOSING;
+                    execution=0;
+                } 
+            }
+            if(!passengers.isEmpty()){
+                for(int i=0;i<building.getFloor(current_floor).size();i++){
+                if(current_direction==Current_direction.DOWN){
+                    if(building.getFloor(current_floor).get(i)<current_floor+1){
+                        passengers.add(building.getFloor(current_floor).get(i));
+                        Pickup.add(building.getFloor(current_floor).get(i));
+                        current_state=Current_state.DOORS_CLOSING;
+                        execution=0;
+                        
+                    }
+                }
+                
+                if(current_direction==Current_direction.UP){
+                    if(building.getFloor(current_floor).get(i)>current_floor+1){
+                        passengers.add(building.getFloor(current_floor).get(i));
+                        Pickup.add(building.getFloor(current_floor).get(i));
+                        current_state=Current_state.DOORS_CLOSING;
+                        execution=0;
+                    }
+                }
+            }
+                
+            for(int j=0;j<Pickup.size();j++){
+                    building.getFloor(current_floor).remove(Pickup.get(j));
+                }
+            Pickup.clear();
+            }
+                
+            
+            else{
+                current_state=Current_state.DOORS_CLOSING;
+                execution=0;
+            }
+        }
+        }
+        
         if(current_state==Current_state.DOORS_OPENING){
+            if(execution==1){
+                for(int i:passengers){
+                for(int j:building.getFloor(current_floor)){
+                    if(i==j){
+                        current_state=Current_state.LOADING_PASSENGERS;
+                        execution=0;
+                    }
+                }
+                }
             for(int i:passengers){
-                if(i==getCurrentFloor()){
+                if(i==getCurrentFloor()+1){
                     current_state=Current_state.UNLOADING_PASSENGERS;
-                   
+                    execution=0;
                 }
             }
             if(passengers.isEmpty()&& !building.getFloor(current_floor).isEmpty()){
                 current_state=Current_state.LOADING_PASSENGERS;
+                execution=0;
                 
+            }
+            
             }
         }
         
         if(current_state==Current_state.IDLE_STATE){
+            if(execution==1){
             if(!passengers.isEmpty()){
-                current_state=Current_state.ACCELERATING;}
+                current_state=Current_state.ACCELERATING;
+                execution=0;
+            }
             if(!building.getFloor(current_floor).isEmpty()){
                 current_state=Current_state.DOORS_OPENING;
-                
+                execution=0;
             }
         }
-        
+        }
         
             
         
@@ -95,7 +268,7 @@ public class Elevator {
                
     @Override
     public String toString(){
-        return "Elevator "+getElevator()+" - Floor "+getCurrentFloor()+" - "+getCurrentState()+" - "
+        return "Elevator "+(getElevator()+1)+" - Floor "+(getCurrentFloor()+1)+" - "+getCurrentState()+" - "
                 +getCurrentDirection()+" - Passengers "+getPassengers();
     }
 }
