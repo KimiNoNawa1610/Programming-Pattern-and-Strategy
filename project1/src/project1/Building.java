@@ -6,7 +6,7 @@
 package project1;
 
 import java.util.ArrayList;
-import static project1.Simulation.getRandom;
+import java.util.Random;
 
 /**
  *
@@ -21,6 +21,11 @@ public class Building{
     public ArrayList<Integer> getFloor(int floorNumber){
         return floors.get(floorNumber);
     }
+    
+    public ArrayList<ArrayList<Integer>> getFloors(){
+        return floors;
+    }
+    
     
     public ArrayList<Elevator> getElevators(){
         return Elevators;
@@ -37,23 +42,33 @@ public class Building{
                 
     
     public void tick(){
-        for(int i=0;i<=floors.size()-1;i++){
-            int pass=getRandom().nextInt(20);
-            if(pass==0){
-                int random=(getRandom().nextInt(floors.size())+1);
-                if(random!=i+1){
-                    floors.get(i).add(random);
-                    System.out.println("Adding person with destination "+ random+" to floor "+(i+1));
+        Random rand=Simulation.getRandom();
+        for(int i=0;i<floors.size();i++){
+            int floorNum=i+1;
+            int randInt=rand.nextInt(20);
+            boolean already =false;
+            if(randInt==0){
+                int randPassenger;
+                while(true){
+                    randPassenger=rand.nextInt(floors.size())+1;
+                    if(randPassenger!=floorNum){
+                        floors.get(i).add(randPassenger);
+                        System.out.println("Adding person with destination "+randPassenger+" to floor "+floorNum);
+                        
+                        already= true;
+                        break;
+                    }
                 }
+            }
+            if(already==true){
                 break;
             }
             
         }
-        for(Elevator y: Elevators){
-            y.tick();
-        }
-        
-        
+        for(Elevator elevator:Elevators){
+                            elevator.tick();
+                            
+                        }
         
         
     }
