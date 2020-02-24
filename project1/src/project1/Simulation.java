@@ -37,13 +37,20 @@ public static void main(String[] args){
         System.out.println(building1);
         scan.nextLine();
         System.out.println("Simulate how many steps ?");
+        int stick=scan.nextInt();
         int i=0;
-        while(true){
+        boolean run=true;
+        while(run){
             i++;
             System.out.println("Step: "+i);
-            scan.nextLine();
             building1.tick();
             System.out.println(building1);
+            if(i==stick){
+                run=false;
+                System.out.println("Simulate how many steps ?");
+                System.out.println(building1);
+            }
+           
             
         }
         
