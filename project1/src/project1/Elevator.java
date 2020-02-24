@@ -141,14 +141,14 @@ public class Elevator {
                 }
                 for(int sameway:building.getFloor(current_floor)){
                     if(current_direction==Current_direction.DOWN){
-                    if(passengers.get(i)>=sameway){
+                    if(passengers.get(i)>=sameway||sameway<current_floor+1){
                         current_state=Current_state.DECELERATING;
                         execution=0;
                         
                     }
                     }
                     if(current_direction==Current_direction.UP){
-                    if(passengers.get(i)<=sameway){
+                    if(passengers.get(i)<=sameway||sameway>current_floor+1){
                         current_state=Current_state.DECELERATING;
                         execution=0;
                         
@@ -207,6 +207,10 @@ public class Elevator {
                         execution=0;
                         
                     }
+                     else{
+                current_state=Current_state.DOORS_CLOSING;
+                execution=0;
+            }
                 }
                 
                 if(current_direction==Current_direction.UP){
@@ -216,6 +220,11 @@ public class Elevator {
                         current_state=Current_state.DOORS_CLOSING;
                         execution=0;
                     }
+            else{
+                current_state=Current_state.DOORS_CLOSING;
+                execution=0;
+            }
+                    
                 }
             }
                 
@@ -223,6 +232,10 @@ public class Elevator {
                     building.getFloor(current_floor).remove(Pickup.get(j));
                 }
             Pickup.clear();
+            }
+            if(building.getFloor(current_floor).isEmpty()){
+                current_state=Current_state.DOORS_CLOSING;
+                execution=0;
             }
                 
             
@@ -235,27 +248,19 @@ public class Elevator {
         
         if(current_state==Current_state.DOORS_OPENING){
             if(execution==1){
-                for(int i:passengers){
-                for(int j:building.getFloor(current_floor)){
-                    if(i==j){
-                        current_state=Current_state.LOADING_PASSENGERS;
-                        execution=0;
-                    }
-                }
-                }
+                current_state=Current_state.LOADING_PASSENGERS;
+                execution=0;
+                
             for(int i:passengers){
                 if(i==getCurrentFloor()+1){
                     current_state=Current_state.UNLOADING_PASSENGERS;
                     execution=0;
                 }
-            }
-            if(passengers.isEmpty()&& !building.getFloor(current_floor).isEmpty()){
-                current_state=Current_state.LOADING_PASSENGERS;
-                execution=0;
-                
-            }
+            }  
+
             
             }
+            
         }
         
         if(current_state==Current_state.IDLE_STATE){
