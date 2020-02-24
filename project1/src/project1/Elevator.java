@@ -140,11 +140,20 @@ public class Elevator {
                     execution=0;
                 }
                 for(int sameway:building.getFloor(current_floor)){
-                    if(passengers.get(i)==sameway){
+                    if(current_direction==Current_direction.DOWN){
+                    if(passengers.get(i)>=sameway){
                         current_state=Current_state.DECELERATING;
                         execution=0;
                         
-                    } 
+                    }
+                    }
+                    if(current_direction==Current_direction.UP){
+                    if(passengers.get(i)<=sameway){
+                        current_state=Current_state.DECELERATING;
+                        execution=0;
+                        
+                    }
+                    }
                 }
             }
         }
