@@ -17,7 +17,7 @@ public class Mapiterator {
     public static void main(String[] args) {
         TreeMap<String, String> map=new TreeMap<>();
         map.put("Nhan","1610");
-        map.put("Tring","2512");
+        map.put("Trinh","2512");
         map.put("Danh","1608");
         map.put("Huong","2605");
         
