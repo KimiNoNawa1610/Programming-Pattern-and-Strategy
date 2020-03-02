@@ -41,8 +41,17 @@ public class InvertedIndex {
         
     }
     
-    public TreeMap Inverted(ArrayList input){
+    public String userchoice(){
+        Scanner scan=new Scanner(System.in);
+        System.out.println("Please enter the word you want to know location");
+        String userchoice=scan.next();
+        return userchoice;
+    }
+    
+    public ArrayList Inverted(ArrayList input, String userchoice){
         TreeMap<String, ArrayList<Integer>> wordmap=new TreeMap<>();
+        ArrayList<String> none=new ArrayList<>();
+        none.add("your word does not exist");
         int index=0;
         for(Object i: input){
             if(i.toString().length()!=0&&!wordmap.containsKey(i.toString())){
@@ -56,8 +65,15 @@ public class InvertedIndex {
             }
             
         }
-        return wordmap;
+        if(wordmap.containsKey(userchoice)){
+            return wordmap.get(userchoice);
+        }
+        else{
+            return none;
+        }
     }
+    
+    
     
     
 }
