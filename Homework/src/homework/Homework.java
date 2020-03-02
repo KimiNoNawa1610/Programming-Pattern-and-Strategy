@@ -16,8 +16,8 @@ public class Homework {
      */
     public static void main(String[] args) {
         InvertedIndex invert=new InvertedIndex();
-        //System.out.println(invert.getInput());
-        System.out.println(invert.Inverted(invert.getInput()));
+        System.out.println(invert.Inverted(invert.getInput(),invert.userchoice()));
+        
     }
     
 }
