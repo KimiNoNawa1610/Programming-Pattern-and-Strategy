@@ -62,8 +62,8 @@ public class InvertedIndex {
     }
     
     /**
-     * The Inverted method to put the word from an ArrayList into a TreeMap with the values are the ArrayList of
-     * each appearance of that word
+     * The Inverted method to put the word from an ArrayList into a TreeMap with the values are the ArrayList
+     * of each appearance of that word
      * @param input the ArrayList Store the words
      * @param userchoice the word that a user wants to know the location
      * @return the location of the userchoice word if it is in the map
