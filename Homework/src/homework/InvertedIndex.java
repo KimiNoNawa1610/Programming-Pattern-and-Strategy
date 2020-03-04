@@ -19,10 +19,15 @@ import java.util.logging.Logger;
  * @author votha
  */
 public class InvertedIndex {
+    /**
+     * The get text file input from the user
+     * @return the ArrayList contains the words from the text file
+     * if the text file is inappropriate, the method will output an error message
+     */
     public ArrayList getInput(){
         String input="";
         Scanner scan=new Scanner(System.in);
-        System.out.println("Please enter a text you want: ");
+        System.out.println("Please enter a text file you want: ");
         File file=new File(scan.next());
         try {
             Scanner filescan=new Scanner(file);
@@ -36,11 +41,20 @@ public class InvertedIndex {
             Logger.getLogger(InvertedIndex.class.getName()).log(Level.SEVERE, null, ex);
         }
         ArrayList<String> output=new ArrayList<>(Arrays.asList(input.split(" ")));
-        
+        for(int i=0;i<output.size();i++){
+            if(output.get(i).length()==0){
+                output.remove(i);
+            }
+        }
+        System.out.println(output);
         return output;
         
     }
     
+    /**
+     * The get user choice of word that they want to know the location of
+     * @return the word that the user chose.
+     */
     public String userchoice(){
         Scanner scan=new Scanner(System.in);
         System.out.println("Please enter the word you want to know location");
@@ -48,13 +62,19 @@ public class InvertedIndex {
         return userchoice;
     }
     
+    /**
+     * 
+     * @param input
+     * @param userchoice
+     * @return 
+     */
     public ArrayList Inverted(ArrayList input, String userchoice){
         TreeMap<String, ArrayList<Integer>> wordmap=new TreeMap<>();
         ArrayList<String> none=new ArrayList<>();
         none.add("your word does not exist");
         int index=0;
         for(Object i: input){
-            if(i.toString().length()!=0&&!wordmap.containsKey(i.toString())){
+            if(!wordmap.containsKey(i.toString())){
                 index++;
                 wordmap.put(i.toString(),new ArrayList<Integer>());
                 wordmap.get(i).add(index);
@@ -66,6 +86,7 @@ public class InvertedIndex {
             
         }
         if(wordmap.containsKey(userchoice)){
+            System.out.print("Your word is at location(s): ");
             return wordmap.get(userchoice);
         }
         else{
