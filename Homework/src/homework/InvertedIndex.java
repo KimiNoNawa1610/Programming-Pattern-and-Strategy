@@ -46,7 +46,6 @@ public class InvertedIndex {
                 output.remove(i);
             }
         }
-        System.out.println(output);
         return output;
         
     }
@@ -63,10 +62,12 @@ public class InvertedIndex {
     }
     
     /**
-     * 
-     * @param input
-     * @param userchoice
-     * @return 
+     * The Inverted method to put the word from an ArrayList into a TreeMap with the values are the ArrayList of
+     * each appearance of that word
+     * @param input the ArrayList Store the words
+     * @param userchoice the word that a user wants to know the location
+     * @return the location of the userchoice word if it is in the map
+     * and a message if the word does not exist.
      */
     public ArrayList Inverted(ArrayList input, String userchoice){
         TreeMap<String, ArrayList<Integer>> wordmap=new TreeMap<>();
@@ -93,7 +94,15 @@ public class InvertedIndex {
             return none;
         }
     }
-    
+    /**
+     * The method to run the InvertedIndex class
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        InvertedIndex invert=new InvertedIndex();
+        System.out.println(invert.Inverted(invert.getInput(),invert.userchoice()));
+        
+    }
     
     
     
