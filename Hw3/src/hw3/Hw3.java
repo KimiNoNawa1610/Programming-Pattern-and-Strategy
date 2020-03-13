@@ -40,8 +40,13 @@ public class Hw3 {
             Tenure=newtenure;
         }
         
+        public void setName(String name){
+            Name=name;
+        }
+        
         public abstract double getWages();
         
+        @Override
         public String toString(){
             return "I'm the employee, whee!";
         }
@@ -57,6 +62,26 @@ public class Hw3 {
             return workedHour*payrate;
         }
         
+        public int getWorkedHour(){
+            return workedHour;
+        }
+        
+        public double getPayRate(){
+            return payrate;
+        }
+        
+        public HourlyEmoloyee(String Name,int Hour, double Payrate){
+            this.setName(Name);
+            workedHour=Hour;
+            payrate=Payrate;
+        }
+        
+        @Override
+        public String toString(){
+            return "I'm an HourlyEmoloyee. I worked "+getWorkedHour()+" hours at a rate of "+getPayRate()+
+                    " dollars per hour. I made "+ " $"+getWages()+"!";
+        }
+        
     }
     
     class SalaryEmployee extends Employee{
@@ -66,6 +91,18 @@ public class Hw3 {
         public double getWages(){
             return montlysalary;
         }
+        
+        public SalaryEmployee(String Name,double msalary){
+            this.setName(Name);
+            montlysalary=msalary;
+        }
+        
+        @Override
+        public String toString(){
+            return "I'm an MonthlyEmoloyee. "+" I made "+ " $"+getWages()+"!";
+        }
+        
+       
         
     }
     
@@ -78,6 +115,33 @@ public class Hw3 {
         public double getWages(){
             return basesalary+monthlysales+commission;
         }
+        
+        public double getBasesalary(){
+            return basesalary;
+        }
+        
+        public double getMonthlysales(){
+            return monthlysales;
+        }
+        
+        public double getCommission(){
+            return commission;
+        }
+        
+        public CommissionEmployee(String Name,double base, double sales, double commit){
+            this.setName(Name);
+            basesalary=base;
+            monthlysales=sales;
+            commission=commit;
+        }
+        
+        @Override
+        public String toString(){
+            return "I'm an CommissionEmployee. My base salary is: "+getBasesalary()+". My monthly sale is: "+getMonthlysales()+
+                    ". My commission is: "+getCommission()+". I made "+" $"+getWages()+"!";
+        }
+        
+        
     }
     
     class SuperviorEmployee extends Employee{
@@ -94,6 +158,18 @@ public class Hw3 {
             }
             return maxwage+maxwage*bonuspercentage;
         }
+        
+        public SuperviorEmployee(String Name,ArrayList<Employee> supervise,double bonus){
+            this.setName(Name);
+            Employees=supervise;
+            bonuspercentage=bonus;
+        }
+        
+        @Override
+        public String toString(){
+            return"I'm an SuperviorEmoloyee. "+" I made "+ " $"+getWages()+"!";
+        }
+        
     }
     class SeniorSalaryEmployee extends Employee{
         
@@ -105,7 +181,17 @@ public class Hw3 {
             }
             return this.getWage()*bonus;
         }
-                
+        
+        public SeniorSalaryEmployee(String Name, int tenure, double wage ){
+            this.setName(Name);
+            this.setTenure(tenure);
+            this.setWages(wage);
+        }
+        
+        @Override
+        public String toString(){
+            return"I'm an SeniorSalaryEmployee. "+" I made "+ " $"+getWages()+"!";
+        }  
     }
 
     /**
