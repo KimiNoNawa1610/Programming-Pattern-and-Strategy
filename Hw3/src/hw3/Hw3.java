@@ -37,12 +37,7 @@ public class Hw3 {
         ems.add(em4);
         SupervisorEmployee em5=hw3.new SupervisorEmployee(" Michael L. Scott", 6,ems,0.2);
         System.out.println(em5);
-        System.out.println(" ");
-        
-        
-        
-        
-       
+          
     }
     abstract class Employee{
         
@@ -162,7 +157,7 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm "+this.getName()+". I'm an CommissionEmployee. "+"I have worked "+this.getTenure()+" years. My base salary is: "
+            return "I'm "+this.getName()+". I'm an CommissionEmployee. "+"I have worked "+this.getTenure()+" years. My base salary is: $"
                     +getBasesalary()+". My monthly sale is: "+getMonthlysales()+". My commission is: "+getCommission()+". I made "+" $"+
                     String.format("%.2f",getWages())+"!";
         }
@@ -196,7 +191,8 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm "+this.getName()+". I'm an SuperviorEmoloyee. "+"My bonus is "+getbonus()+". I made "+ " $"+String.format("%.2f",getWages())+"!";
+            return "I'm "+this.getName()+". I'm an SuperviorEmoloyee. "+"My bonus is "+getbonus()+
+                    ". I made "+ " $"+String.format("%.2f",getWages())+"!";
         }
         
     }
@@ -216,8 +212,8 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm "+this.getName()+". I'm an SeniorSalaryEmployee. "+"I have worked "+this.getTenure()+" years. My base salary is $"+getBaseWage()+
-                    ". I made "+ " $"+String.format("%.2f",getWages())+"!";
+            return "I'm "+this.getName()+". I'm an SeniorSalaryEmployee. "+"I have worked "+this.getTenure()+" years. My base salary is $"+
+                    getBaseWage()+". I made "+ " $"+String.format("%.2f",getWages())+"!";
         }  
     }
 
