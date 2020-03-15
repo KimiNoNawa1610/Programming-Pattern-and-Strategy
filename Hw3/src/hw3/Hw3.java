@@ -12,8 +12,17 @@ import java.util.ArrayList;
  * @author votha
  */
 public class Hw3 {
-    
-
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        Hw3 hw3=new Hw3();
+        HourlyEmployee em1=hw3.new HourlyEmployee("Pam Beesly",5,40,10);
+        System.out.println(em1);
+        
+       
+    }
     abstract class Employee{
         
         private String Name;
@@ -32,27 +41,24 @@ public class Hw3 {
             return wages;
         }
         
-        public void setWages(double newwages){
-            wages=newwages;
-        }
-        
-        public void setTenure(int newtenure){
-            Tenure=newtenure;
-        }
-        
-        public void setName(String name){
+        public Employee(String name, int tenure){
             Name=name;
+            Tenure=tenure;    
+        }
+        
+        public void setWages(double wage){
+            wages=wage;
         }
         
         public abstract double getWages();
         
         @Override
         public String toString(){
-            return "I'm the employee, whee!";
+            return "I'm "+this.getName()+" I'm the employee, whee!";
         }
         
 }
-    class HourlyEmoloyee extends Employee{
+    public class HourlyEmployee extends Employee{
         
         private int workedHour;
         private double payrate;
@@ -70,21 +76,21 @@ public class Hw3 {
             return payrate;
         }
         
-        public HourlyEmoloyee(String Name,int Hour, double Payrate){
-            this.setName(Name);
+        public HourlyEmployee(String Name,int Tenure,int Hour, double Payrate){
+            super(Name, Tenure);
             workedHour=Hour;
             payrate=Payrate;
         }
         
         @Override
         public String toString(){
-            return "I'm an HourlyEmoloyee. I worked "+getWorkedHour()+" hours at a rate of "+getPayRate()+
+            return "I'm "+this.getName()+" I'm an HourlyEmoloyee. I worked "+getWorkedHour()+" hours at a rate of "+getPayRate()+
                     " dollars per hour. I made "+ " $"+getWages()+"!";
         }
         
     }
     
-    class SalaryEmployee extends Employee{
+    public class SalaryEmployee extends Employee{
         private double montlysalary;
         
         @Override
@@ -92,21 +98,21 @@ public class Hw3 {
             return montlysalary;
         }
         
-        public SalaryEmployee(String Name,double msalary){
-            this.setName(Name);
+        public SalaryEmployee(String Name,int Tenure,double msalary){
+            super(Name, Tenure);
             montlysalary=msalary;
         }
         
         @Override
         public String toString(){
-            return "I'm an MonthlyEmoloyee. "+" I made "+ " $"+getWages()+"!";
+            return "I'm "+this.getName()+" I'm an MonthlyEmoloyee. "+" I made "+ " $"+getWages()+"!";
         }
         
        
         
     }
     
-    class CommissionEmployee extends Employee{
+    public class CommissionEmployee extends Employee{
         private double basesalary;
         private double monthlysales;
         private double commission;
@@ -128,8 +134,8 @@ public class Hw3 {
             return commission;
         }
         
-        public CommissionEmployee(String Name,double base, double sales, double commit){
-            this.setName(Name);
+        public CommissionEmployee(String Name, int Tenure,double base, double sales, double commit){
+            super(Name, Tenure);
             basesalary=base;
             monthlysales=sales;
             commission=commit;
@@ -137,14 +143,14 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm an CommissionEmployee. My base salary is: "+getBasesalary()+". My monthly sale is: "+getMonthlysales()+
+            return "I'm "+this.getName()+" I'm an CommissionEmployee. My base salary is: "+getBasesalary()+". My monthly sale is: "+getMonthlysales()+
                     ". My commission is: "+getCommission()+". I made "+" $"+getWages()+"!";
         }
         
         
     }
     
-    class SuperviorEmployee extends Employee{
+    public class SuperviorEmployee extends Employee{
         private ArrayList<Employee> Employees;
         private double bonuspercentage;
         
@@ -159,19 +165,19 @@ public class Hw3 {
             return maxwage+maxwage*bonuspercentage;
         }
         
-        public SuperviorEmployee(String Name,ArrayList<Employee> supervise,double bonus){
-            this.setName(Name);
+        public SuperviorEmployee(String Name,int Tenure,ArrayList<Employee> supervise,double bonus){
+            super(Name, Tenure);
             Employees=supervise;
             bonuspercentage=bonus;
         }
         
         @Override
         public String toString(){
-            return"I'm an SuperviorEmoloyee. "+" I made "+ " $"+getWages()+"!";
+            return "I'm "+this.getName()+" I'm an SuperviorEmoloyee. "+" I made "+ " $"+getWages()+"!";
         }
         
     }
-    class SeniorSalaryEmployee extends Employee{
+    public class SeniorSalaryEmployee extends Employee{
         
         @Override
         public double getWages(){
@@ -182,23 +188,17 @@ public class Hw3 {
             return this.getWage()*bonus;
         }
         
-        public SeniorSalaryEmployee(String Name, int tenure, double wage ){
-            this.setName(Name);
-            this.setTenure(tenure);
+        public SeniorSalaryEmployee(String Name, int Tenure, double wage ){
+            super(Name,Tenure);
             this.setWages(wage);
         }
         
         @Override
         public String toString(){
-            return"I'm an SeniorSalaryEmployee. "+" I made "+ " $"+getWages()+"!";
+            return "I'm "+this.getName()+" I'm an SeniorSalaryEmployee. "+" I made "+ " $"+getWages()+"!";
         }  
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
+    
     
 }
