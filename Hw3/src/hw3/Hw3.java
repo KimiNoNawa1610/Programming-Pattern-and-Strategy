@@ -303,8 +303,13 @@ public class Hw3 {
         @Override
         public double getWages(){
             double bonus=1.03;
-            bonus=Math.pow(bonus,this.getTenure());
-            return this.getBaseWage()*bonus;
+            if(this.getBaseWage()>10){
+                bonus=Math.pow(bonus,this.getTenure()%10);
+                return this.getBaseWage()*bonus;
+        }
+            else{
+                return this.getBaseWage();
+        }
             
         }
         /**
