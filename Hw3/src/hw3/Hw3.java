@@ -17,9 +17,25 @@ public class Hw3 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        ArrayList<Employee> ems=new ArrayList<>();
         Hw3 hw3=new Hw3();
         HourlyEmployee em1=hw3.new HourlyEmployee("Pam Beesly",5,40,10);
         System.out.println(em1);
+        System.out.println(" ");
+        SalaryEmployee em2=hw3.new SalaryEmployee("Angela Martin",10,4500);
+        System.out.println(em2);
+        System.out.println(" ");
+        CommissionEmployee em3=hw3.new CommissionEmployee("Dwight K. Shrute",11,2000,0.1,40000);
+        System.out.println(em3);
+        System.out.println(" ");
+        SeniorSalaryEmployee em4=hw3.new SeniorSalaryEmployee("Todd Packer",18, 50000);
+        System.out.println(em4);
+        System.out.println(" ");
+        ems.add(em1);
+        ems.add(em2);
+        ems.add(em3);
+        
+        
         
        
     }
@@ -54,7 +70,7 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm "+this.getName()+" I'm the employee, whee!";
+            return "I'm "+this.getName()+". I'm the employee, whee!";
         }
         
 }
@@ -84,7 +100,7 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm "+this.getName()+" I'm an HourlyEmoloyee. I worked "+getWorkedHour()+" hours at a rate of "+getPayRate()+
+            return "I'm "+this.getName()+". I'm an HourlyEmoloyee. I worked "+getWorkedHour()+" hours at a rate of "+getPayRate()+
                     " dollars per hour. I made "+ " $"+getWages()+"!";
         }
         
@@ -105,7 +121,7 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm "+this.getName()+" I'm an MonthlyEmoloyee. "+" I made "+ " $"+getWages()+"!";
+            return "I'm "+this.getName()+". I'm an MonthlyEmoloyee. "+" I made "+ " $"+getWages()+"!";
         }
         
        
@@ -119,7 +135,7 @@ public class Hw3 {
         
         @Override
         public double getWages(){
-            return basesalary+monthlysales+commission;
+            return basesalary+monthlysales*commission;
         }
         
         public double getBasesalary(){
@@ -134,7 +150,7 @@ public class Hw3 {
             return commission;
         }
         
-        public CommissionEmployee(String Name, int Tenure,double base, double sales, double commit){
+        public CommissionEmployee(String Name, int Tenure, double base, double commit, double sales){
             super(Name, Tenure);
             basesalary=base;
             monthlysales=sales;
@@ -143,7 +159,7 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm "+this.getName()+" I'm an CommissionEmployee. My base salary is: "+getBasesalary()+". My monthly sale is: "+getMonthlysales()+
+            return "I'm "+this.getName()+". I'm an CommissionEmployee. My base salary is: "+getBasesalary()+". My monthly sale is: "+getMonthlysales()+
                     ". My commission is: "+getCommission()+". I made "+" $"+getWages()+"!";
         }
         
@@ -173,7 +189,7 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm "+this.getName()+" I'm an SuperviorEmoloyee. "+" I made "+ " $"+getWages()+"!";
+            return "I'm "+this.getName()+". I'm an SuperviorEmoloyee. "+" I made "+ " $"+getWages()+"!";
         }
         
     }
@@ -182,10 +198,9 @@ public class Hw3 {
         @Override
         public double getWages(){
             double bonus=1.03;
-            for(int i=0;i<this.getTenure();i++){
-                bonus*=bonus;
-            }
+            bonus=Math.pow(bonus,this.getTenure());
             return this.getWage()*bonus;
+            
         }
         
         public SeniorSalaryEmployee(String Name, int Tenure, double wage ){
@@ -195,7 +210,7 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm "+this.getName()+" I'm an SeniorSalaryEmployee. "+" I made "+ " $"+getWages()+"!";
+            return "I'm "+this.getName()+". I'm an SeniorSalaryEmployee. "+" I made "+ " $"+String.format("%.2f",getWages())+"!";
         }  
     }
 
