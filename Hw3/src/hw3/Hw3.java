@@ -34,6 +34,11 @@ public class Hw3 {
         ems.add(em1);
         ems.add(em2);
         ems.add(em3);
+        ems.add(em4);
+        SupervisorEmployee em5=hw3.new SupervisorEmployee(" Michael L. Scott", 6,ems,0.2);
+        System.out.println(em5);
+        System.out.println(" ");
+        
         
         
         
@@ -160,13 +165,13 @@ public class Hw3 {
         @Override
         public String toString(){
             return "I'm "+this.getName()+". I'm an CommissionEmployee. My base salary is: "+getBasesalary()+". My monthly sale is: "+getMonthlysales()+
-                    ". My commission is: "+getCommission()+". I made "+" $"+getWages()+"!";
+                    ". My commission is: "+getCommission()+". I made "+" $"+String.format("%.2f",getWages())+"!";
         }
         
         
     }
     
-    public class SuperviorEmployee extends Employee{
+    public class SupervisorEmployee extends Employee{
         private ArrayList<Employee> Employees;
         private double bonuspercentage;
         
@@ -181,7 +186,7 @@ public class Hw3 {
             return maxwage+maxwage*bonuspercentage;
         }
         
-        public SuperviorEmployee(String Name,int Tenure,ArrayList<Employee> supervise,double bonus){
+        public SupervisorEmployee(String Name,int Tenure,ArrayList<Employee> supervise,double bonus){
             super(Name, Tenure);
             Employees=supervise;
             bonuspercentage=bonus;
@@ -189,7 +194,7 @@ public class Hw3 {
         
         @Override
         public String toString(){
-            return "I'm "+this.getName()+". I'm an SuperviorEmoloyee. "+" I made "+ " $"+getWages()+"!";
+            return "I'm "+this.getName()+". I'm an SuperviorEmoloyee. "+" I made "+ " $"+String.format("%.2f",getWages())+"!";
         }
         
     }
