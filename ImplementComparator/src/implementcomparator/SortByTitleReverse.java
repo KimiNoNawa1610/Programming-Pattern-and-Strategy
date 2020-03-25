@@ -16,10 +16,10 @@ public class SortByTitleReverse implements Comparator<Album>{
     @Override
     public int compare(Album n, Album m) {
         if(n.getTitle().compareTo(m.getTitle())<0){
-            return -1;
+            return 1;
         }
         else if(n.getTitle().compareTo(m.getTitle())>0){
-            return 1;
+            return -1;
         }
         else{
             return 0;
