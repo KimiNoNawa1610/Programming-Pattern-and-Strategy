@@ -10,5 +10,5 @@ package project2;
  * @author votha
  */
 public class NewClass {
-    hello
+    
 }
