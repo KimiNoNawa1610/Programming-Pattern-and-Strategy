@@ -1,6 +1,6 @@
-package cecs277.events;
+package events;
 
-import cecs277.Simulation;
+import elevators.Simulation;
 
 /**
  * Represents an event that occurs in the simulation, which acts to update the state of the simulation in some way.
