@@ -1,11 +1,10 @@
-package cecs277.elevators;
+package elevators;
 
-import cecs277.Simulation;
-import cecs277.buildings.Building;
-import cecs277.buildings.Floor;
-import cecs277.buildings.FloorObserver;
-import cecs277.events.ElevatorStateEvent;
-import cecs277.passengers.Passenger;
+import buildings.Building;
+import buildings.Floor;
+import buildings.FloorObserver;
+import events.ElevatorStateEvent;
+import passengers.Passenger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,7 +40,8 @@ public class Elevator implements FloorObserver {
 	
 	// TODO: declare a field to keep track of which floors have been requested by passengers.
 	
-	
+	private int RequestedFloor;
+        
 	public Elevator(int number, Building bld) {
 		mNumber = number;
 		mBuilding = bld;
@@ -60,9 +60,11 @@ public class Elevator implements FloorObserver {
 	
 	/**
 	 * Adds the given passenger to the elevator's list of passengers, and requests the passenger's destination floor.
+         * @param passenger
 	 */
 	public void addPassenger(Passenger passenger) {
 		// TODO: add the passenger's destination to the set of requested floors.
+                RequestedFloor=passenger.getDestination();
 		mPassengers.add(passenger);
 	}
 	
@@ -85,10 +87,21 @@ public class Elevator implements FloorObserver {
 	
 	/**
 	 * Sends an idle elevator to the given floor.
+         * @param floor
 	 */
 	public void dispatchTo(Floor floor) {
 		// TODO: if we are currently idle and not on the given floor, change our direction to move towards the floor.
 		// TODO: set a floor request for the given floor, and schedule a state change to ACCELERATING immediately.
+                if(this.isIdle()==true&& this.getCurrentFloor().getNumber()!=floor.getNumber()){
+                    if(this.getCurrentFloor().getNumber()<floor.getNumber()){
+                        this.mCurrentDirection=Direction.MOVING_UP;
+                    }
+                    else{
+                        this.mCurrentDirection=Direction.MOVING_DOWN;
+                    }
+                    int Accelerationtime=2;
+                    scheduleStateChange(ElevatorState.ACCELERATING,Accelerationtime);
+                }
 		
 	}
 	
@@ -111,6 +124,9 @@ public class Elevator implements FloorObserver {
 	 */
 	public boolean isIdle() {
 		// TODO: complete this method.
+                if(mPassengers.isEmpty()==true){
+                    return true;
+                }
 		return false;
 	}
 	
@@ -159,6 +175,13 @@ public class Elevator implements FloorObserver {
 	public void directionRequested(Floor sender, Direction direction) {
 		// TODO: if we are currently idle, change direction to match the request. Then alert all our observers that we are decelerating,
 		// TODO: then schedule an immediate state change to DOORS_OPENING.
+                
+                if(this.isIdle()){
+                    int DoorOppeningTime=2;
+                    this.mCurrentDirection=direction;
+                    this.mCurrentState=ElevatorState.DECELERATING;
+                    this.scheduleStateChange(ElevatorState.DOORS_OPENING, DoorOppeningTime);
+                }
 	}
 	
 	
