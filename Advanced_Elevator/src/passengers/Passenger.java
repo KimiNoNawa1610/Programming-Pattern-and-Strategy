@@ -1,9 +1,9 @@
-package cecs277.passengers;
+package passengers;
 
-import cecs277.buildings.Floor;
-import cecs277.buildings.FloorObserver;
-import cecs277.elevators.Elevator;
-import cecs277.elevators.ElevatorObserver;
+import buildings.Floor;
+import buildings.FloorObserver;
+import elevators.Elevator;
+import elevators.ElevatorObserver;
 
 /**
  * A passenger that is either waiting on a floor or riding an elevator.
@@ -22,7 +22,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 		return ++mNextId;
 	}
 	
-	private int mIdentifier;
+	private final int mIdentifier;
 	private PassengerState mCurrentState;
 	
 	public Passenger() {
@@ -36,6 +36,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 	
 	/**
 	 * Gets the passenger's unique identifier.
+         * @return 
 	 */
 	public int getId() {
 		return mIdentifier;
@@ -44,6 +45,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 	
 	/**
 	 * Handles an elevator arriving at the passenger's current floor.
+         * @param floor
 	 */
 	@Override
 	public void elevatorArriving(Floor floor, Elevator elevator) {
@@ -64,6 +66,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 	
 	/**
 	 * Handles an observed elevator opening its doors. Depart the elevator if we are on it; otherwise, enter the elevator.
+         * @param elevator
 	 */
 	@Override
 	public void elevatorDoorsOpened(Elevator elevator) {
@@ -97,6 +100,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 	
 	/**
 	 * Returns the passenger's current destination (what floor they are travelling to).
+         * @return 
 	 */
 	public abstract int getDestination();
 	
@@ -108,6 +112,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 	
 	/**
 	 * Called when the passenger is departing the given elevator.
+         * @param elevator
 	 */
 	protected abstract void leavingElevator(Elevator elevator);
 	
