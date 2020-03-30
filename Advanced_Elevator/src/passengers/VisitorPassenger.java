@@ -1,7 +1,7 @@
 package passengers;
 
-import elevators.Simulation;
 import elevators.Elevator;
+import elevators.Simulation;
 import events.PassengerNextDestinationEvent;
 
 /**
@@ -12,22 +12,35 @@ import events.PassengerNextDestinationEvent;
  */
 public class VisitorPassenger extends Passenger {
 	// TODO: add fields, constructors, and accessors to implement this class.
+        private int destination;
+        private int schedule;
 	
 	public VisitorPassenger(int destinationFloor, int durationTime) {
 		super();
 		// TODO: change this constructor's  body.
+                destination=destinationFloor;
+                schedule=durationTime;
 	}
+        
+        public int getSchedule(){
+            return schedule;
+        }
 	
 	@Override
 	public int getDestination() {
 		// TODO: finish this method to return the visitor's destination, which changes to floor 1 when they
 		// "reappear".
-		return -1;
+                return destination;
+                
 	}
 	
 	// TODO: implement this template method variant. A Visitor will join an elevator whose passenger count is less than its capacity.
 	@Override
 	protected boolean willBoardElevator(Elevator elevator) {
+                if(elevator.getCapacity()>elevator.getPassengerCount()){
+                    elevator.addPassenger(this);
+                    return true;
+                }
 		return false;
 	}
 	
@@ -39,20 +52,20 @@ public class VisitorPassenger extends Passenger {
 	*/
 	@Override
 	protected void leavingElevator(Elevator elevator) {
-		/* Example of how to schedule a PassengerNextDestinationEvent:
+                elevator.removePassenger(this);
+                int EndFloor=1;
 		Simulation s = elevator.getBuilding().getSimulation();
-		PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent(s.currentTime() + 10, this,
-		 elevator.getCurrentFloor());
+		PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent(s.currentTime() + getSchedule() , this,
+		elevator.getCurrentFloor());
+                this.destination=EndFloor;
 		s.scheduleEvent(ev);
-		
-		Schedules this passenger to reappear on this floor 10 seconds from now.
-		 */
+                
 	}
 	
 	// TODO: return "Visitor heading to floor {destination}", replacing {destination} with the floor number.
 	@Override
 	public String toString() {
-		return "";
+		return "Visitor "+this.getId()+" is heading to "+this.getDestination();
 	}
 	
 	@Override
