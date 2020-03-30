@@ -14,7 +14,9 @@ public class Floor implements ElevatorObserver {
 	
 	// TODO: declare a field(s) to help keep track of which direction buttons are currently pressed.
 	// You can assume that every floor has both up and down buttons, even the ground and top floors.
-	
+        
+        private Elevator.Direction PassengerDirection;
+        
 	public Floor(int number, Building building) {
 		mNumber = number;
 		mBuilding = building;
@@ -28,6 +30,14 @@ public class Floor implements ElevatorObserver {
 	 */
 	public void requestDirection(Elevator.Direction direction) {
 		// TODO: implement this method as described in the comment.
+                if(directionIsPressed(direction)==false){
+                    PassengerDirection=direction;
+                    for(FloorObserver n: mObservers){
+                        n.directionRequested(this, direction);
+                    }
+                }
+                
+                
 	}
 	
 	/**
@@ -37,6 +47,9 @@ public class Floor implements ElevatorObserver {
 	 */
 	public boolean directionIsPressed(Elevator.Direction direction) {
 		// TODO: complete this method.
+                if(PassengerDirection.equals(direction)){
+                    return true;
+                }
 		return false;
 	}
 	
@@ -46,6 +59,7 @@ public class Floor implements ElevatorObserver {
 	 */
 	public void clearDirection(Elevator.Direction direction) {
 		// TODO: complete this method.
+                PassengerDirection=null;
 	}
 	
 	/**
@@ -58,8 +72,11 @@ public class Floor implements ElevatorObserver {
 		p.setState(Passenger.PassengerState.WAITING_ON_FLOOR);
 		
 		// TODO: call requestDirection with the appropriate direction for this passenger's destination.
+                int destination=p.getDestination();
+                
+                
 	}
-	
+
 	/**
 	 * Removes the given Passenger from the floor's waiting passengers.
          * @param p
@@ -97,6 +114,7 @@ public class Floor implements ElevatorObserver {
 	public void elevatorDecelerating(Elevator elevator) {
 		// TODO: if the elevator is arriving at THIS FLOOR, alert all the floor's observers that elevatorArriving.
 		// TODO:    then clear the elevator's current direction from this floor's requested direction buttons.
+                
 		
 	}
 	
