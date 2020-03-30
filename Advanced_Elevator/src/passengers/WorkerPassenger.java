@@ -1,7 +1,7 @@
-package cecs277.passengers;
+package passengers;
 
-import cecs277.elevators.Elevator;
-import cecs277.events.PassengerNextDestinationEvent;
+import elevators.Elevator;
+import events.PassengerNextDestinationEvent;
 
 import java.util.List;
 
