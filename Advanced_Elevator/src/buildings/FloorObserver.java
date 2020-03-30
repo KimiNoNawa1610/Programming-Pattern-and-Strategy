@@ -1,7 +1,6 @@
-package cecs277.buildings;
+package buildings;
 
-import cecs277.buildings.Floor;
-import cecs277.elevators.Elevator;
+import elevators.Elevator;
 
 public interface FloorObserver {
 	/**
@@ -13,6 +12,8 @@ public interface FloorObserver {
 	
 	/**
 	 * Triggered when a direction button has been pressed on the given floor.
+         * @param sender
+         * @param direction
 	 */
 	void directionRequested(Floor sender, Elevator.Direction direction);
 }
