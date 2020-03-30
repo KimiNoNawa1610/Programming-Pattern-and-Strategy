@@ -1,8 +1,8 @@
-package cecs277.buildings;
+package buildings;
 
-import cecs277.elevators.ElevatorObserver;
-import cecs277.passengers.Passenger;
-import cecs277.elevators.Elevator;
+import elevators.ElevatorObserver;
+import passengers.Passenger;
+import elevators.Elevator;
 
 import java.util.*;
 
@@ -32,6 +32,8 @@ public class Floor implements ElevatorObserver {
 	
 	/**
 	 * Returns true if the given direction button has been pressed.
+         * @param direction
+         * @return 
 	 */
 	public boolean directionIsPressed(Elevator.Direction direction) {
 		// TODO: complete this method.
@@ -40,6 +42,7 @@ public class Floor implements ElevatorObserver {
 	
 	/**
 	 * Clears the given direction button so it is no longer pressed.
+         * @param direction
 	 */
 	public void clearDirection(Elevator.Direction direction) {
 		// TODO: complete this method.
@@ -47,6 +50,7 @@ public class Floor implements ElevatorObserver {
 	
 	/**
 	 * Adds a given Passenger as a waiting passenger on this floor, and presses the passenger's direction button.
+         * @param p
 	 */
 	public void addWaitingPassenger(Passenger p) {
 		mPassengers.add(p);
@@ -58,6 +62,7 @@ public class Floor implements ElevatorObserver {
 	
 	/**
 	 * Removes the given Passenger from the floor's waiting passengers.
+         * @param p
 	 */
 	public void removeWaitingPassenger(Passenger p) {
 		mPassengers.remove(p);
