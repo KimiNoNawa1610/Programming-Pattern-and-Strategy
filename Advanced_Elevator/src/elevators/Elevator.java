@@ -71,6 +71,8 @@ public class Elevator implements FloorObserver {
 	public void removePassenger(Passenger passenger) {
 		mPassengers.remove(passenger);
 	}
+        
+        
 	
 	
 	/**
@@ -179,7 +181,9 @@ public class Elevator implements FloorObserver {
                 if(this.isIdle()){
                     int DoorOppeningTime=2;
                     this.mCurrentDirection=direction;
-                    this.mCurrentState=ElevatorState.DECELERATING;
+                    for(ElevatorObserver n: mObservers){
+                        n.elevatorDecelerating(this);
+                    }
                     this.scheduleStateChange(ElevatorState.DOORS_OPENING, DoorOppeningTime);
                 }
 	}
