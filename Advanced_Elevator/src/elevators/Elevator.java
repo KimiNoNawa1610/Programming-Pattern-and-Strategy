@@ -39,7 +39,27 @@ public class Elevator implements FloorObserver {
 	private List<ElevatorObserver> mObservers = new ArrayList<>();
 	
 	// TODO: declare a field to keep track of which floors have been requested by passengers.
-	
+	private int nextRequestUp(int FromFloor){
+            int smallestmax=-1;
+            for (Passenger i: this.mPassengers){
+                if(i.getDestination()>FromFloor){
+                    smallestmax=i.getDestination();
+                }
+            }
+            return smallestmax;
+        }
+        
+        private int nextRequestDown(int FromFloor){
+            int biggestmin=-1;
+            for (Passenger i: this.mPassengers){
+                if(i.getDestination()<FromFloor){
+                     biggestmin=i.getDestination();
+                }
+                
+            }
+            return biggestmin;
+        }
+        
 	private int RequestedFloor;
         
 	public Elevator(int number, Building bld) {
@@ -84,6 +104,7 @@ public class Elevator implements FloorObserver {
 		
 		// Example of how to trigger a state change:
 		// scheduleStateChange(ElevatorState.MOVING, 3); // switch to MOVING and call tick(), 3 seconds from now.
+                
 	}
 	
 	
