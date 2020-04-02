@@ -1,7 +1,6 @@
 package passengers;
 
 import elevators.Elevator;
-import events.PassengerNextDestinationEvent;
 
 import java.util.List;
 
