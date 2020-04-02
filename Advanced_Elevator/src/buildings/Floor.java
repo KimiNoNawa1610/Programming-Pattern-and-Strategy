@@ -36,8 +36,6 @@ public class Floor implements ElevatorObserver {
                         n.directionRequested(this, direction);
                     }
                 }
-                
-                
 	}
 	
 	/**
@@ -73,6 +71,12 @@ public class Floor implements ElevatorObserver {
 		
 		// TODO: call requestDirection with the appropriate direction for this passenger's destination.
                 int destination=p.getDestination();
+                if(this.getNumber()<destination){
+                    requestDirection(Elevator.Direction.MOVING_UP);
+                }
+                else if(this.getNumber()<destination){
+                    requestDirection(Elevator.Direction.MOVING_DOWN);
+                }
                 
                 
 	}
