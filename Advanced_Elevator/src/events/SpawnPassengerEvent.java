@@ -4,6 +4,7 @@ import buildings.Building;
 import passengers.Passenger;
 import elevators.Simulation;
 import java.util.Random;
+import passengers.VisitorPassenger;
 
 /**
  * A simulation event that adds a new random passenger on floor 1, and then schedules the next spawn event.
@@ -44,6 +45,11 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		 with a scheduled time that is X seconds in the future, where X is a uniform random integer from
 		 1 to 30 inclusive.
 		*/
+                int max=30;
+                int min=1;
+                int ScheduledTime=r.nextInt((max-min)+1)+min;
+                SpawnPassengerEvent SPE=new SpawnPassengerEvent(ScheduledTime,this.mBuilding);
+                sim.scheduleEvent(SPE);
 	}
 	
 	
@@ -54,10 +60,17 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		 The visitor's visit duration should follow a NORMAL (GAUSSIAN) DISTRIBUTION with a mean of 1 hour
 		 and a standard deviation of 20 minutes.
 		 */
+                
 		Random r = mBuilding.getSimulation().getRandom();
 		// Look up the documentation for the .nextGaussian() method of the Random class.
-		
-		return null;
+                int BaseFloor=2;
+                int TopFloor=mBuilding.getFloorCount()-1;
+                int RandomFloor=r.nextInt((TopFloor-BaseFloor)+1)+BaseFloor;
+                int VisitTime=60;
+                int StandardDeviation=20;
+                double val=r.nextGaussian()*StandardDeviation+VisitTime;
+		VisitorPassenger newVisitor=new VisitorPassenger(RandomFloor,val);
+		return newVisitor;
 	}
 	
 	private Passenger getWorker() {
