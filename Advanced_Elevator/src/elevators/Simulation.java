@@ -86,7 +86,7 @@ public class Simulation {
 		}
 		
 		// TODO: print the Building after simulating the requested time.
-		
+		System.out.println(b.toString());
 		
 		/*
 		 TODO: the simulation stops after one round of simulation. Write a loop that continues to ask the user
@@ -99,5 +99,6 @@ public class Simulation {
 		// TODO: ask the user for a seed value and change the line below.
 		Simulation sim = new Simulation(new Random(1));
 		sim.startSimulation(s);
+                
 	}
 }
