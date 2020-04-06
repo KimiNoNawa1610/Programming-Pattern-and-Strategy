@@ -22,7 +22,6 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		mBuilding = building;
 	}
 	
-        
 	@Override
 	public String toString() {
 		return super.toString() + "Adding " + mPassenger + " to floor 1.";
@@ -65,10 +64,10 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		Random r = mBuilding.getSimulation().getRandom();
 		// Look up the documentation for the .nextGaussian() method of the Random class.
                 int BaseFloor=2;
-                int TopFloor=mBuilding.getFloorCount()-1;
+                int TopFloor=mBuilding.getFloorCount();
                 int RandomFloor=r.nextInt((TopFloor-BaseFloor)+1)+BaseFloor;
-                int VisitTime=60;
-                int StandardDeviation=20;
+                int VisitTime=3600;
+                int StandardDeviation=120;
                 double val=r.nextGaussian()*StandardDeviation+VisitTime;
 		VisitorPassenger newVisitor=new VisitorPassenger(RandomFloor,val);
 		return newVisitor;
