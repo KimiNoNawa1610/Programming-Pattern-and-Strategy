@@ -20,6 +20,7 @@ public class Simulation {
 	public Simulation(Random random) {
 		mRandom = random;
 	}
+        
 	
 	/**
 	 * Gets the current time of the simulation.
