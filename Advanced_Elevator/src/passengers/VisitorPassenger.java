@@ -13,17 +13,17 @@ import events.PassengerNextDestinationEvent;
 public class VisitorPassenger extends Passenger {
 	// TODO: add fields, constructors, and accessors to implement this class.
         private int destination;
-        private double schedule;
+        private int schedule;
 	
 	public VisitorPassenger(int destinationFloor, double durationTime) {
 		super();
 		// TODO: change this constructor's  body.
                 destination=destinationFloor;
-                schedule=durationTime;
+                schedule=(int) durationTime;
                 
 	}
         
-        public double getSchedule(){
+        public int getSchedule(){
             return schedule;
         }
 	
@@ -56,7 +56,7 @@ public class VisitorPassenger extends Passenger {
                 elevator.removePassenger(this);
                 int EndFloor=1;
 		Simulation s = elevator.getBuilding().getSimulation();
-		PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent((long) (s.currentTime() + getSchedule()), this,
+		PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent( (s.currentTime() + getSchedule()), this,
 		elevator.getCurrentFloor());
                 this.destination=EndFloor;
 		s.scheduleEvent(ev);
