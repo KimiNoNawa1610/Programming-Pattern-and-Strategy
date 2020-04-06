@@ -17,7 +17,6 @@ public class Floor implements ElevatorObserver {
         
         private Elevator.Direction PassengerDirection;
         
-        
 	public Floor(int number, Building building) {
 		mNumber = number;
 		mBuilding = building;
@@ -31,12 +30,14 @@ public class Floor implements ElevatorObserver {
 	 */
 	public void requestDirection(Elevator.Direction direction) {
 		// TODO: implement this method as described in the comment.
+                PassengerDirection=direction;
                 if(directionIsPressed(direction)==false){
-                    PassengerDirection=direction;
                     for(FloorObserver n: mObservers){
                         n.directionRequested(this, direction);
                     }
                 }
+                
+                
 	}
 	
 	/**
@@ -58,7 +59,7 @@ public class Floor implements ElevatorObserver {
 	 */
 	public void clearDirection(Elevator.Direction direction) {
 		// TODO: complete this method.
-                PassengerDirection=null;
+                PassengerDirection=Elevator.Direction.NOT_MOVING;
 	}
 	
 	/**
