@@ -21,6 +21,7 @@ public class Building implements ElevatorObserver, FloorObserver {
 			f.addObserver(this);
 			mFloors.add(f);
 		}
+                
 		
 		// Construct the elevators, and observe each one.
 		for (int i = 0; i < elevatorCount; i++) {
