@@ -99,232 +99,28 @@ public class Elevator implements FloorObserver {
 	 * Schedules the elevator's next state change based on its current state.
 	 */
 	public void tick() {
+            int scheduletime1=2;
 		// TODO: port the logic of your state changes from Project 1, accounting for the adjustments in the spec.
 		// TODO: State changes are no longer immediate; they are scheduled using scheduleStateChange().
 		
 		// Example of how to trigger a state change:
 		// scheduleStateChange(ElevatorState.MOVING, 3); // switch to MOVING and call tick(), 3 seconds from now.
                 ArrayList<Integer> Pickup=new ArrayList<>();
-        ArrayList<Integer> Drop=new ArrayList<>();
-        
-        int execution=1;    
-        
-        
-        if(mCurrentState==ElevatorState.UNLOADING_PASSENGERS){
-            if(execution==1){
-                if(mBuilding.getFloor(current_floor).isEmpty()){
-                    mCurrentState=ElevatorState.DOORS_CLOSING;
-                    execution=0;
-                }
-                for(int i=0;i<passengers.size();i++){
-                    if(passengers.get(i)==current_floor+1){
-                        Drop.add(passengers.get(i));
-                        mCurrentState=ElevatorState.DOORS_CLOSING;
-                        execution=0;
-                    }
-                }
-                for(int j=0;j<Drop.size();j++){
-                    passengers.remove(Drop.get(j));
-                }
-                Drop.clear();
-                if(passengers.isEmpty()){
-                    current_direction=Current_direction.NOT_MOVING;
-                    if(!building.getFloor(current_floor).isEmpty()){
-                        mCurrentState=ElevatorState.LOADING_PASSENGERS;
-                        execution=0;
-                    }
-                }
-                if(!passengers.isEmpty()){
-                    for(int i=0;i<building.getFloor(current_floor).size();i++){
-                            if(current_direction==Current_direction.DOWN){
-                                if(building.getFloor(current_floor).get(i)<current_floor+1){
-                                    mCurrentState=ElevatorState.LOADING_PASSENGERS;
-                                        execution=0;
-                    }
-                }
-                            if(current_direction==Current_direction.UP){
-                                if(building.getFloor(current_floor).get(i)>current_floor+1){
-                                    mCurrentState=ElevatorState.LOADING_PASSENGERS;
-                                        execution=0;
-                    }
-                }
+        if(this.mCurrentState==ElevatorState.IDLE_STATE){
+            if(!mPassengers.isEmpty()){
+                ElevatorStateEvent ESE=new ElevatorStateEvent(scheduletime1, Elevator.ElevatorState.ACCELERATING, this);
             }
-                }
-                
-                
-        }
-        }
-        
-        if(mCurrentState==ElevatorState.DECELERATING){
-            if(execution==1){
-            if(passengers.isEmpty()){
-                current_direction=Current_direction.NOT_MOVING;
-                execution=0;
-            }
-            else{
-                mCurrentState=ElevatorState.DOORS_OPENING;
-                execution=0;
-                    
-                }
-                
+            if(!mCurrentFloor.getWaitingPassengers().isEmpty()){
+                this.mCurrentState=ElevatorState.DOORS_OPENING;
             }
         }
-        
-        
-        if(mCurrentState==ElevatorState.MOVING){
-            if(execution==1){
-            if(current_direction==Current_direction.UP){
-                current_floor+=1;
-            }
-            if(current_direction==Current_direction.DOWN){
-                current_floor-=1;
-            }
-            for(int i=0;i<passengers.size();i++){
-                if(passengers.get(i)==current_floor+1){
-                    mCurrentState=ElevatorState.DECELERATING;
-                    execution=0;
-                }
-                for(int sameway:building.getFloor(current_floor)){
-                    if(current_direction==Current_direction.DOWN){
-                    if(passengers.get(i)>=sameway||sameway<current_floor+1){
-                        mCurrentState=ElevatorState.DECELERATING;
-                        execution=0;
-                        
-                    }
-                    }
-                    if(current_direction==Current_direction.UP){
-                    if(passengers.get(i)<=sameway||sameway>current_floor+1){
-                        mCurrentState=ElevatorState.DECELERATING;
-                        execution=0;
-                        
-                    }
-                    }
-                }
-            }
-        }
+        else if(this.mCurrentState==ElevatorState.DOORS_OPENING){
+           ElevatorStateEvent ESE=new ElevatorStateEvent(scheduletime1, Elevator.ElevatorState.DOORS_OPEN, this);
         }
         
-        if(mCurrentState==ElevatorState.ACCELERATING){
-            if(execution==1){
-            mCurrentState=ElevatorState.MOVING;
-            execution=0;
-            }
         }
         
-        if(mCurrentState==ElevatorState.DOORS_CLOSING){
-            if(execution==1){
-            if(!passengers.isEmpty()){
-                current_state=Current_state.ACCELERATING;
-                execution=0;
-            }
-            else{
-                mCurrentState=ElevatorState.IDLE_STATE;
-                execution=0;
-            }
-            
-            }
-        }
-        
-        if(mCurrentState==ElevatorState.LOADING_PASSENGERS){
-            if(execution==1){
-            if(current_direction==Current_direction.NOT_MOVING && !building.getFloor(current_floor).isEmpty()){
-                passengers.add(building.getFloor(current_floor).get(0));
-                building.getFloor(current_floor).remove(0);
-                if(passengers.get(0)>current_floor+1){
-                    current_direction=Current_direction.UP;
-                    mCurrentState=ElevatorState.DOORS_CLOSING;
-                    execution=0;
-                }
-            
-                else if(passengers.get(0)<current_floor+1){
-                    current_direction=Current_direction.DOWN;
-                    mCurrentState=ElevatorState.DOORS_CLOSING;
-                    execution=0;
-                } 
-            }
-            if(!passengers.isEmpty()){
-                for(int i=0;i<building.getFloor(current_floor).size();i++){
-                if(current_direction==Current_direction.DOWN){
-                    if(building.getFloor(current_floor).get(i)<current_floor+1){
-                        passengers.add(building.getFloor(current_floor).get(i));
-                        Pickup.add(building.getFloor(current_floor).get(i));
-                        mCurrentState=ElevatorState.DOORS_CLOSING;
-                        execution=0;
-                        
-                    }
-                     else{
-                mCurrentState=ElevatorState.DOORS_CLOSING;
-                execution=0;
-            }
-                }
-                
-                if(current_direction==Current_direction.UP){
-                    if(building.getFloor(current_floor).get(i)>current_floor+1){
-                        passengers.add(building.getFloor(current_floor).get(i));
-                        Pickup.add(building.getFloor(current_floor).get(i));
-                        mCurrentState=ElevatorState.DOORS_CLOSING;
-                        execution=0;
-                    }
-            else{
-                mCurrentState=ElevatorState.DOORS_CLOSING;
-                execution=0;
-            }
-                    
-                }
-            }
-                
-            for(int j=0;j<Pickup.size();j++){
-                    building.getFloor(current_floor).remove(Pickup.get(j));
-                }
-            Pickup.clear();
-            }
-            if(building.getFloor(current_floor).isEmpty()){
-                mCurrentState=ElevatorState.DOORS_CLOSING;
-                execution=0;
-            }
-                
-            
-            else{
-                mCurrentState=ElevatorState.DOORS_CLOSING;
-                execution=0;
-            }
-        }
-        }
-        
-        if(mCurrentState==ElevatorState.DOORS_OPENING){
-            if(execution==1){
-                mCurrentState=ElevatorState.LOADING_PASSENGERS;
-                execution=0;
-                
-            for(int i:passengers){
-                if(i==getCurrentFloor()+1){
-                    mCurrentState=ElevatorState.UNLOADING_PASSENGERS;
-                    execution=0;
-                }
-            }  
-
-            
-            }
-            
-        }
-        
-        if(mCurrentState==ElevatorState.IDLE_STATE){
-            if(execution==1){
-            if(!passengers.isEmpty()){
-                current_state=Current_state.ACCELERATING;
-                execution=0;
-            }
-            if(!building.getFloor(current_floor).isEmpty()){
-                mCurrentState=ElevatorState.DOORS_OPENING;
-                execution=0;
-            }
-        }
-        }
-        
-            
-        
-        
-	}
+	
 	
 	
 	/**
