@@ -17,6 +17,7 @@ public class Floor implements ElevatorObserver {
         
         private Elevator.Direction PassengerDirection;
         
+        
 	public Floor(int number, Building building) {
 		mNumber = number;
 		mBuilding = building;
