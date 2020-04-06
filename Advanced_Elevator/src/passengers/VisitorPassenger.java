@@ -20,6 +20,7 @@ public class VisitorPassenger extends Passenger {
 		// TODO: change this constructor's  body.
                 destination=destinationFloor;
                 schedule=durationTime;
+                
 	}
         
         public double getSchedule(){
