@@ -84,6 +84,7 @@ public class Simulation {
 			mCurrentTime += diffTime;
 			nextEvent.execute(this);
 			System.out.println(nextEvent);
+                        
 		}
 		
 		// TODO: print the Building after simulating the requested time.
