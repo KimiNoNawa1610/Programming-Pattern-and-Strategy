@@ -58,6 +58,7 @@ public class Elevator implements FloorObserver {
                 
             }
             return biggestmin;
+            
         }
         
 	private int RequestedFloor;
