@@ -22,6 +22,7 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		mBuilding = building;
 	}
 	
+        
 	@Override
 	public String toString() {
 		return super.toString() + "Adding " + mPassenger + " to floor 1.";
