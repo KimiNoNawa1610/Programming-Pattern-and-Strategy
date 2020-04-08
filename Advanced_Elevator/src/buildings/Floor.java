@@ -15,7 +15,7 @@ public class Floor implements ElevatorObserver {
 	// TODO: declare a field(s) to help keep track of which direction buttons are currently pressed.
 	// You can assume that every floor has both up and down buttons, even the ground and top floors.
         
-        private Elevator.Direction PassengerDirection;
+        private List<Elevator.Direction> PassengerDirection= new ArrayList<>();
         
 	public Floor(int number, Building building) {
 		mNumber = number;
@@ -30,12 +30,14 @@ public class Floor implements ElevatorObserver {
 	 */
 	public void requestDirection(Elevator.Direction direction) {
 		// TODO: implement this method as described in the comment.
-                PassengerDirection=direction;
+                
                 if(directionIsPressed(direction)==false){
                     for(FloorObserver n: mObservers){
                         n.directionRequested(this, direction);
                     }
+                    PassengerDirection.add(direction);
                 }
+                
                 
                 
 	}
@@ -47,7 +49,8 @@ public class Floor implements ElevatorObserver {
 	 */
 	public boolean directionIsPressed(Elevator.Direction direction) {
 		// TODO: complete this method.
-                if(PassengerDirection.equals(direction)){
+                
+                if(PassengerDirection.contains(direction)){
                     return true;
                 }
 		return false;
@@ -59,7 +62,7 @@ public class Floor implements ElevatorObserver {
 	 */
 	public void clearDirection(Elevator.Direction direction) {
 		// TODO: complete this method.
-                PassengerDirection=Elevator.Direction.NOT_MOVING;
+                PassengerDirection.remove(direction);
 	}
 	
 	/**
@@ -67,10 +70,9 @@ public class Floor implements ElevatorObserver {
          * @param p
 	 */
 	public void addWaitingPassenger(Passenger p) {
-		mPassengers.add(p);
-		addObserver(p);
+		mObservers.add(p);
+                mPassengers.add(p);
 		p.setState(Passenger.PassengerState.WAITING_ON_FLOOR);
-		
 		// TODO: call requestDirection with the appropriate direction for this passenger's destination.
                 int destination=p.getDestination();
                 if(this.getNumber()<destination){
@@ -79,6 +81,7 @@ public class Floor implements ElevatorObserver {
                 else if(this.getNumber()<destination){
                     requestDirection(Elevator.Direction.MOVING_DOWN);
                 }
+                
                 
                 
 	}
@@ -112,6 +115,7 @@ public class Floor implements ElevatorObserver {
 	}
 	
 	public void addObserver(FloorObserver observer) {
+                //System.out.println(mObservers);
 		mObservers.add(observer);
 	}
 	
