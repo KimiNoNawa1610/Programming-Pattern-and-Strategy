@@ -38,30 +38,33 @@ public class Building implements ElevatorObserver, FloorObserver {
 	// TODO: recreate your toString() here.
         @Override
 	public String toString(){
-             ArrayList<String> x=new ArrayList<>();
+        ArrayList<String> x=new ArrayList<>();
         ArrayList<String> y=new ArrayList<>();
         for(int z=0;z<mElevators.size();z++){
             y.add("|  |");
         }
-        for(Floor i:mFloors){
+        for(int i=mFloors.size()-1;i>=0;i--){
             for(int z=0;z<mElevators.size();z++){
-                if(i==mElevators.get(z).getCurrentFloor()){
+                if(mElevators.get(z).getCurrentFloor().getNumber()-1==i){
                     y.set(z, "| x |");
                 }
                 else{y.set(z,"|   |");}
             }
-                if(i.getNumber()+1>=10){
-                    x.add((i.getNumber()+1)+ ": "+String.join("",y)+i.getWaitingPassengers()+"\n");
+                if(i+1>=10){
+                    x.add((i+1)+ ": "+String.join("",y)+this.mFloors.get(i).getWaitingPassengers()+"\n");
                 }
                 else{
-                    x.add(" "+(i.getNumber()+1)+": "+String.join("",y)+i.getWaitingPassengers()+"\n");
+                    x.add(" "+(i+1)+": "+String.join("",y)+this.mFloors.get(i).getWaitingPassengers()+"\n");
                 }
         }
+        
+       
         for(Elevator z:mElevators){
             x.add(z.toString()+"\n");
         }
         String output= String.join("",x);
-        return output;
+        return output;    
+    
         
     
         }
@@ -92,9 +95,11 @@ public class Building implements ElevatorObserver, FloorObserver {
 	
 	@Override
 	public void elevatorWentIdle(Elevator elevator) {
+            
 		// TODO: if mWaitingFloors is not empty, remove the first entry from the queue and dispatch the elevator to that floor.
-                int FirstEntry=mWaitingFloors.peek();
+                
                 if(mWaitingFloors.isEmpty()!=true){
+                    int FirstEntry=mWaitingFloors.peek();
                     elevator.dispatchTo(mFloors.get(FirstEntry));
                     mWaitingFloors.remove(FirstEntry);
                     
