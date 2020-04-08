@@ -10,22 +10,32 @@ import java.util.List;
  */
 public class WorkerPassenger extends Passenger {
 	// TODO: add fields for the list of destination floors, and the list of duration amounts.
+    
+        private List<Integer> Destination;
+        
+        private List<Long> duration;
 	
 	public WorkerPassenger(List<Integer> destinations, List<Long> durations) {
 		super();
-	
+                Destination=destinations;
+                duration=durations;
 		// TODO: finish the constructor.
+                
 	}
 	// TODO: implement this method. Return the current destination, which is the first element of the destinations list.
 	@Override
 	public int getDestination() {
-		return -1;
+		return Destination.get(0);
 	}
 	
 	// TODO: implement this template method variant. A Worker will only join an elevator with at most 3 people on it.
 	@Override
 	protected boolean willBoardElevator(Elevator elevator) {
+            if(elevator.getPassengerCount()<=3){
+                return true;
+            }
 		return false;
+                
 	}
 	
 	/*
@@ -37,7 +47,7 @@ public class WorkerPassenger extends Passenger {
 	*/
 	@Override
 	protected void leavingElevator(Elevator elevator) {
-	
+            
 	}
 	
 	@Override
@@ -48,7 +58,7 @@ public class WorkerPassenger extends Passenger {
 	// TODO: return "Worker heading to floor {destination}", replacing {destination} with the first destination floor number.
 	@Override
 	public String toString() {
-		return "";
+		return "Worker heading to floor"+this.getDestination();
 	}
 	
 }
