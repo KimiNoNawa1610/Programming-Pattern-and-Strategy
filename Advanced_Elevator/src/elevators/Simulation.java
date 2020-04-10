@@ -101,7 +101,45 @@ public class Simulation {
 		Scanner s = new Scanner(System.in);
 		// TODO: ask the user for a seed value and change the line below.
 		Simulation sim = new Simulation(new Random(1));
-		sim.startSimulation(s);
+
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                sim.startSimulation(s);
                 
 	}
 }
