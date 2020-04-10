@@ -42,7 +42,7 @@ public class Elevator implements FloorObserver {
 	private List<ElevatorObserver> mObservers = new ArrayList<>();
 	
 	// TODO: declare a field to keep track of which floors have been requested by passengers.
-	private ArrayList<Integer> RequestedFloor;
+	private List<Floor> RequestedFloor=new ArrayList<>();
 	
 	public Elevator(int number, Building bld) {
 		mNumber = number;
@@ -50,6 +50,7 @@ public class Elevator implements FloorObserver {
 		mCurrentFloor = bld.getFloor(1);
 		
 		scheduleStateChange(ElevatorState.IDLE_STATE, 0);
+                
 	}
 	
 	/**
@@ -66,6 +67,7 @@ public class Elevator implements FloorObserver {
 	public void addPassenger(Passenger passenger) {
 		// TODO: add the passenger's destination to the set of requested floors.
 		mPassengers.add(passenger);
+                RequestedFloor.add(mBuilding.getFloor(passenger.getDestination()));
 	}
 	
 	public void removePassenger(Passenger passenger) {
@@ -96,7 +98,9 @@ public class Elevator implements FloorObserver {
 	 * Schedules the elevator's next state change based on its current state.
 	 */
 	public void tick() {
-            if(null!=mCurrentState) // TODO: port the logic of your state changes from Project 1, accounting for the adjustments in the spec.
+            
+            //Collections.copy(mObservers, mCurrentFloor.getWaitingPassengers());
+            // TODO: port the logic of your state changes from Project 1, accounting for the adjustments in the spec.
             // TODO: State changes are no longer immediate; they are scheduled using scheduleStateChange().
             // Example of how to trigger a state change:
             // scheduleStateChange(ElevatorState.MOVING, 3); // switch to MOVING and call tick(), 3 seconds from now.
@@ -105,21 +109,29 @@ public class Elevator implements FloorObserver {
                     this.mCurrentFloor.addObserver(this);
                     mObservers.forEach((i) -> {
                         i.elevatorWentIdle(this);
-                    }); break;
+                    }); 
+                    
+                    break;
                 case DOORS_OPENING:
                     scheduleStateChange(ElevatorState.DOORS_OPEN,2);
                     //System.out.println(this.mObservers);
+                    
                     break;
                 case DOORS_OPEN:
+                    mCurrentFloor.getWaitingPassengers().forEach((i) -> {
+                        i.elevatorArriving(mCurrentFloor, this);
+                    });
                     int PreviousPassengerOntheFloor= this.mCurrentFloor.getWaitingPassengers().size();
                     int PreviousPassengerOntheElevator= this.mPassengers.size();
-                    mObservers.forEach((i) -> {
+                    for(ElevatorObserver i:mObservers){
                         i.elevatorDoorsOpened(this);
-                    }); int CurrentPassengerOntheFloor= this.mCurrentFloor.getWaitingPassengers().size();
+                    }
+                    int CurrentPassengerOntheFloor= this.mCurrentFloor.getWaitingPassengers().size();
                     int CurrentPassengerOntheElevator=this.mPassengers.size();
                     int PassengerChangeCount=PreviousPassengerOntheFloor-CurrentPassengerOntheFloor+
                             PreviousPassengerOntheElevator-CurrentPassengerOntheElevator;
                     int x=PassengerChangeCount/2;
+                    
                     scheduleStateChange(ElevatorState.DOORS_CLOSING,1+x);
                     break;
                 case DOORS_CLOSING:
@@ -161,6 +173,7 @@ public class Elevator implements FloorObserver {
                     scheduleStateChange(ElevatorState.MOVING,2);
                     break;
                 case MOVING:
+                    
                     if(mCurrentDirection==Direction.MOVING_UP){
                         setCurrentFloor(mBuilding.getFloor(mCurrentFloor.getNumber()+1));
                         mPassengers.stream().filter((i) -> (RequestedFloor.contains(i.getDestination()))).forEachOrdered((_item) -> {
@@ -178,7 +191,9 @@ public class Elevator implements FloorObserver {
                     }
                     else{
                         scheduleStateChange(ElevatorState.MOVING,2);
-                    }   break;
+                    }  
+                    
+                    break;
                 case DECELERATING:
                     RequestedFloor.remove(mCurrentFloor.getNumber());
                     if(!mCurrentFloor.directionIsPressed(mCurrentDirection)){
@@ -207,7 +222,11 @@ public class Elevator implements FloorObserver {
                     }
                     else{
                         mCurrentDirection=Direction.NOT_MOVING;
-                    }   break;
+                    }   
+                    for(ElevatorObserver i:mObservers){
+                        i.elevatorDecelerating(this);
+                    }
+                    break;
                 default:
                     break;
             }  
@@ -222,7 +241,10 @@ public class Elevator implements FloorObserver {
 	public void dispatchTo(Floor floor) {
 		// TODO: if we are currently idle and not on the given floor, change our direction to move towards the floor.
 		// TODO: set a floor request for the given floor, and schedule a state change to ACCELERATING immediately.
-		
+		if(this.isIdle()&& mCurrentFloor.equals(floor)==false){
+                    RequestedFloor.add(floor);
+                    scheduleStateChange(ElevatorState.ACCELERATING,0);
+                }
 	}
 	
 	// Simple accessors
@@ -233,6 +255,9 @@ public class Elevator implements FloorObserver {
 	public Direction getCurrentDirection() {
 		return mCurrentDirection;
 	}
+        public ElevatorState getCurrentState(){
+            return mCurrentState;
+        }
 	
 	public Building getBuilding() {
 		return mBuilding;
@@ -249,6 +274,10 @@ public class Elevator implements FloorObserver {
                 }
 		return false;
 	}
+        
+        public List<Passenger> getPassenger(){
+            return mPassengers;
+        }
 	
 	// All elevators have a capacity of 10, for now.
 	public int getCapacity() {
@@ -271,7 +300,9 @@ public class Elevator implements FloorObserver {
 	public void setCurrentFloor(Floor floor) {
 		mCurrentFloor = floor;
 	}
-	
+	public List<ElevatorObserver> getObserver(){
+            return mObservers;
+        }
 	// Observers
 	public void addObserver(ElevatorObserver observer) {
 		mObservers.add(observer);
