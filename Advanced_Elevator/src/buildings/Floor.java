@@ -15,11 +15,14 @@ public class Floor implements ElevatorObserver {
 	// TODO: declare a field(s) to help keep track of which direction buttons are currently pressed.
 	// You can assume that every floor has both up and down buttons, even the ground and top floors.
         
-        private List<Elevator.Direction> PassengerDirection= new ArrayList<>();
+        EnumMap<Elevator.Direction,Boolean> PassengerDirection= new EnumMap<Elevator.Direction,Boolean>(Elevator.Direction.class);
         
 	public Floor(int number, Building building) {
 		mNumber = number;
 		mBuilding = building;
+                PassengerDirection.put(Elevator.Direction.MOVING_UP, Boolean.FALSE);
+                PassengerDirection.put(Elevator.Direction.MOVING_DOWN, Boolean.FALSE);
+                
 	}
 	
 	
@@ -35,8 +38,10 @@ public class Floor implements ElevatorObserver {
                     for(FloorObserver n: mObservers){
                         n.directionRequested(this, direction);
                     }
-                    PassengerDirection.add(direction);
+                    PassengerDirection.put(direction, Boolean.TRUE);
+                    
                 }
+                
                 
                 
                 
@@ -50,9 +55,10 @@ public class Floor implements ElevatorObserver {
 	public boolean directionIsPressed(Elevator.Direction direction) {
 		// TODO: complete this method.
                 
-                if(PassengerDirection.contains(direction)){
+                if(PassengerDirection.get(direction)==true){
                     return true;
                 }
+                
 		return false;
 	}
 	
@@ -70,9 +76,10 @@ public class Floor implements ElevatorObserver {
          * @param p
 	 */
 	public void addWaitingPassenger(Passenger p) {
-		mObservers.add(p);
-                mPassengers.add(p);
+		mPassengers.add(p);
+		addObserver(p);
 		p.setState(Passenger.PassengerState.WAITING_ON_FLOOR);
+              
 		// TODO: call requestDirection with the appropriate direction for this passenger's destination.
                 int destination=p.getDestination();
                 if(this.getNumber()<destination){
@@ -115,16 +122,24 @@ public class Floor implements ElevatorObserver {
 	}
 	
 	public void addObserver(FloorObserver observer) {
-                //System.out.println(mObservers);
 		mObservers.add(observer);
 	}
+        
+        public ArrayList<FloorObserver> getobserver(){
+            return mObservers;
+        }
 	
 	// Observer methods.
 	@Override
 	public void elevatorDecelerating(Elevator elevator) {
 		// TODO: if the elevator is arriving at THIS FLOOR, alert all the floor's observers that elevatorArriving.
 		// TODO:    then clear the elevator's current direction from this floor's requested direction buttons.
-                
+                if(elevator.getCurrentState()==Elevator.ElevatorState.DECELERATING){
+                    for(FloorObserver i:mObservers){
+                        i.elevatorArriving(this, elevator);
+                    }
+                    clearDirection(elevator.getCurrentDirection());
+                }
 		
 	}
 	
