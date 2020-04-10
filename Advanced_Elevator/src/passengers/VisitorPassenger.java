@@ -20,7 +20,6 @@ public class VisitorPassenger extends Passenger {
 		// TODO: change this constructor's  body.
                 destination=destinationFloor;
                 schedule=(int) durationTime;
-                
 	}
         
         public int getSchedule(){
@@ -44,6 +43,7 @@ public class VisitorPassenger extends Passenger {
                 }
 		return false;
 	}
+        
 	
 	/*
 	 TODO: implement this template method variant, which is called when the passenger is leaving the elevator it
