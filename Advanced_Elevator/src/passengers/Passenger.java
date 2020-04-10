@@ -33,6 +33,9 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 	public void setState(PassengerState state) {
 		mCurrentState = state;
 	}
+        public PassengerState getState(){
+            return mCurrentState;
+        }
 	
 	/**
 	 * Gets the passenger's unique identifier.
@@ -95,7 +98,9 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 			// leavingElevator method to allow a derived class to do something when the passenger departs.
 			// Set the current state to BUSY.
 			elevator.removePassenger(this);
+                        elevator.removeObserver(this);
                         this.leavingElevator(elevator);
+                        System.out.println("wrong");
                         this.mCurrentState=PassengerState.BUSY;
 			
 		}
@@ -109,7 +114,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
                         if(this.willBoardElevator(elevator)==true){
                             elevator.getCurrentFloor().removeObserver(this);
                             elevator.getCurrentFloor().removeWaitingPassenger(this);
-                            elevator.addObserver(this);
+                            //elevator.addObserver(this);
                             elevator.addPassenger(this);
                             this.mCurrentState=PassengerState.ON_ELEVATOR;
                         }
