@@ -25,9 +25,11 @@ public class Building implements ElevatorObserver, FloorObserver {
 		
 		// Construct the elevators, and observe each one.
 		for (int i = 0; i < elevatorCount; i++) {
+                    
 			Elevator elevator = new Elevator(i + 1, this);
 			elevator.addObserver(this);
 			for (Floor f : mFloors) {
+                                
 				elevator.addObserver(f);
 			}
 			mElevators.add(elevator);
@@ -121,6 +123,7 @@ public class Building implements ElevatorObserver, FloorObserver {
                 for(Elevator ele:mElevators){
                     if(ele.isIdle()==true){
                         ele.dispatchTo(floor);
+                        ele.setCurrentDirection(direction);
                     }
                     else{
                         mWaitingFloors.add(floor.getNumber());
