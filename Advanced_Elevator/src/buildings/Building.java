@@ -12,6 +12,7 @@ public class Building implements ElevatorObserver, FloorObserver {
 	private Simulation mSimulation;
 	private Queue<Integer> mWaitingFloors = new ArrayDeque<>();
 	
+        
 	public Building(int floors, int elevatorCount, Simulation sim) {
 		mSimulation = sim;
 		
