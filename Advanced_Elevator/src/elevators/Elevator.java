@@ -61,6 +61,7 @@ public class Elevator implements FloorObserver {
 		sim.scheduleEvent(new ElevatorStateEvent(sim.currentTime() + timeFromNow, state, this));
 	}
 	
+        
 	/**
 	 * Adds the given passenger to the elevator's list of passengers, and requests the passenger's destination floor.
 	 */
