@@ -15,6 +15,7 @@ public class VisitorPassenger extends Passenger {
         private int destination;
         private int schedule;
 	
+        
 	public VisitorPassenger(int destinationFloor, double durationTime) {
 		super();
 		// TODO: change this constructor's  body.
