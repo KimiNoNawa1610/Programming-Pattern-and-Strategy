@@ -15,6 +15,7 @@ public class WorkerPassenger extends Passenger {
         
         private List<Long> duration;
 	
+        
 	public WorkerPassenger(List<Integer> destinations, List<Long> durations) {
 		super();
                 Destination=destinations;
