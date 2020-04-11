@@ -13,6 +13,7 @@ public class SpawnPassengerEvent extends SimulationEvent {
 	private static long SPAWN_MEAN_DURATION = 10_800;
 	private static long SPAWN_STDEV_DURATION = 3_600;
 
+        
 	// After executing, will reference the Passenger object that was spawned.
 	private Passenger mPassenger;
 	private Building mBuilding;
