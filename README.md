@@ -1,1 +1,1 @@
-# CECS277-California University of Long Beach
+# CECS277-California State University of Long Beach
