@@ -99,8 +99,6 @@ public class Elevator implements FloorObserver {
 	 * Schedules the elevator's next state change based on its current state.
 	 */
 	public void tick() {
-            
-            //Collections.copy(mObservers, mCurrentFloor.getWaitingPassengers());
             // TODO: port the logic of your state changes from Project 1, accounting for the adjustments in the spec.
             // TODO: State changes are no longer immediate; they are scheduled using scheduleStateChange().
             // Example of how to trigger a state change:
@@ -122,6 +120,8 @@ public class Elevator implements FloorObserver {
                     mCurrentFloor.getWaitingPassengers().forEach((i) -> {
                         i.elevatorArriving(mCurrentFloor, this);
                     });
+                    System.out.println(mCurrentFloor.getWaitingPassengers());
+                    
                     int PreviousPassengerOntheFloor= this.mCurrentFloor.getWaitingPassengers().size();
                     int PreviousPassengerOntheElevator= this.mPassengers.size();
                     for(ElevatorObserver i:mObservers){
@@ -136,6 +136,8 @@ public class Elevator implements FloorObserver {
                     scheduleStateChange(ElevatorState.DOORS_CLOSING,1+x);
                     break;
                 case DOORS_CLOSING:
+                    System.out.println(mCurrentFloor.getWaitingPassengers());
+                    System.out.println(this.getPassenger());
                     if(null==mCurrentDirection){
                         mCurrentDirection=Direction.NOT_MOVING;
                         scheduleStateChange(ElevatorState.IDLE_STATE,2);
@@ -288,6 +290,7 @@ public class Elevator implements FloorObserver {
 	public int getPassengerCount() {
 		return mPassengers.size();
 	}
+        
 	
 	// Simple mutators
 	public void setState(ElevatorState newState) {
