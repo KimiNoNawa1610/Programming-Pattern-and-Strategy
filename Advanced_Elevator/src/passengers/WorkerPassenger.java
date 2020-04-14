@@ -1,6 +1,8 @@
 package passengers;
 
 import elevators.Elevator;
+import elevators.Simulation;
+import events.PassengerNextDestinationEvent;
 
 import java.util.List;
 
@@ -48,7 +50,16 @@ public class WorkerPassenger extends Passenger {
 	*/
 	@Override
 	protected void leavingElevator(Elevator elevator) {
-            
+            if(elevator.getCurrentFloor().getNumber()==1){
+                System.out.println(this+"is leaving the building");
+            }
+            else{
+                this.Destination.remove(0);
+                Simulation s = elevator.getBuilding().getSimulation();
+                PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent( (s.currentTime() + this.duration.get(0)), this,
+		elevator.getCurrentFloor());
+                this.duration.remove(0);
+            }
 	}
 	
 	@Override
