@@ -96,50 +96,13 @@ public class Simulation {
 		 how many seconds to simulate, simulates that many seconds, and stops only if they choose -1 seconds.
 		*/
                 
+                
 	}
 	
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		// TODO: ask the user for a seed value and change the line below.
 		Simulation sim = new Simulation(new Random(1));
-
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
                 sim.startSimulation(s);
                 
 	}
