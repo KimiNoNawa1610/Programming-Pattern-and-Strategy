@@ -3,8 +3,10 @@ package events;
 import buildings.Building;
 import passengers.Passenger;
 import elevators.Simulation;
+import java.util.ArrayList;
 import java.util.Random;
 import passengers.VisitorPassenger;
+import passengers.WorkerPassenger;
 
 /**
  * A simulation event that adds a new random passenger on floor 1, and then schedules the next spawn event.
@@ -69,7 +71,7 @@ public class SpawnPassengerEvent extends SimulationEvent {
                 int RandomFloor=r.nextInt((TopFloor-BaseFloor)+1)+BaseFloor;
                 int VisitTime=3600;
                 int StandardDeviation=120;
-                double val=r.nextGaussian()*StandardDeviation+VisitTime;
+                int val=(int) (r.nextGaussian()*StandardDeviation+VisitTime);
 		VisitorPassenger newVisitor=new VisitorPassenger(RandomFloor,val);
 		return newVisitor;
 	}
@@ -85,7 +87,22 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		and a standard deviation of 3 minutes.
 		 */
 		Random r = mBuilding.getSimulation().getRandom();
-		
-		return null;
+                ArrayList<Integer>Destination=new ArrayList<>();
+                ArrayList<Long>Duration=new ArrayList<>();
+                int VisitTime=600;
+                int StandardDeviation=180;
+		int BaseFloor=2;
+                int TopFloor=mBuilding.getFloorCount();
+                int X=r.nextInt((5-BaseFloor)+1)+BaseFloor;
+                for(int i=0;i<X;i++){
+                    int y=r.nextInt((TopFloor-BaseFloor)+1)+BaseFloor;
+                    if(Destination.contains(y)!=true){
+                        Destination.add(y);
+                    }
+                    Long val=(long) (r.nextGaussian()*StandardDeviation+VisitTime);
+                    Duration.add(val);
+                }
+                WorkerPassenger newWorker=new WorkerPassenger(Destination,Duration);
+		return newWorker;
 	}
 }
