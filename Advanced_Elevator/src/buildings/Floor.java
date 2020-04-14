@@ -58,7 +58,6 @@ public class Floor implements ElevatorObserver {
                 if(PassengerDirection.get(direction)==true){
                     return true;
                 }
-                
 		return false;
 	}
 	
@@ -78,8 +77,9 @@ public class Floor implements ElevatorObserver {
 	public void addWaitingPassenger(Passenger p) {
 		mPassengers.add(p);
 		addObserver(p);
+                System.out.println(p);
 		p.setState(Passenger.PassengerState.WAITING_ON_FLOOR);
-              
+                
 		// TODO: call requestDirection with the appropriate direction for this passenger's destination.
                 int destination=p.getDestination();
                 if(this.getNumber()<destination){
@@ -98,7 +98,9 @@ public class Floor implements ElevatorObserver {
          * @param p
 	 */
 	public void removeWaitingPassenger(Passenger p) {
+                System.out.println("true");
 		mPassengers.remove(p);
+                System.out.println(this.getWaitingPassengers());
 	}
 	
 	
@@ -115,6 +117,7 @@ public class Floor implements ElevatorObserver {
 	public String toString() {
 		return "Floor " + mNumber;
 	}
+        
 	
 	// Observer methods.
 	public void removeObserver(FloorObserver observer) {
