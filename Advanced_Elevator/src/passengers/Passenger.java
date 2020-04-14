@@ -100,7 +100,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 			elevator.removePassenger(this);
                         elevator.removeObserver(this);
                         this.leavingElevator(elevator);
-                        System.out.println("wrong");
+                      
                         this.mCurrentState=PassengerState.BUSY;
 			
 		}
@@ -112,11 +112,18 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 			// then add the passenger as an observer of and passenger on the elevator. Then set the mCurrentState
 			// to ON_ELEVATOR.
                         if(this.willBoardElevator(elevator)==true){
-                            elevator.getCurrentFloor().removeObserver(this);
+                            //System.out.println(elevator.getPassenger());
+                            //System.out.println(elevator.getCurrentFloor().getNumber());
+                            //System.out.println(elevator.getCurrentFloor().getobserver().size());
                             elevator.getCurrentFloor().removeWaitingPassenger(this);
-                            //elevator.addObserver(this);
+                            elevator.getCurrentFloor().removeObserver(this);
+                            System.out.println(elevator.getCurrentFloor().getobserver().size());
                             elevator.addPassenger(this);
+                            //elevator.addObserver(this);
                             this.mCurrentState=PassengerState.ON_ELEVATOR;
+                        }
+                        else{
+                            elevator.removeObserver(this);
                         }
 			
 			
