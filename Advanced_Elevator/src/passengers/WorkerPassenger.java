@@ -37,6 +37,8 @@ public class WorkerPassenger extends Passenger {
             if(elevator.getPassengerCount()<=3){
                 return true;
             }
+                System.out.println("Worker Passenger: will board Eleavator");
+
 		return false;
                 
 	}
@@ -60,6 +62,8 @@ public class WorkerPassenger extends Passenger {
 		elevator.getCurrentFloor());
                 this.duration.remove(0);
             }
+            System.out.println("Worker Passenger: leaving Eleavator");
+
 	}
 	
 	@Override
