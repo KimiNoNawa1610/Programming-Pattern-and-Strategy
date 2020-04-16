@@ -39,9 +39,10 @@ public class VisitorPassenger extends Passenger {
 	@Override
 	protected boolean willBoardElevator(Elevator elevator) {
                 if(elevator.getCapacity()>elevator.getPassengerCount()){
-                    elevator.addPassenger(this);
                     return true;
                 }
+                System.out.println("Visitor Passenger: will board Eleavator");
+
 		return false;
 	}
         
@@ -54,14 +55,13 @@ public class VisitorPassenger extends Passenger {
 	*/
 	@Override
 	protected void leavingElevator(Elevator elevator) {
-                elevator.removePassenger(this);
                 int EndFloor=1;
 		Simulation s = elevator.getBuilding().getSimulation();
 		PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent( (s.currentTime() + getSchedule()), this,
 		elevator.getCurrentFloor());
                 this.destination=EndFloor;
 		s.scheduleEvent(ev);
-                
+                System.out.println("Visitor Passenger: leaving Eleavator");
 	}
 	
 	// TODO: return "Visitor heading to floor {destination}", replacing {destination} with the floor number.
