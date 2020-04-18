@@ -68,8 +68,6 @@ public class Building implements ElevatorObserver, FloorObserver {
         String output= String.join("",x);
         return output;    
     
-        
-    
         }
 	
 	public int getFloorCount() {
@@ -84,6 +82,9 @@ public class Building implements ElevatorObserver, FloorObserver {
 		return mSimulation;
 	}
 	
+        public Queue<Integer> GetWaitingFloor(){
+            return mWaitingFloors;
+        }
 	
 	@Override
 	public void elevatorDecelerating(Elevator elevator) {
@@ -98,13 +99,16 @@ public class Building implements ElevatorObserver, FloorObserver {
 	
 	@Override
 	public void elevatorWentIdle(Elevator elevator) {
-            
+                System.out.println(mWaitingFloors.size());
 		// TODO: if mWaitingFloors is not empty, remove the first entry from the queue and dispatch the elevator to that floor.
-                
                 if(mWaitingFloors.isEmpty()!=true){
                     int FirstEntry=mWaitingFloors.peek();
-                    elevator.dispatchTo(mFloors.get(FirstEntry));
+                    System.out.println("Current Waiting Floor: "+FirstEntry);
+                    System.out.println("Elevator Current Floor:"+ elevator.getCurrentFloor().getNumber());
+                    elevator.dispatchTo(mFloors.get(FirstEntry-1));
                     mWaitingFloors.remove(FirstEntry);
+                    //System.out.println(elevator.getObserver().size());
+                    System.out.println("Buidling: Elevator went idle");
                     
                 }
 	}
@@ -112,9 +116,16 @@ public class Building implements ElevatorObserver, FloorObserver {
 	@Override
 	public void elevatorArriving(Floor sender, Elevator elevator) {
 		// TODO: add the floor mWaitingFloors if it is not already in the queue.
+                //System.out.println("Buidling: Elevator arriving");
+                //System.out.println(elevator.getObserver().size());
+
                 if(mWaitingFloors.contains(sender)!=true){
                     mWaitingFloors.add(sender.getNumber());
                 }
+                //System.out.println("Buidling: Pass Elevator arriving");
+                //System.out.println("Elevator direction: "+elevator.getCurrentDirection());
+                //System.out.println(elevator.getObserver().size());
+
 	}
 	
 	@Override
@@ -125,10 +136,12 @@ public class Building implements ElevatorObserver, FloorObserver {
                     if(ele.isIdle()==true){
                         ele.dispatchTo(floor);
                         ele.setCurrentDirection(direction);
+                        break;
                     }
                     else{
                         mWaitingFloors.add(floor.getNumber());
                     }
+                    //System.out.println("Buidling: Direction Requested");
                 }
 		
 	}
