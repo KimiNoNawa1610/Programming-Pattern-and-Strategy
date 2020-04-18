@@ -6,14 +6,12 @@
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/events/SpawnPassengerEvent.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/elevators/Simulation.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/buildings/Building.java</file>
-            <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/buildings/Automobile.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/passengers/Passenger.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/passengers/WorkerPassenger.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/buildings/Floor.java</file>
-            <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/buildings/Vehicle.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/elevators/Elevator.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/passengers/VisitorPassenger.java</file>
-            <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/elevators/ElevatorObserver.java</file>
+            <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/events/SimulationEvent.java</file>
         </group>
     </open-files>
 </project-private>
