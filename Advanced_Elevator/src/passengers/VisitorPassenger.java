@@ -41,7 +41,7 @@ public class VisitorPassenger extends Passenger {
                 if(elevator.getCapacity()>elevator.getPassengerCount()){
                     return true;
                 }
-                System.out.println("Visitor Passenger: will board Eleavator");
+                //System.out.println("Visitor Passenger: will board Eleavator");
 
 		return false;
 	}
@@ -61,7 +61,8 @@ public class VisitorPassenger extends Passenger {
 		elevator.getCurrentFloor());
                 this.destination=EndFloor;
 		s.scheduleEvent(ev);
-                System.out.println("Visitor Passenger: leaving Eleavator");
+                //elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]=false;
+                //System.out.println("Visitor Passenger: leaving Eleavator");
 	}
 	
 	// TODO: return "Visitor heading to floor {destination}", replacing {destination} with the floor number.
