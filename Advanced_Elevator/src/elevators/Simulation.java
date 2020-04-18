@@ -60,7 +60,8 @@ public class Simulation {
 		double realTimeScale = 1.0;
 		
 		// TODO: the simulation currently stops at 200s. Instead, ask the user how long they want to simulate.
-		nextSimLength = 200;
+                //System.out.println("Please Enter your simulation time.");
+		nextSimLength = input.nextInt();
 		
 		long nextStopTime = mCurrentTime + nextSimLength;
 		// If the next event in the queue occurs after the requested sim time, then just fast forward to the requested sim time.
@@ -95,6 +96,9 @@ public class Simulation {
 		 TODO: the simulation stops after one round of simulation. Write a loop that continues to ask the user
 		 how many seconds to simulate, simulates that many seconds, and stops only if they choose -1 seconds.
 		*/
+                System.out.println("Please continue Enter your simulation time. Enter -1 to exist");
+                startSimulation(input);
+
                 
                 
 	}
@@ -102,7 +106,10 @@ public class Simulation {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		// TODO: ask the user for a seed value and change the line below.
-		Simulation sim = new Simulation(new Random(1));
+                System.out.println("Please enter your seed number.");
+                int seed=s.nextInt();
+                System.out.println("Please enter your time number.");
+		Simulation sim = new Simulation(new Random(seed));
                 sim.startSimulation(s);
                 
 	}
