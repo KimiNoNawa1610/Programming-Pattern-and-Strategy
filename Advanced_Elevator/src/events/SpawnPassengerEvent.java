@@ -51,7 +51,7 @@ public class SpawnPassengerEvent extends SimulationEvent {
                 int max=30;
                 int min=1;
                 int ScheduledTime=r.nextInt((max-min)+1)+min;
-                SpawnPassengerEvent SPE=new SpawnPassengerEvent(ScheduledTime,this.mBuilding);
+                SpawnPassengerEvent SPE=new SpawnPassengerEvent(sim.currentTime()+ScheduledTime,this.mBuilding);
                 sim.scheduleEvent(SPE);
 	}
 	
@@ -63,14 +63,15 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		 The visitor's visit duration should follow a NORMAL (GAUSSIAN) DISTRIBUTION with a mean of 1 hour
 		 and a standard deviation of 20 minutes.
 		 */
-                
+                //System.out.println("Spawn Passenger: spawn visitor");
+
 		Random r = mBuilding.getSimulation().getRandom();
 		// Look up the documentation for the .nextGaussian() method of the Random class.
                 int BaseFloor=2;
                 int TopFloor=mBuilding.getFloorCount();
                 int RandomFloor=r.nextInt((TopFloor-BaseFloor)+1)+BaseFloor;
                 int VisitTime=3600;
-                int StandardDeviation=120;
+                int StandardDeviation=1200;
                 int val=(int) (r.nextGaussian()*StandardDeviation+VisitTime);
 		VisitorPassenger newVisitor=new VisitorPassenger(RandomFloor,val);
 		return newVisitor;
@@ -86,6 +87,7 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		To generate the list of durations, generate X integers using a NORMAL DISTRIBUTION with a mean of 10 minutes
 		and a standard deviation of 3 minutes.
 		 */
+                //System.out.println("Spawn Passenger: spawn worker");
 		Random r = mBuilding.getSimulation().getRandom();
                 ArrayList<Integer>Destination=new ArrayList<>();
                 ArrayList<Long>Duration=new ArrayList<>();
