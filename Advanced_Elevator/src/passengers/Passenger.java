@@ -55,7 +55,6 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 		// This is a sanity check. A Passenger should never be observing a Floor they are not waiting on.
 		if (floor.getWaitingPassengers().contains(this) && mCurrentState == PassengerState.WAITING_ON_FLOOR) {
 			Elevator.Direction elevatorDirection = elevator.getCurrentDirection();
-			
 			if(null!=elevatorDirection) 
                     // TODO: check if the elevator is either NOT_MOVING, or is going in the direction that this passenger wants.
                     // If so, this passenger becomes an observer of the elevator.
@@ -76,6 +75,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
                         default:
                             break;
                     }
+                        //System.out.println("Passenger: Elevator arriving");
 		}
 		// This else should not happen if your code is correct. Do not remove this branch; it reveals errors in your code.
 		else {
@@ -92,17 +92,19 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 	public void elevatorDoorsOpened(Elevator elevator) {
 		// The elevator is arriving at our destination. Remove ourselves from the elevator, and stop observing it.
 		// Does NOT handle any "next" destination...
-                
+                //System.out.println("Passenger: Elevator doors opened");
+
 		if (mCurrentState == PassengerState.ON_ELEVATOR && elevator.getCurrentFloor().getNumber() == getDestination()) {
 			// TODO: remove this passenger from the elevator, and as an observer of the elevator. Call the
 			// leavingElevator method to allow a derived class to do something when the passenger departs.
 			// Set the current state to BUSY.
+                        
 			elevator.removePassenger(this);
                         elevator.removeObserver(this);
                         this.leavingElevator(elevator);
-                      
                         this.mCurrentState=PassengerState.BUSY;
-			
+			//System.out.println("Passenger: leaving elevator");
+
 		}
 		// The elevator has arrived on the floor we are waiting on. If the elevator has room for us, remove ourselves
 		// from the floor, and enter the elevator.
@@ -117,14 +119,15 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
                             //System.out.println(elevator.getCurrentFloor().getobserver().size());
                             elevator.getCurrentFloor().removeWaitingPassenger(this);
                             elevator.getCurrentFloor().removeObserver(this);
-                            System.out.println(elevator.getCurrentFloor().getobserver().size());
                             elevator.addPassenger(this);
-                            //elevator.addObserver(this);
+                            elevator.addObserver(this);
                             this.mCurrentState=PassengerState.ON_ELEVATOR;
                         }
                         else{
                             elevator.removeObserver(this);
                         }
+                        //System.out.println("Passenger: will board elevator");
+
 			
 			
 			
