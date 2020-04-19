@@ -27,7 +27,7 @@ public class SpawnPassengerEvent extends SimulationEvent {
 	
 	@Override
 	public String toString() {
-		return super.toString() + "Adding " + mPassenger + " to floor 1.";
+		return super.toString() + " Adding " + mPassenger + " to floor 1.";
 	}
 	
 	@Override
@@ -50,9 +50,11 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		*/
                 int max=30;
                 int min=1;
-                int ScheduledTime=r.nextInt((max-min)+1)+min;
+                int ScheduledTime=r.nextInt(max-min+1)+min;
+                System.out.println(sim.currentTime()+"s: "+"Passenger spwan in "+ScheduledTime+"s");
                 SpawnPassengerEvent SPE=new SpawnPassengerEvent(sim.currentTime()+ScheduledTime,this.mBuilding);
                 sim.scheduleEvent(SPE);
+                //System.out.println("Spawn Passenger Event execute");
 	}
 	
 	
