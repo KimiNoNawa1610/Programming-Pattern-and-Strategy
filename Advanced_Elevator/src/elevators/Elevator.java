@@ -132,8 +132,10 @@ public class Elevator implements FloorObserver {
                     int CurrentPassengerOntheFloor= this.mCurrentFloor.getWaitingPassengers().size();
                     int CurrentPassengerOntheElevator=this.mPassengers.size();
                   
-                    int PassengerChangeCount=PreviousPassengerOntheFloor-CurrentPassengerOntheFloor+
-                            PreviousPassengerOntheElevator-CurrentPassengerOntheElevator;
+                    int PassengerChangeCount=Math.abs(PreviousPassengerOntheFloor-CurrentPassengerOntheFloor)+
+                            PreviousPassengerOntheElevator-CurrentPassengerOntheElevator+
+                            Math.abs(PreviousPassengerOntheFloor-CurrentPassengerOntheFloor);
+                    //System.out.println(PassengerChangeCount);
                     int x=PassengerChangeCount/2;
                     
                     scheduleStateChange(ElevatorState.DOORS_CLOSING,1+x);
@@ -186,7 +188,6 @@ public class Elevator implements FloorObserver {
                            scheduleStateChange(ElevatorState.DECELERATING,2);
                        }
                        else{
-                            
                             scheduleStateChange(ElevatorState.MOVING,2);
                     }  
                       
@@ -197,8 +198,7 @@ public class Elevator implements FloorObserver {
                            scheduleStateChange(ElevatorState.DECELERATING,2);
                         }
                         else{
-                            
-                            scheduleStateChange(ElevatorState.MOVING,2);
+                             scheduleStateChange(ElevatorState.MOVING,2);
                     }  
                        
                     }  
