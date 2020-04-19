@@ -127,12 +127,6 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
                             elevator.removeObserver(this);
                         }
                         //System.out.println("Passenger: will board elevator");
-
-			
-			
-			
-			
-			
 			
 			
 		}
