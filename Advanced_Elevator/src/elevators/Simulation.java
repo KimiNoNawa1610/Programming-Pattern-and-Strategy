@@ -85,6 +85,7 @@ public class Simulation {
 			
 			mCurrentTime += diffTime;
 			nextEvent.execute(this);
+                        //System.out.println("Simulation execute");
 			System.out.println(nextEvent);
                         
 		}
@@ -97,7 +98,10 @@ public class Simulation {
 		 how many seconds to simulate, simulates that many seconds, and stops only if they choose -1 seconds.
 		*/
                 System.out.println("Please continue Enter your simulation time. Enter -1 to exist");
-                startSimulation(input);
+                while(input.nextInt()!=-1){
+                    
+                    startSimulation(input);
+                }
 
                 
                 
