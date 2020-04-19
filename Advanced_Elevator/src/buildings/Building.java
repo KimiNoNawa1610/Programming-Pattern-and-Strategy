@@ -123,7 +123,7 @@ public class Building implements ElevatorObserver, FloorObserver {
                         mWaitingFloors.add(sender.getNumber());
                     }
                 }
-                //System.out.println("Buidling: Pass Elevator arriving");
+                //System.out.println("Buidling: Elevator arriving");
                 //System.out.println("Elevator direction: "+elevator.getCurrentDirection());
                 //System.out.println(elevator.getObserver().size());
 
