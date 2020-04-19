@@ -94,7 +94,7 @@ public class Floor implements ElevatorObserver {
                 else if(this.getNumber()>destination){
                     requestDirection(Elevator.Direction.MOVING_DOWN);
                 }
-                //System.out.println("Floor pass: add waiting passenger");
+                //System.out.println("Floor : add waiting passenger");
                 
                 
                 
@@ -121,7 +121,7 @@ public class Floor implements ElevatorObserver {
 	
 	@Override
 	public String toString() {
-		return "Floor " + mNumber;
+		return " Floor " + mNumber;
 	}
         
 	
