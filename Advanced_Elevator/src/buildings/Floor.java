@@ -71,7 +71,7 @@ public class Floor implements ElevatorObserver {
 	public void clearDirection(Elevator.Direction direction) {
 		// TODO: complete this method.
                 PassengerDirection.put(direction,Boolean.FALSE);
-                //System.out.println("Floor: clear direction "+direction);
+                //System.out.println(this.getNumber()+" Floor: clear direction "+direction);
 
 	}
 	
