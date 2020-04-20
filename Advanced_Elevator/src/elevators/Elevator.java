@@ -113,7 +113,8 @@ public class Elevator implements FloorObserver {
             // scheduleStateChange(ElevatorState.MOVING, 3); // switch to MOVING and call tick(), 3 seconds from now.
             switch (mCurrentState) {
                 case IDLE_STATE:
-                    this.mCurrentFloor.addObserver(this);
+                    if(mCurrentFloor.getobserver().contains(this)==false){
+                    this.mCurrentFloor.addObserver(this);}
                     mObservers.forEach((i) -> {
                         i.elevatorWentIdle(this);
                     }); 
@@ -127,7 +128,6 @@ public class Elevator implements FloorObserver {
                     for(ElevatorObserver i:cache){
                         i.elevatorDoorsOpened(this);
                     }
-                   
                     int CurrentPassengerOntheFloor= this.mCurrentFloor.getWaitingPassengers().size();
                     int CurrentPassengerOntheElevator=this.mPassengers.size();
                   
