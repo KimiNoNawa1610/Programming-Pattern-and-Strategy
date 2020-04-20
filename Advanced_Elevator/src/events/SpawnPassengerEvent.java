@@ -27,7 +27,7 @@ public class SpawnPassengerEvent extends SimulationEvent {
 	
 	@Override
 	public String toString() {
-		return super.toString() + " Adding " + mPassenger + " to floor 1.";
+		return super.toString() + "Adding " + mPassenger + " to floor 1.";
 	}
 	
 	@Override
@@ -50,8 +50,7 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		*/
                 int max=30;
                 int min=1;
-                int ScheduledTime=r.nextInt(max-min+1)+min;
-                System.out.println(sim.currentTime()+"s: "+"Passenger spwan in "+ScheduledTime+"s");
+                int ScheduledTime=r.nextInt(max)+min;
                 SpawnPassengerEvent SPE=new SpawnPassengerEvent(sim.currentTime()+ScheduledTime,this.mBuilding);
                 sim.scheduleEvent(SPE);
                 //System.out.println("Spawn Passenger Event execute");
@@ -71,7 +70,7 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		// Look up the documentation for the .nextGaussian() method of the Random class.
                 int BaseFloor=2;
                 int TopFloor=mBuilding.getFloorCount();
-                int RandomFloor=r.nextInt((TopFloor-BaseFloor)+1)+BaseFloor;
+                int RandomFloor=r.nextInt(TopFloor-1)+BaseFloor;
                 int VisitTime=3600;
                 int StandardDeviation=1200;
                 int val=(int) (r.nextGaussian()*StandardDeviation+VisitTime);
@@ -93,16 +92,21 @@ public class SpawnPassengerEvent extends SimulationEvent {
 		Random r = mBuilding.getSimulation().getRandom();
                 ArrayList<Integer>Destination=new ArrayList<>();
                 ArrayList<Long>Duration=new ArrayList<>();
+                int bound=mBuilding.getFloorCount();
                 int VisitTime=600;
                 int StandardDeviation=180;
-		int BaseFloor=2;
-                int TopFloor=mBuilding.getFloorCount();
-                int X=r.nextInt((5-BaseFloor)+1)+BaseFloor;
-                for(int i=0;i<X;i++){
-                    int y=r.nextInt((TopFloor-BaseFloor)+1)+BaseFloor;
-                    if(Destination.contains(y)!=true){
-                        Destination.add(y);
+		int numFloorVisits=r.nextInt(4)+2;
+                int randFloor;
+                int prevFloor=0;
+                for(int i=0;i<numFloorVisits;i++){
+                    randFloor=r.nextInt(bound-1)+2;
+                    while(randFloor==prevFloor){
+                        randFloor=r.nextInt(bound-1)+2;
                     }
+                    Destination.add(randFloor);
+                    prevFloor=randFloor;
+                }
+                for(int i=0;i<numFloorVisits;i++){
                     Long val=(long) (r.nextGaussian()*StandardDeviation+VisitTime);
                     Duration.add(val);
                 }
