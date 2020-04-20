@@ -48,7 +48,11 @@ public class Simulation {
 	}
 	
 	public void startSimulation(Scanner input) {
-		Building b = new Building(10, 1, this);
+                System.out.println("Please enter your building floors number");
+                int floorcount=input.nextInt();
+                System.out.println("Please enter your elevator number");
+                int ele=input.nextInt();
+		Building b = new Building(floorcount, ele, this);
 		SpawnPassengerEvent ev = new SpawnPassengerEvent(0, b);
 		scheduleEvent(ev);
 		
@@ -60,9 +64,9 @@ public class Simulation {
 		double realTimeScale = 1.0;
 		
 		// TODO: the simulation currently stops at 200s. Instead, ask the user how long they want to simulate.
-                //System.out.println("Please Enter your simulation time.");
+                System.out.println("Please Enter your simulation time.");
 		nextSimLength = input.nextInt();
-		
+		while(nextSimLength!=-1){
 		long nextStopTime = mCurrentTime + nextSimLength;
 		// If the next event in the queue occurs after the requested sim time, then just fast forward to the requested sim time.
 		if (mEvents.peek().getScheduledTime() >= nextStopTime) {
@@ -97,13 +101,10 @@ public class Simulation {
 		 TODO: the simulation stops after one round of simulation. Write a loop that continues to ask the user
 		 how many seconds to simulate, simulates that many seconds, and stops only if they choose -1 seconds.
 		*/
-                System.out.println("Please continue Enter your simulation time. Enter -1 to exist");
-                while(input.nextInt()!=-1){
-                    
-                    startSimulation(input);
-                }
-
+                System.out.println("Please Enter your simulation time. Enter -1 to exist");
+		nextSimLength = input.nextInt();
                 
+                }
                 
 	}
 	
@@ -112,7 +113,6 @@ public class Simulation {
 		// TODO: ask the user for a seed value and change the line below.
                 System.out.println("Please enter your seed number.");
                 int seed=s.nextInt();
-                System.out.println("Please enter your time number.");
 		Simulation sim = new Simulation(new Random(seed));
                 sim.startSimulation(s);
                 
