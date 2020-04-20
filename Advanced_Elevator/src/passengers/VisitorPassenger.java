@@ -55,12 +55,17 @@ public class VisitorPassenger extends Passenger {
 	*/
 	@Override
 	protected void leavingElevator(Elevator elevator) {
+                if(this.destination==1){
+                    System.out.println("Visitor "+this.getId()+" is leaving the building");
+                }
+                
                 int EndFloor=1;
 		Simulation s = elevator.getBuilding().getSimulation();
-		PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent( (s.currentTime() + getSchedule()), this,
+		PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent( getSchedule(), this,
 		elevator.getCurrentFloor());
                 this.destination=EndFloor;
 		s.scheduleEvent(ev);
+                
                 //elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]=false;
                 //System.out.println("Visitor Passenger: leaving Eleavator");
 	}
