@@ -61,6 +61,8 @@ public class WorkerPassenger extends Passenger {
                 PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent( (s.currentTime() + this.duration.get(0)), this,
 		elevator.getCurrentFloor());
                 this.duration.remove(0);
+                s.scheduleEvent(ev);
+                
             }
             //System.out.println("Worker Passenger: leaving Eleavator");
 
