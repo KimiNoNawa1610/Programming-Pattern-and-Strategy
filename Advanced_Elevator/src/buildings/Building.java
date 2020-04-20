@@ -5,6 +5,7 @@ import elevators.Elevator;
 import elevators.ElevatorObserver;
 
 import java.util.*;
+import passengers.Passenger;
 
 public class Building implements ElevatorObserver, FloorObserver {
 	private List<Elevator> mElevators = new ArrayList<>();
@@ -43,6 +44,7 @@ public class Building implements ElevatorObserver, FloorObserver {
 	public String toString(){
         ArrayList<String> x=new ArrayList<>();
         ArrayList<String> y=new ArrayList<>();
+        ArrayList<Integer> des=new ArrayList<>();
         for(int z=0;z<mElevators.size();z++){
             y.add("|  |");
         }
@@ -53,11 +55,14 @@ public class Building implements ElevatorObserver, FloorObserver {
                 }
                 else{y.set(z,"|   |");}
             }
+            for(Passenger pass:this.mFloors.get(i).getWaitingPassengers()){
+                des.add(pass.getDestination());
+            }
                 if(i+1>=10){
-                    x.add((i+1)+ ": "+String.join("",y)+this.mFloors.get(i).getWaitingPassengers()+"\n");
+                    x.add((i+1)+ ": "+String.join("",y)+des.toString()+"\n");
                 }
                 else{
-                    x.add(" "+(i+1)+": "+String.join("",y)+this.mFloors.get(i).getWaitingPassengers()+"\n");
+                    x.add(" "+(i+1)+": "+String.join("",y)+des.toString()+"\n");
                 }
         }
         
@@ -103,13 +108,21 @@ public class Building implements ElevatorObserver, FloorObserver {
 		// TODO: if mWaitingFloors is not empty, remove the first entry from the queue and dispatch the elevator to that floor.
                 if(mWaitingFloors.isEmpty()!=true){
                     int FirstEntry=mWaitingFloors.peek();
+                    for(Elevator ele:mElevators){
+                        if(ele.getCurrentFloor().getNumber()==FirstEntry){
                     //System.out.println("Current Waiting Floor: "+FirstEntry);
                     //System.out.println("Elevator Current Floor:"+ elevator.getCurrentFloor().getNumber());
-                    elevator.dispatchTo(mFloors.get(FirstEntry-1));
-                    mWaitingFloors.remove(FirstEntry);
+                            ele.dispatchTo(mFloors.get(FirstEntry-1));
+                            mWaitingFloors.remove(FirstEntry);}
+
+                        
+                        else{
+                            elevator.dispatchTo(mFloors.get(FirstEntry-1));
+                            mWaitingFloors.remove(FirstEntry);}
                     //System.out.println(elevator.getObserver().size());
                     //System.out.println("Buidling: Elevator went idle");
                     
+                }
                 }
 	}
 	
@@ -137,13 +150,14 @@ public class Building implements ElevatorObserver, FloorObserver {
                     if(ele.isIdle()==true){
                         ele.dispatchTo(floor);
                         ele.setCurrentDirection(direction);
-                        break;
+                        //System.out.println("Buidling: Direction Requested");
                     }
+                    
                     else{
                         mWaitingFloors.add(floor.getNumber());
-                    }
-                    //System.out.println("Buidling: Direction Requested");
+                    }  
                 }
+                
 		
 	}
 }
