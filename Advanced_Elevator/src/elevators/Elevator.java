@@ -187,19 +187,22 @@ public class Elevator implements FloorObserver {
                     if(mCurrentDirection==Direction.MOVING_UP){
                        //System.out.println(Arrays.toString(RequestedFloor));
                        setCurrentFloor(mBuilding.getFloor(mCurrentFloor.getNumber()+1));
-                       if(RequestedFloor[this.mCurrentFloor.getNumber()-1]==true){
+                       if(RequestedFloor[this.mCurrentFloor.getNumber()-1]==true||mCurrentFloor.directionIsPressed(mCurrentDirection)){
                            scheduleStateChange(ElevatorState.DECELERATING,2);
                        }
                        else{
                             scheduleStateChange(ElevatorState.MOVING,2);
                     }  
+                       
                       
                     }
                     else if(mCurrentDirection==Direction.MOVING_DOWN){
+                        //System.out.println(Arrays.toString(RequestedFloor));
                         setCurrentFloor(mBuilding.getFloor(mCurrentFloor.getNumber()-1));
-                        if(RequestedFloor[this.mCurrentFloor.getNumber()-1]==true){
+                        if(RequestedFloor[this.mCurrentFloor.getNumber()-1]==true||mCurrentFloor.directionIsPressed(mCurrentDirection)){
                            scheduleStateChange(ElevatorState.DECELERATING,2);
                         }
+                        
                         else{
                              scheduleStateChange(ElevatorState.MOVING,2);
                     }  
