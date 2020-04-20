@@ -74,6 +74,8 @@ public class WorkerPassenger extends Passenger {
 	// TODO: return "Worker heading to floor {destination}", replacing {destination} with the first destination floor number.
 	@Override
 	public String toString() {
+                //System.out.println(Destination);
+                //System.out.println(this.duration);
 		return "Worker "+this.getId()+" heading to floor "+this.getDestination();
 	}
 	
