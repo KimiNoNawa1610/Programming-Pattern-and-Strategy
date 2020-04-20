@@ -120,7 +120,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
                             elevator.getCurrentFloor().removeWaitingPassenger(this);
                             elevator.getCurrentFloor().removeObserver(this);
                             elevator.addPassenger(this);
-                            elevator.addObserver(this);
+                            //elevator.addObserver(this);
                             this.mCurrentState=PassengerState.ON_ELEVATOR;
                         }
                         else{
