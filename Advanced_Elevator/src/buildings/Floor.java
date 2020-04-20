@@ -137,6 +137,14 @@ public class Floor implements ElevatorObserver {
         public ArrayList<FloorObserver> getobserver(){
             return mObservers;
         }
+        
+        public ArrayList<Integer> getDestinations(){
+            ArrayList<Integer>output=new ArrayList<>();
+            for(Passenger i:mPassengers){
+                output.add(i.getDestination());
+            }
+            return output;
+        }
 	
 	// Observer methods.
 	@Override
