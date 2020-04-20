@@ -268,12 +268,13 @@ public class Elevator implements FloorObserver {
 		if(this.isIdle()&& mCurrentFloor.equals(floor)==false){
                     RequestedFloor[floor.getNumber()-1]=true;
                     scheduleStateChange(ElevatorState.ACCELERATING,0);
-                    //System.out.println("Elevator: dispatch to"+floor.getNumber());
+                    System.out.println(this+"Elevator: dispatch to"+floor.getNumber());
+                    System.out.println(mCurrentFloor.getNumber());
                     if(mCurrentFloor.getNumber()>floor.getNumber()){
-                        setCurrentDirection(Elevator.Direction.MOVING_DOWN);
+                        mCurrentDirection=Elevator.Direction.MOVING_DOWN;
                     }
                     else if(mCurrentFloor.getNumber()<floor.getNumber()){
-                        setCurrentDirection(Elevator.Direction.MOVING_UP);
+                        mCurrentDirection=Elevator.Direction.MOVING_UP;
                     }
                 }
                 //System.out.println("Elevator dispatch to: "+floor.getNumber());
