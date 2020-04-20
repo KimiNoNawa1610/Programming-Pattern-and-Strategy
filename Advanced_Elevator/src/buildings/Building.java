@@ -111,8 +111,6 @@ public class Building implements ElevatorObserver, FloorObserver {
                     //System.out.println("Elevator Current Floor:"+ elevator.getCurrentFloor().getNumber());
                             ele.dispatchTo(mFloors.get(FirstEntry-1));
                             mWaitingFloors.remove(FirstEntry);}
-
-                        
                         else{
                             elevator.dispatchTo(mFloors.get(FirstEntry-1));
                             mWaitingFloors.remove(FirstEntry);}
@@ -146,8 +144,7 @@ public class Building implements ElevatorObserver, FloorObserver {
                 for(Elevator ele:mElevators){
                     if(ele.isIdle()==true){
                         ele.dispatchTo(floor);
-                        ele.setCurrentDirection(direction);
-                        //System.out.println("Buidling: Direction Requested");
+                        //ele.setCurrentDirection(direction);
                     }
                     
                     else{
