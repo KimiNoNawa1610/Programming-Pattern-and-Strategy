@@ -58,13 +58,14 @@ public class VisitorPassenger extends Passenger {
                 if(this.destination==1){
                     System.out.println("Visitor "+this.getId()+" is leaving the building");
                 }
-                
+                else{
                 int EndFloor=1;
 		Simulation s = elevator.getBuilding().getSimulation();
 		PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent( getSchedule(), this,
 		elevator.getCurrentFloor());
                 this.destination=EndFloor;
 		s.scheduleEvent(ev);
+                }
                 
                 //elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]=false;
                 //System.out.println("Visitor Passenger: leaving Eleavator");

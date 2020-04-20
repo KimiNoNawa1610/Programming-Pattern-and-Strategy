@@ -53,7 +53,7 @@ public class WorkerPassenger extends Passenger {
 	@Override
 	protected void leavingElevator(Elevator elevator) {
             if(elevator.getCurrentFloor().getNumber()==1){
-                //System.out.println(this+"is leaving the building");
+                System.out.println(this+" is leaving the building.");
             }
             else{
                 this.Destination.remove(0);
