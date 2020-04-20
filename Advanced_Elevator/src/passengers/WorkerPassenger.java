@@ -28,7 +28,9 @@ public class WorkerPassenger extends Passenger {
 	// TODO: implement this method. Return the current destination, which is the first element of the destinations list.
 	@Override
 	public int getDestination() {
+                //System.out.println(Destination);
 		return Destination.get(0);
+                
 	}
 	
 	// TODO: implement this template method variant. A Worker will only join an elevator with at most 3 people on it.
@@ -53,16 +55,18 @@ public class WorkerPassenger extends Passenger {
 	@Override
 	protected void leavingElevator(Elevator elevator) {
             if(elevator.getCurrentFloor().getNumber()==1){
-                System.out.println(this+" is leaving the building.");
+                System.out.println("Visitor "+this.getId()+" is leaving the building");
             }
             else{
                 this.Destination.remove(0);
                 Simulation s = elevator.getBuilding().getSimulation();
-                PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent( (s.currentTime() + this.duration.get(0)), this,
+                PassengerNextDestinationEvent ev = new PassengerNextDestinationEvent( s.currentTime()+this.duration.get(0), this,
 		elevator.getCurrentFloor());
-                this.duration.remove(0);
                 s.scheduleEvent(ev);
-                
+                duration.remove(0);
+                if(duration.isEmpty()&&Destination.isEmpty()){
+                    Destination.add(1);
+                }
             }
             //System.out.println("Worker Passenger: leaving Eleavator");
 
