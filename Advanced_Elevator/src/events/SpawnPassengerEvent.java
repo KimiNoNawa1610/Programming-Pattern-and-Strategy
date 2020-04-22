@@ -95,18 +95,18 @@ public class SpawnPassengerEvent extends SimulationEvent {
                 int bound=mBuilding.getFloorCount();
                 int VisitTime=600;
                 int StandardDeviation=180;
-		int numFloorVisits=r.nextInt(4)+2;
-                int randFloor;
+		int duration=r.nextInt(4)+2;
+                int newFloor;
                 int prevFloor=0;
-                for(int i=0;i<numFloorVisits;i++){
-                    randFloor=r.nextInt(bound-1)+2;
-                    while(randFloor==prevFloor){
-                        randFloor=r.nextInt(bound-1)+2;
+                for(int i=0;i<duration;i++){
+                    newFloor=r.nextInt(bound-1)+2;
+                    while(newFloor==prevFloor){
+                        newFloor=r.nextInt(bound-1)+2;
                     }
-                    Destination.add(randFloor);
-                    prevFloor=randFloor;
+                    Destination.add(newFloor);
+                    prevFloor=newFloor;
                 }
-                for(int i=0;i<numFloorVisits;i++){
+                for(int i=0;i<duration;i++){
                     Long val=(long) (r.nextGaussian()*StandardDeviation+VisitTime);
                     Duration.add(val);
                 }
