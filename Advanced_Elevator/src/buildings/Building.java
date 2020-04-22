@@ -31,7 +31,6 @@ public class Building implements ElevatorObserver, FloorObserver {
 			Elevator elevator = new Elevator(i + 1, this);
 			elevator.addObserver(this);
 			for (Floor f : mFloors) {
-                                
 				elevator.addObserver(f);
 			}
 			mElevators.add(elevator);
@@ -105,21 +104,19 @@ public class Building implements ElevatorObserver, FloorObserver {
 		// TODO: if mWaitingFloors is not empty, remove the first entry from the queue and dispatch the elevator to that floor.
                 if(mWaitingFloors.isEmpty()!=true){
                     int FirstEntry=mWaitingFloors.peek();
-                    for(Elevator ele:mElevators){
-                        if(ele.getCurrentFloor().getNumber()==FirstEntry){
+                    
                     //System.out.println("Current Waiting Floor: "+FirstEntry);
                     //System.out.println("Elevator Current Floor:"+ elevator.getCurrentFloor().getNumber());
-                            ele.dispatchTo(mFloors.get(FirstEntry-1));
-                            mWaitingFloors.remove(FirstEntry);}
-                        else{
-                            elevator.dispatchTo(mFloors.get(FirstEntry-1));
-                            mWaitingFloors.remove(FirstEntry);}
+                            
+                       
+                    elevator.dispatchTo(mFloors.get(FirstEntry-1));
+                    mWaitingFloors.remove(FirstEntry);}
                     //System.out.println(elevator.getObserver().size());
                     //System.out.println("Buidling: Elevator went idle");
                     
                 }
-                }
-	}
+                
+	
 	
 	@Override
 	public void elevatorArriving(Floor sender, Elevator elevator) {
@@ -144,6 +141,7 @@ public class Building implements ElevatorObserver, FloorObserver {
                 for(Elevator ele:mElevators){
                     if(ele.isIdle()==true){
                         ele.dispatchTo(floor);
+                        break;
                         //ele.setCurrentDirection(direction);
                     }
                     
