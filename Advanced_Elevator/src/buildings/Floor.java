@@ -36,10 +36,11 @@ public class Floor implements ElevatorObserver {
                 //System.out.println("Floor: request direction "+direction);
                 if(directionIsPressed(direction)==false){
                     PassengerDirection.put(direction, Boolean.TRUE);
-                }
-                for(FloorObserver n: mObservers){
+                    for(FloorObserver n: mObservers){
                         n.directionRequested(this, direction);
                     }
+                }
+                
                 
                 
                 
