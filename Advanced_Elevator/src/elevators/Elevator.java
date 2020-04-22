@@ -113,8 +113,9 @@ public class Elevator implements FloorObserver {
             // scheduleStateChange(ElevatorState.MOVING, 3); // switch to MOVING and call tick(), 3 seconds from now.
             switch (mCurrentState) {
                 case IDLE_STATE:
-                    if(mCurrentFloor.getobserver().contains(this)==false){
-                    this.mCurrentFloor.addObserver(this);}
+                    if(!mCurrentFloor.getobserver().contains(this)){
+                    this.mCurrentFloor.addObserver(this);
+                    }
                     mObservers.forEach((i) -> {
                         i.elevatorWentIdle(this);
                     }); 
@@ -268,8 +269,8 @@ public class Elevator implements FloorObserver {
 		if(this.isIdle()&& mCurrentFloor.equals(floor)==false){
                     RequestedFloor[floor.getNumber()-1]=true;
                     scheduleStateChange(ElevatorState.ACCELERATING,0);
-                    System.out.println(this+"Elevator: dispatch to"+floor.getNumber());
-                    System.out.println(mCurrentFloor.getNumber());
+                    //System.out.println(this+"Elevator: dispatch to"+floor.getNumber());
+                    //System.out.println(mCurrentFloor.getNumber());
                     if(mCurrentFloor.getNumber()>floor.getNumber()){
                         mCurrentDirection=Elevator.Direction.MOVING_DOWN;
                     }
