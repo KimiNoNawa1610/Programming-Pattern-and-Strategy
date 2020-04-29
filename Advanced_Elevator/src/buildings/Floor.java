@@ -24,6 +24,10 @@ public class Floor implements ElevatorObserver {
                 PassengerDirection.put(Elevator.Direction.MOVING_DOWN, Boolean.FALSE);
                 
 	}
+        
+        public Building getBuilding(){
+            return mBuilding;
+        }
 	
 	
 	/**
