@@ -255,7 +255,9 @@ public class Elevator implements FloorObserver {
             
             
         
-        
+        public void requestFloor(Floor floor){
+            RequestedFloor[floor.getNumber()]=true;
+        }
 	
 	
 	/**
