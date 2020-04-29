@@ -9,6 +9,9 @@ import elevators.Elevator;
 public interface BoardingStrategy {
 	/**
 	 * Returns true if the given passenger will board the given elevator.
+         * @param passenger
+         * @param elevator
+         * @return 
 	 */
 	boolean willBoardElevator(Passenger passenger, Elevator elevator);
 }
