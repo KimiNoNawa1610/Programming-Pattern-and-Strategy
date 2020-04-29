@@ -5,8 +5,7 @@ import passengers.Passenger;
 import elevators.Simulation;
 import java.util.ArrayList;
 import java.util.Random;
-import passengers.VisitorPassenger;
-import passengers.WorkerPassenger;
+
 
 /**
  * A simulation event that adds a new random passenger on floor 1, and then schedules the next spawn event.
