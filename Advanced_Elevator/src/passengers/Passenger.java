@@ -8,14 +8,22 @@ import elevators.ElevatorObserver;
 /**
  * A passenger that is either waiting on a floor or riding an elevator.
  */
-public abstract class Passenger implements FloorObserver, ElevatorObserver {
+public abstract class Passenger implements FloorObserver, ElevatorObserver, DebarkingStrategy,BoardingStrategy,EmbarkingStrategy,TravelStrategy {
+    
 	// An enum for determining whether a Passenger is on a floor, an elevator, or busy (visiting a room in the building).
 	public enum PassengerState {
 		WAITING_ON_FLOOR,
 		ON_ELEVATOR,
 		BUSY
 	}
-	
+        
+	private String PassengerName;
+        private String PassengerShortName;
+        private DebarkingStrategy Debark;
+        private BoardingStrategy Boadring;
+        private EmbarkingStrategy Embark;
+        private TravelStrategy Travel;
+        
 	// A cute trick for assigning unique IDs to each object that is created. (See the constructor.)
 	private static int mNextId;
 	protected static int nextPassengerId() {
@@ -37,6 +45,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
             return mCurrentState;
         }
 	
+       
 	/**
 	 * Gets the passenger's unique identifier.
          * @return 
@@ -136,11 +145,14 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver {
 	 * Returns the passenger's current destination (what floor they are travelling to).
          * @return 
 	 */
+        @Override
 	public abstract int getDestination();
 	
 	/**
 	 * Called to determine whether the passenger will board the given elevator that is moving in the direction the
 	 * passenger wants to travel.
+         * @param elevator
+         * @return 
 	 */
 	protected abstract boolean willBoardElevator(Elevator elevator);
 	
