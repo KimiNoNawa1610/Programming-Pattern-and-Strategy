@@ -18,4 +18,5 @@ public class ResponsibleEmbarking implements EmbarkingStrategy{
         elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getDestination()));
     }
     
+    
 }
