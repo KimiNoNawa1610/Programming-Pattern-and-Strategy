@@ -33,6 +33,7 @@ public class SingleDestinationTravel implements TravelStrategy{
         PassengerNextDestinationEvent ev=new PassengerNextDestinationEvent(s.currentTime()+schedule,
                     passenger,currentFloor);
         s.scheduleEvent(ev);
+        
     }
     
 }
