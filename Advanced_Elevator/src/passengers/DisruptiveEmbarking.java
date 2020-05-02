@@ -23,6 +23,7 @@ public class DisruptiveEmbarking implements EmbarkingStrategy{
         else if(passenger.getDestination()<elevator.getCurrentFloor().getNumber()){
             for( int i=0;i<elevator.getCurrentFloor().getNumber();i++){
                 elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getDestination()-i));
+                
         }
         }
     }
