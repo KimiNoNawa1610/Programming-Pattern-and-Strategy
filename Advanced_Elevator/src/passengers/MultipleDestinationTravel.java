@@ -39,6 +39,7 @@ public class MultipleDestinationTravel implements TravelStrategy{
         if(this.destination.size()==0){
             destination.add(1);
         }
+        
         s.scheduleEvent(ev);
         
     }
