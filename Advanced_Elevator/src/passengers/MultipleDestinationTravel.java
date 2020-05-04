@@ -23,6 +23,9 @@ public class MultipleDestinationTravel implements TravelStrategy{
         schedule=sch;
         
     }
+    public void setSchedule(Long sche){
+        schedule.set(0, sche);
+    }
     @Override
     public int getDestination() {
         return destination.get(0);
