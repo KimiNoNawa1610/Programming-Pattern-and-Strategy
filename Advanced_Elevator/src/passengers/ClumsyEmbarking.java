@@ -12,6 +12,7 @@ import elevators.Elevator;
  * @author votha
  */
 public class ClumsyEmbarking implements EmbarkingStrategy{
+    public ClumsyEmbarking(){};
 
     @Override
     public void enteredElevator(Passenger passenger, Elevator elevator) {
