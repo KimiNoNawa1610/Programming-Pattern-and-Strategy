@@ -14,8 +14,7 @@ import elevators.Elevator;
 public class AwkwardBoarding implements BoardingStrategy{
     private int Threshold;
     
-    public AwkwardBoarding(int threshold){
-        Threshold=threshold;
+    public AwkwardBoarding(){
     }
 
     @Override
