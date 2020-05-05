@@ -7,8 +7,12 @@ import elevators.Elevator;
  * capacity.
  */
 public class CapacityBoarding implements BoardingStrategy {
-	@Override
-	public boolean willBoardElevator(Passenger passenger, Elevator elevator) {
-		return elevator.getPassengerCount() < elevator.getCapacity();
-	}
+    public CapacityBoarding(){
+        
+    }
+    @Override
+    public boolean willBoardElevator(Passenger passenger, Elevator elevator) {
+	return elevator.getPassengerCount() < elevator.getCapacity();
+	
+    }
 }
