@@ -23,7 +23,7 @@ public class AttentiveDebarking implements DebarkingStrategy{
 
     @Override
     public void departedElevator(Passenger passenger, Elevator elevator) {
-        
+        passenger.getTravel().scheduleNextDestination(passenger, elevator.getCurrentFloor());
     }
     
 }
