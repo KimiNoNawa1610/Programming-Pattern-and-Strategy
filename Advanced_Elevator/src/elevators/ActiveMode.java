@@ -1,7 +1,10 @@
 package elevators;
 
+import buildings.Building;
 import buildings.Floor;
-
+import java.util.ArrayList;
+import java.util.List;
+import passengers.Passenger;
 /**
  * An ActiveMode elevator is handling at least one floor request.
  */
@@ -16,16 +19,14 @@ public class ActiveMode implements OperationMode {
 	// Otherwise your code should be almost identical, except you are no longer in the Elevator class, so you need
 	//    to use accessors and mutators instead of directly addressing the fields of Elevator.
 	
-	
-	
-	@Override
-	public String toString() {
-		return "Active";
-	}
+    @Override
+    public String toString() {
+	return "Active";
+    }
 
     @Override
     public boolean canBeDispatchedToFloor(Elevator elevator, Floor floor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
 
     @Override
@@ -35,11 +36,227 @@ public class ActiveMode implements OperationMode {
 
     @Override
     public void directionRequested(Elevator elevator, Floor floor, Elevator.Direction direction) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //ignore
     }
 
     @Override
     public void tick(Elevator elevator) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<ElevatorObserver> cache=new ArrayList<>(elevator.getObserver());
+        Elevator.Direction tempDirection=elevator.getCurrentDirection();
+        Floor tempFloor=elevator.getCurrentFloor();
+        Building tempBuilding=elevator.getBuilding();
+        List<Passenger> temppas=elevator.getPassenger();
+        switch (elevator.getCurrentState()) {
+        case DOORS_OPENING:
+                    
+            elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_OPEN,2);
+                    
+            break;
+                
+        case DOORS_OPEN:
+                    
+            int PreviousPassengerOntheFloor= tempFloor.getWaitingPassengers().size();
+                    
+            int PreviousPassengerOntheElevator= temppas.size();
+                    
+            for(ElevatorObserver i:cache){
+                        
+                i.elevatorDoorsOpened(elevator);
+                    
+            }
+                    
+            int CurrentPassengerOntheFloor= tempFloor.getWaitingPassengers().size();
+                    
+            int CurrentPassengerOntheElevator=temppas.size();
+                  
+                    
+            int PassengerChangeCount=Math.abs(PreviousPassengerOntheFloor-CurrentPassengerOntheFloor)+
+                            
+                    PreviousPassengerOntheElevator-CurrentPassengerOntheElevator+
+                            
+                    Math.abs(PreviousPassengerOntheFloor-CurrentPassengerOntheFloor);
+                    //System.out.println(PassengerChangeCount);
+                    
+            int x=PassengerChangeCount/2;
+                    
+                    
+            elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_CLOSING,1+x);
+                    
+                    
+            break;
+                
+        case DOORS_CLOSING:
+                    
+                    
+            if(null==elevator.getCurrentDirection()){
+                        
+                tempDirection=Elevator.Direction.NOT_MOVING;
+                        
+                elevator.scheduleModeChange(new IdleMode(),Elevator.ElevatorState.IDLE_STATE,2);
+                    
+            }
+                    
+            else switch (tempDirection) {
+                
+                case MOVING_DOWN:
+                    if(elevator.nextRequestDown(tempFloor.getNumber())!=-1){
+                        elevator.scheduleStateChange(Elevator.ElevatorState.ACCELERATING,2);
+                    }
+                    else if(elevator.nextRequestUp(tempFloor.getNumber())!=-1){
+                        elevator.setCurrentDirection(Elevator.Direction.MOVING_UP);
+                        elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_OPENING,2);
+                    }
+                    else{
+                        elevator.setCurrentDirection(Elevator.Direction.NOT_MOVING);
+                        elevator.scheduleModeChange(new IdleMode(),Elevator.ElevatorState.IDLE_STATE,2);
+                    }
+                    break;
+                case MOVING_UP:
+                    if(elevator.nextRequestUp(tempFloor.getNumber())!=-1){
+                        elevator.scheduleStateChange(Elevator.ElevatorState.ACCELERATING,2);
+                    }
+                    else if(elevator.nextRequestDown(tempFloor.getNumber())!=-1){
+                        elevator.setCurrentDirection(Elevator.Direction.MOVING_DOWN);
+                        elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_OPENING,2);
+                    }
+                    else{
+                        elevator.setCurrentDirection(Elevator.Direction.NOT_MOVING);
+                        elevator.scheduleModeChange(new IdleMode(),Elevator.ElevatorState.IDLE_STATE,2);
+                    }
+                    break;
+                default:
+                    tempDirection=Elevator.Direction.NOT_MOVING;
+                    elevator.scheduleModeChange(new IdleMode(),Elevator.ElevatorState.IDLE_STATE,2);
+                    break;
+            
+            }
+            
+                    break;
+                
+        case ACCELERATING:
+                    
+            tempFloor.removeObserver(elevator);
+                    
+            elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,3);
+                    
+            break;
+                
+        case MOVING:
+                    
+            if(tempDirection==Elevator.Direction.MOVING_UP){
+                       
+                elevator.setCurrentFloor(tempBuilding.getFloor(tempFloor.getNumber()+1));
+                       
+                if(elevator.getRequestedFloor()[tempFloor.getNumber()-1]==true||tempFloor.directionIsPressed(tempDirection)){
+                           
+                    elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);
+                       
+                }
+                       
+                else{
+                            
+                    elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,2);
+                    
+                }  
+                       
+                      
+                    
+            }
+                    
+            else if(tempDirection==Elevator.Direction.MOVING_DOWN){
+                        
+                elevator.setCurrentFloor(tempBuilding.getFloor(tempFloor.getNumber()-1));
+                        
+                if(elevator.getRequestedFloor()[tempFloor.getNumber()-1]==true||tempFloor.directionIsPressed(tempDirection)){
+                           
+                    elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);
+                        
+                }
+                        
+                        
+                else{
+                             
+                    elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,2);
+                    
+                }  
+                       
+                    
+            }  
+                    
+                    
+            break;
+                
+        case DECELERATING:
+                    
+            elevator.getRequestedFloor()[tempFloor.getNumber()-1]=false;
+                    
+            if(!tempFloor.directionIsPressed(tempDirection)){
+                        
+                if(tempDirection==Elevator.Direction.MOVING_UP){
+                            
+                    if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_UP)||elevator.nextRequestUp(tempFloor.getNumber())!=-1){
+                                
+                        tempDirection=Elevator.Direction.MOVING_UP;
+                            
+                    }
+                            
+                    else if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_DOWN)&& elevator.nextRequestUp(tempFloor.getNumber())==-1){
+                                
+                        tempDirection=Elevator.Direction.MOVING_DOWN;
+                            
+                    }
+                            
+                    else{
+                                
+                        tempDirection=Elevator.Direction.NOT_MOVING;
+                            
+                    }
+                            
+                        
+                }
+                        
+                else if(tempDirection==Elevator.Direction.MOVING_DOWN){
+                            
+                            
+                    if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_DOWN)||elevator.nextRequestDown(tempFloor.getNumber())!=-1){
+                                
+                        tempDirection=Elevator.Direction.MOVING_DOWN;
+                            
+                    }
+                            
+                    else if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_UP)&& elevator.nextRequestDown(tempFloor.getNumber())==-1){
+                                
+                        tempDirection=Elevator.Direction.MOVING_UP;
+                            
+                    }
+                            
+                    else{
+                                
+                        tempDirection=Elevator.Direction.NOT_MOVING;
+                            
+                    }
+                    
+                }
+                    
+            }
+            
+                    
+                    
+            for(ElevatorObserver i:cache){
+                        
+                i.elevatorDecelerating(elevator);
+                    
+            }
+                    
+            elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_OPENING,3);
+                    
+                    
+            break;
+                
+        default:
+                    
+            break;
+            
+        }    
     }
 }
