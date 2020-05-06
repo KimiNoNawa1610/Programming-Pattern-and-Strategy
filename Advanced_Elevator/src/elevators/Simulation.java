@@ -3,16 +3,18 @@ package elevators;
 import buildings.Building;
 import events.SimulationEvent;
 import events.SpawnPassengerEvent;
-
+import java.util.*;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Scanner;
+import passengers.Passenger;
+import passengers.PassengerFactory;
 
 public class Simulation {
 	private Random mRandom;
 	private PriorityQueue<SimulationEvent> mEvents = new PriorityQueue<>();
 	private long mCurrentTime;
-	
+	private List<PassengerFactory> passengers;
         
 	/**
 	 * Seeds the Simulation with a given random number generator.
@@ -22,7 +24,17 @@ public class Simulation {
 		mRandom = random;
 	}
         
-	
+        public List<PassengerFactory> getPassengerFactories(){
+            return passengers;
+        }
+        
+	public void setPassenger(List<PassengerFactory> pas){
+            pas=passengers;
+        }
+        
+        public void addPassenger(PassengerFactory pas){
+            passengers.add(pas);
+        }
 	/**
 	 * Gets the current time of the simulation.
          * @return 
