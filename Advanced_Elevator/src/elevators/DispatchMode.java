@@ -1,5 +1,6 @@
 package elevators;
 
+import buildings.Building;
 import buildings.Floor;
 
 /**
@@ -27,21 +28,25 @@ public class DispatchMode implements OperationMode {
 	//    announce that it is decelerating, and then schedule an operation change in 3 seconds to
 	//    ActiveOperation in the DOORS_OPENING state.
 	// A DispatchOperation elevator should never be in the DOORS_OPENING, DOORS_OPEN, or DOORS_CLOSING states.
+    @Override
+    public String toString() {
+		
+        return "Dispatching to " + mDestination.getNumber() + " " + mDesiredDirection;
 	
-	
-	@Override
-	public String toString() {
-		return "Dispatching to " + mDestination.getNumber() + " " + mDesiredDirection;
-	}
+    }
 
     @Override
     public boolean canBeDispatchedToFloor(Elevator elevator, Floor floor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(elevator.getCurrentFloor()!=floor&&elevator.isIdle()==true){
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void dispatchToFloor(Elevator elevator, Floor targetFloor, Elevator.Direction targetDirection) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        elevator.setCurrentDirection(targetDirection);
+        elevator.getRequestedFloor()[targetFloor.getNumber()-1]=true;
     }
 
     @Override
@@ -51,6 +56,65 @@ public class DispatchMode implements OperationMode {
 
     @Override
     public void tick(Elevator elevator) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Elevator.Direction tempDirection=elevator.getCurrentDirection();
+        Floor tempFloor=elevator.getCurrentFloor();
+        Building tempBuilding=elevator.getBuilding();
+        switch(elevator.getCurrentState()){
+            case IDLE_STATE:
+                elevator.scheduleStateChange(Elevator.ElevatorState.ACCELERATING,0);
+                break;
+            case ACCELERATING:
+                elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,2);
+                break;
+            case MOVING:
+                if(tempDirection==Elevator.Direction.MOVING_UP){
+                       
+                elevator.setCurrentFloor(tempBuilding.getFloor(tempFloor.getNumber()+1));
+                       
+                if(elevator.getRequestedFloor()[tempFloor.getNumber()-1]==true||tempFloor.directionIsPressed(tempDirection)){
+                           
+                    elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);
+                       
+                }
+                       
+                else{
+                            
+                    elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,2);
+                    
+                }  
+                       
+                      
+                    
+            }
+                    
+            else if(tempDirection==Elevator.Direction.MOVING_DOWN){
+                        
+                elevator.setCurrentFloor(tempBuilding.getFloor(tempFloor.getNumber()-1));
+                        
+                if(elevator.getRequestedFloor()[tempFloor.getNumber()-1]==true||tempFloor.directionIsPressed(tempDirection)){
+                           
+                    elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);
+                        
+                }
+                        
+                        
+                else{
+                             
+                    elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,2);
+                    
+                }  
+                       
+                    
+            }
+                break;
+                
+            case DECELERATING:
+                elevator.getRequestedFloor()[tempFloor.getNumber()-1]=false;
+                elevator.announceElevatorDecelerating();
+                elevator.setCurrentDirection(mDesiredDirection);
+                elevator.scheduleModeChange(elevator, Elevator.ElevatorState.DOORS_OPENING, 3);
+                break;
+        }
+        
     }
 }
