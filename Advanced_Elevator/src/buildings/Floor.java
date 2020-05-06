@@ -92,7 +92,7 @@ public class Floor implements ElevatorObserver {
 		p.setState(Passenger.PassengerState.WAITING_ON_FLOOR);
                 
 		// TODO: call requestDirection with the appropriate direction for this passenger's destination.
-                int destination=p.getDestination();
+                int destination=p.getTravel().getDestination();
                 if(this.getNumber()<destination){
                     requestDirection(Elevator.Direction.MOVING_UP);
                 }
@@ -146,7 +146,7 @@ public class Floor implements ElevatorObserver {
         public ArrayList<Integer> getDestinations(){
             ArrayList<Integer>output=new ArrayList<>();
             for(Passenger i:mPassengers){
-                output.add(i.getDestination());
+                output.add(i.getTravel().getDestination());
             }
             return output;
         }
