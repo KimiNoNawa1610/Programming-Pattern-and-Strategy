@@ -16,12 +16,12 @@ public class ClumsyEmbarking implements EmbarkingStrategy{
 
     @Override
     public void enteredElevator(Passenger passenger, Elevator elevator) {
-        elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getDestination()));
-        if(passenger.getDestination()>elevator.getCurrentFloor().getNumber()){
-            elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getDestination()-1));
+        elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getTravel().getDestination()));
+        if(passenger.getTravel().getDestination()>elevator.getCurrentFloor().getNumber()){
+            elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getTravel().getDestination()-1));
         }
-        else if(passenger.getDestination()<elevator.getCurrentFloor().getNumber()){
-            elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getDestination()+1));
+        else if(passenger.getTravel().getDestination()<elevator.getCurrentFloor().getNumber()){
+            elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getTravel().getDestination()+1));
             
         }
         
