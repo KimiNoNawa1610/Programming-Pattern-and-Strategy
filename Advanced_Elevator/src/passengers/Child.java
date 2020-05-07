@@ -12,8 +12,8 @@ import elevators.Simulation;
  * @author votha
  */
 public class Child implements PassengerFactory{
-    int destination;
-    int schedule;
+    private int destination;
+    private int schedule;
     
     public void setDestination(int des){
         destination=des;
