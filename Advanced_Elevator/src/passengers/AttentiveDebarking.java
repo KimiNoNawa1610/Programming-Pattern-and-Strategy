@@ -15,7 +15,7 @@ public class AttentiveDebarking implements DebarkingStrategy{
 
     @Override
     public boolean willLeaveElevator(Passenger passenger, Elevator elevator) {
-        if(passenger.getDestination()==elevator.getCurrentFloor().getNumber()){
+        if(passenger.getTravel().getDestination()==elevator.getCurrentFloor().getNumber()){
             return true;
         }
         return false;
