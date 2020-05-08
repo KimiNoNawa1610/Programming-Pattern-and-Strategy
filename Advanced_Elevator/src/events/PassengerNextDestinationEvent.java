@@ -29,6 +29,6 @@ public class PassengerNextDestinationEvent extends SimulationEvent {
 	@Override
 	public String toString() {
 		return super.toString() + "Passenger " + mPassenger.getId() + " joining floor " + mStartingFloor.getNumber() +
-		 ", heading to floor " + mPassenger.getDestination();
+		 ", heading to floor " + mPassenger.getTravel().getDestination();
 	}
 }
