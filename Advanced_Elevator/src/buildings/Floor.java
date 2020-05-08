@@ -36,19 +36,13 @@ public class Floor implements ElevatorObserver {
 	 * @param direction
 	 */
 	public void requestDirection(Elevator.Direction direction) {
-		// TODO: implement this method as described in the comment.
-                //System.out.println("Floor: request direction "+direction);
                 if(directionIsPressed(direction)==false){
                     PassengerDirection.put(direction, Boolean.TRUE);
                     for(FloorObserver n: mObservers){
                         n.directionRequested(this, direction);
                     }
                 }
-                
-                
-                
-                
-                
+    
 	}
 	
 	/**
@@ -58,13 +52,9 @@ public class Floor implements ElevatorObserver {
 	 */
 	public boolean directionIsPressed(Elevator.Direction direction) {
 		// TODO: complete this method.
-                //System.out.println(PassengerDirection.get(Elevator.Direction.MOVING_UP));
-                //System.out.println(PassengerDirection.get(Elevator.Direction.MOVING_DOWN));
                 if(PassengerDirection.get(direction)==true){
                     return true;
                 }
-                //System.out.println("Floor: Direction is pressed "+direction);
-
 		return false;
                 
 	}
@@ -74,10 +64,8 @@ public class Floor implements ElevatorObserver {
          * @param direction
 	 */
 	public void clearDirection(Elevator.Direction direction) {
-		// TODO: complete this method.
                 PassengerDirection.put(direction,Boolean.FALSE);
-                //System.out.println(this.getNumber()+" Floor: clear direction "+direction);
-
+               
 	}
 	
 	/**
@@ -85,10 +73,8 @@ public class Floor implements ElevatorObserver {
          * @param p
 	 */
 	public void addWaitingPassenger(Passenger p) {
-                //System.out.println("Floor: add waiting passenger");
 		mPassengers.add(p);
 		addObserver(p);
-                //System.out.println("Floor: add Obsever succeed");
 		p.setState(Passenger.PassengerState.WAITING_ON_FLOOR);
                 
 		// TODO: call requestDirection with the appropriate direction for this passenger's destination.
@@ -99,10 +85,7 @@ public class Floor implements ElevatorObserver {
                 else if(this.getNumber()>destination){
                     requestDirection(Elevator.Direction.MOVING_DOWN);
                 }
-                //System.out.println("Floor : add waiting passenger");
-                
-                
-                
+    
 	}
 
 	/**
@@ -161,9 +144,6 @@ public class Floor implements ElevatorObserver {
                         i.elevatorArriving(this, elevator);
                     }
                     clearDirection(elevator.getCurrentDirection());
-                    //System.out.println("Floor: elevator decelerating");
-                    //System.out.println(elevator.getObserver().size());
-
                 }
 		
 	}
