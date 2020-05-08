@@ -7,7 +7,6 @@ import java.util.*;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Scanner;
-import passengers.Passenger;
 import passengers.PassengerFactory;
 
 public class Simulation {
