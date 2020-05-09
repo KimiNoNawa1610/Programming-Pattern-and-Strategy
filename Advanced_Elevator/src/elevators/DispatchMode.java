@@ -51,7 +51,7 @@ public class DispatchMode implements OperationMode {
 
     @Override
     public void directionRequested(Elevator elevator, Floor floor, Elevator.Direction direction) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //ignore  
     }
 
     @Override
