@@ -14,6 +14,7 @@ public class Simulation {
 	private PriorityQueue<SimulationEvent> mEvents = new PriorityQueue<>();
 	private long mCurrentTime;
 	private List<PassengerFactory> passengers;
+        private Building mBuilding;
         
 	/**
 	 * Seeds the Simulation with a given random number generator.
@@ -23,6 +24,9 @@ public class Simulation {
 		mRandom = random;
 	}
         
+        public Building getBuilding(){
+            return mBuilding;
+        }
         public List<PassengerFactory> getPassengerFactories(){
             return passengers;
         }
@@ -63,8 +67,8 @@ public class Simulation {
                 int floorcount=input.nextInt();
                 System.out.println("Please enter your elevator number");
                 int ele=input.nextInt();
-		Building b = new Building(floorcount, ele, this);
-		SpawnPassengerEvent ev = new SpawnPassengerEvent(0, b);
+		mBuilding = new Building(floorcount, ele, this);
+		SpawnPassengerEvent ev = new SpawnPassengerEvent(0, mBuilding);
 		scheduleEvent(ev);
 		
 		long nextSimLength = -1;
@@ -100,13 +104,12 @@ public class Simulation {
 			
 			mCurrentTime += diffTime;
 			nextEvent.execute(this);
-                        //System.out.println("Simulation execute");
 			System.out.println(nextEvent);
                         
 		}
 		
 		// TODO: print the Building after simulating the requested time.
-		System.out.println(b.toString());
+		System.out.println(mBuilding.toString());
 		
 		/*
 		 TODO: the simulation stops after one round of simulation. Write a loop that continues to ask the user
