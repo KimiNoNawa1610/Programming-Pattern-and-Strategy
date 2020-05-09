@@ -11,26 +11,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Elevator implements FloorObserver, OperationMode {
-
-    @Override
-    public boolean canBeDispatchedToFloor(Elevator elevator, Floor floor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void dispatchToFloor(Elevator elevator, Floor targetFloor, Direction targetDirection) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void directionRequested(Elevator elevator, Floor floor, Direction direction) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void tick(Elevator elevator) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 	
 	public enum ElevatorState {
 		IDLE_STATE,
@@ -70,7 +50,7 @@ public class Elevator implements FloorObserver, OperationMode {
                     RequestedFloor[i]=false;
                 }
 		mCurrentFloor = bld.getFloor(1);
-		scheduleStateChange(ElevatorState.IDLE_STATE, 0);  
+		scheduleModeChange(new IdleMode(),ElevatorState.IDLE_STATE, 0);  
                 
 	}
 	
@@ -145,30 +125,6 @@ public class Elevator implements FloorObserver, OperationMode {
         public void requestFloor(Floor floor){
             RequestedFloor[floor.getNumber()]=true;
         }
-	
-	
-	/**
-	 * Sends an idle elevator to the given floor.
-         * @param floor
-	 */
-	public void dispatchTo(Floor floor) {
-           
-		// TODO: if we are currently idle and not on the given floor, change our direction to move towards the floor.
-		// TODO: set a floor request for the given floor, and schedule a state change to ACCELERATING immediately.
-		if(this.isIdle()&& mCurrentFloor.equals(floor)==false){
-                    RequestedFloor[floor.getNumber()-1]=true;
-                    scheduleStateChange(ElevatorState.ACCELERATING,0);
-                    //System.out.println(this+"Elevator: dispatch to"+floor.getNumber());
-                    //System.out.println(mCurrentFloor.getNumber());
-                    if(mCurrentFloor.getNumber()>floor.getNumber()){
-                        mCurrentDirection=Elevator.Direction.MOVING_DOWN;
-                    }
-                    else if(mCurrentFloor.getNumber()<floor.getNumber()){
-                        mCurrentDirection=Elevator.Direction.MOVING_UP;
-                    }
-                }
-                //System.out.println("Elevator dispatch to: "+floor.getNumber());
-	}
 	
 	// Simple accessors
 	public Floor getCurrentFloor() {
@@ -260,15 +216,37 @@ public class Elevator implements FloorObserver, OperationMode {
                 if(this.isIdle()){
                     this.mCurrentDirection=direction;
                 }
-                //System.out.println("Elevator: direction is pressed");
-                //System.out.println(this.getObserver().size());
                 List<ElevatorObserver> cache=new ArrayList<>(mObservers);
                 for(ElevatorObserver i:cache){
                         i.elevatorDecelerating(this);
                     }
-                scheduleStateChange(ElevatorState.DOORS_OPENING,0);
+                scheduleModeChange(new ActiveMode(),ElevatorState.DOORS_OPENING,0);
 
 	}
+        
+        @Override
+        public boolean canBeDispatchedToFloor(Elevator elevator, Floor floor) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+        }
+
+        @Override
+        public void dispatchToFloor(Elevator elevator, Floor targetFloor, Direction targetDirection) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+        }
+
+        @Override
+        public void directionRequested(Elevator elevator, Floor floor, Direction direction) {
+        
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void tick(Elevator elevator) {
+        
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
 	
 	// Voodoo magic.
 	@Override
