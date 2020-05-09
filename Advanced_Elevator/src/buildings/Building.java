@@ -100,13 +100,11 @@ public class Building implements ElevatorObserver, FloorObserver {
 	
 	@Override
 	public void elevatorWentIdle(Elevator elevator) {
+            int FirstEntry=mWaitingFloors.peek();
                 if(mWaitingFloors.isEmpty()!=true){
-                    int FirstEntry=mWaitingFloors.peek();
-                    elevator.dispatchTo(mFloors.get(FirstEntry-1));
-                    mWaitingFloors.remove(FirstEntry);}
-                    
+                    elevator.dispatchToFloor(elevator, this.getFloor(FirstEntry), Elevator.Direction.NOT_MOVING);
                 }
-                
+        }
 	
 	
 	@Override
@@ -124,11 +122,10 @@ public class Building implements ElevatorObserver, FloorObserver {
 		// TODO: go through each elevator. If an elevator is idle, dispatch it to the given floor.
 		// TODO: if no elevators are idle, then add the floor number to the mWaitingFloors queue.
                 for(Elevator ele:mElevators){
-                    if(ele.isIdle()==true){
-                        ele.dispatchTo(floor);
+                    if(ele.canBeDispatchedToFloor(ele, floor)==true){
+                        ele.dispatchToFloor(ele, floor, direction);
                         break;
                     }
-                    
                     else{
                         mWaitingFloors.add(floor.getNumber());
                     }  
