@@ -64,8 +64,7 @@ public class Floor implements ElevatorObserver {
          * @param direction
 	 */
 	public void clearDirection(Elevator.Direction direction) {
-                PassengerDirection.put(direction,Boolean.FALSE);
-               
+                PassengerDirection.put(direction,Boolean.FALSE); 
 	}
 	
 	/**
