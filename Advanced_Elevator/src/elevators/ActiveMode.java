@@ -31,7 +31,7 @@ public class ActiveMode implements OperationMode {
 
     @Override
     public void dispatchToFloor(Elevator elevator, Floor targetFloor, Elevator.Direction targetDirection) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //ignore since canBeDispatchedtoFloor is false
     }
 
     @Override
