@@ -10,7 +10,7 @@ import passengers.Passenger;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Elevator implements FloorObserver, OperationMode {
+public class Elevator implements FloorObserver {
 	
 	public enum ElevatorState {
 		IDLE_STATE,
@@ -50,9 +50,14 @@ public class Elevator implements FloorObserver, OperationMode {
                     RequestedFloor[i]=false;
                 }
 		mCurrentFloor = bld.getFloor(1);
-		scheduleModeChange(new IdleMode(),ElevatorState.IDLE_STATE, 0);  
+                mOperation=new IdleMode();
+                mCurrentFloor.addObserver(this);
                 
 	}
+        
+        public void tick(){
+            getOperation().tick(this);
+        }
 	
 	/**
 	 * Helper method to schedule a state change in a given number of seconds from now.
@@ -66,7 +71,9 @@ public class Elevator implements FloorObserver, OperationMode {
             Simulation sim = mBuilding.getSimulation();
             sim.scheduleEvent(new ElevatorModeEvent(sim.currentTime() + TimeFromNow, newMode, newState, this));
         }
-	
+	public OperationMode getOperation(){
+            return mOperation;
+        }
 	/**
 	 * Adds the given passenger to the elevator's list of passengers, and requests the passenger's destination floor.
 	 */
@@ -99,8 +106,6 @@ public class Elevator implements FloorObserver, OperationMode {
                 if(i.getTravel().getDestination()<FromFloor){
                      biggestmin=i.getTravel().getDestination();
                 }
-                
-                
             }
             return biggestmin;
         }
@@ -123,7 +128,9 @@ public class Elevator implements FloorObserver, OperationMode {
             return RequestedFloor;
         }
         public void requestFloor(Floor floor){
-            RequestedFloor[floor.getNumber()]=true;
+            if(floor!=mCurrentFloor){
+            RequestedFloor[floor.getNumber()-1]=true;
+            }
         }
 	
 	// Simple accessors
@@ -196,6 +203,9 @@ public class Elevator implements FloorObserver, OperationMode {
 		mObservers.remove(observer);
 	}
 	
+        public int getNumber(){
+            return mNumber;
+        }
 	
 	// FloorObserver methods
 	
@@ -213,46 +223,15 @@ public class Elevator implements FloorObserver, OperationMode {
 	public void directionRequested(Floor sender, Direction direction) {
 		// TODO: if we are currently idle, change direction to match the request. Then alert all our observers that we are decelerating,
 		// TODO: then schedule an immediate state change to DOORS_OPENING.
-                if(this.isIdle()){
-                    this.mCurrentDirection=direction;
-                }
-                List<ElevatorObserver> cache=new ArrayList<>(mObservers);
-                for(ElevatorObserver i:cache){
-                        i.elevatorDecelerating(this);
-                    }
-                scheduleModeChange(new ActiveMode(),ElevatorState.DOORS_OPENING,0);
+                this.getOperation().directionRequested(this, sender, direction);
 
 	}
-        
-        @Override
-        public boolean canBeDispatchedToFloor(Elevator elevator, Floor floor) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    
-        }
-
-        @Override
-        public void dispatchToFloor(Elevator elevator, Floor targetFloor, Direction targetDirection) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    
-        }
-
-        @Override
-        public void directionRequested(Elevator elevator, Floor floor, Direction direction) {
-        
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public void tick(Elevator elevator) {
-        
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
 	
 	// Voodoo magic.
 	@Override
 	public String toString() {
-		return "Elevator " + mNumber + " - " + mCurrentFloor + " - " + mCurrentState + " - " + mCurrentDirection + " - "
-		 + "[" + mPassengers.stream().map(p -> Integer.toString(p.getTravel().getDestination())).collect(Collectors.joining(", "))
+		return "Elevator " + mNumber + "["+this.getOperation()+"]" +" - " + mCurrentFloor + " - " + mCurrentState + " - " + mCurrentDirection + " - "
+		 + "[" + mPassengers.stream().map(p -> p.getShortName()+p.getId()).collect(Collectors.joining(", "))
 		 + "]";
 	}
 	
