@@ -3,6 +3,7 @@ package elevators;
 import buildings.Building;
 import buildings.Floor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import passengers.Passenger;
 /**
@@ -50,6 +51,7 @@ public class ActiveMode implements OperationMode {
         case DOORS_OPENING:
                     
             elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_OPEN,2);
+            
                     
             break;
                 
@@ -130,7 +132,6 @@ public class ActiveMode implements OperationMode {
                     break;
             
             }
-            
                     break;
                 
         case ACCELERATING:
@@ -144,46 +145,33 @@ public class ActiveMode implements OperationMode {
         case MOVING:
                     
             if(tempDirection==Elevator.Direction.MOVING_UP){
-                       
                 elevator.setCurrentFloor(tempBuilding.getFloor(tempFloor.getNumber()+1));
-                       
-                if(elevator.getRequestedFloor()[tempFloor.getNumber()-1]==true||tempFloor.directionIsPressed(tempDirection)){
-                           
+                
+                if(elevator.getRequestedFloor()[tempBuilding.getFloor(tempFloor.getNumber()+1).getNumber()-1]==true||
+                        tempFloor.directionIsPressed(tempDirection)){
                     elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);
-                       
                 }
                        
                 else{
-                            
                     elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,2);
-                    
-                }  
-                       
-                      
-                    
+                }    
+                
             }
                     
             else if(tempDirection==Elevator.Direction.MOVING_DOWN){
-                        
+                
                 elevator.setCurrentFloor(tempBuilding.getFloor(tempFloor.getNumber()-1));
-                        
-                if(elevator.getRequestedFloor()[tempFloor.getNumber()-1]==true||tempFloor.directionIsPressed(tempDirection)){
-                           
-                    elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);
-                        
-                }
-                        
-                        
+                                                                          
+                if(elevator.getRequestedFloor()[(tempFloor.getNumber()-1)-1]==true||tempFloor.directionIsPressed(tempDirection)){   
+                    elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);    
+                }          
                 else{
-                             
-                    elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,2);
+                    elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,2); 
+                }    
                     
-                }  
-                       
-                    
+                
+      
             }  
-                    
-                    
             break;
                 
         case DECELERATING:
@@ -193,55 +181,37 @@ public class ActiveMode implements OperationMode {
             if(!tempFloor.directionIsPressed(tempDirection)){
                         
                 if(tempDirection==Elevator.Direction.MOVING_UP){
-                            
+                    
                     if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_UP)||elevator.nextRequestUp(tempFloor.getNumber())!=-1){
-                                
-                        tempDirection=Elevator.Direction.MOVING_UP;
-                            
-                    }
-                            
+
+                        elevator.setCurrentDirection(Elevator.Direction.MOVING_UP);
+                    }   
                     else if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_DOWN)&& elevator.nextRequestUp(tempFloor.getNumber())==-1){
-                                
-                        tempDirection=Elevator.Direction.MOVING_DOWN;
-                            
+ 
+                        elevator.setCurrentDirection(Elevator.Direction.MOVING_DOWN);     
+                    }    
+                    else{       
+                        elevator.setCurrentDirection(Elevator.Direction.NOT_MOVING);     
+                    } 
+                }     
+                else if(tempDirection==Elevator.Direction.MOVING_DOWN){    
+                    if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_DOWN)||elevator.nextRequestDown(tempFloor.getNumber())!=-1){       
+                        elevator.setCurrentDirection(Elevator.Direction.MOVING_DOWN);   
+                    }     
+                    else if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_UP)&& elevator.nextRequestDown(tempFloor.getNumber())==-1){       
+                        elevator.setCurrentDirection(Elevator.Direction.MOVING_UP);   
                     }
                             
                     else{
                                 
-                        tempDirection=Elevator.Direction.NOT_MOVING;
-                            
-                    }
-                            
-                        
-                }
-                        
-                else if(tempDirection==Elevator.Direction.MOVING_DOWN){
-                            
-                            
-                    if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_DOWN)||elevator.nextRequestDown(tempFloor.getNumber())!=-1){
-                                
-                        tempDirection=Elevator.Direction.MOVING_DOWN;
-                            
-                    }
-                            
-                    else if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_UP)&& elevator.nextRequestDown(tempFloor.getNumber())==-1){
-                                
-                        tempDirection=Elevator.Direction.MOVING_UP;
-                            
-                    }
-                            
-                    else{
-                                
-                        tempDirection=Elevator.Direction.NOT_MOVING;
+                        elevator.setCurrentDirection(Elevator.Direction.NOT_MOVING);
                             
                     }
                     
                 }
                     
             }
-            
-                    
-                    
+             
             for(ElevatorObserver i:cache){
                         
                 i.elevatorDecelerating(elevator);
