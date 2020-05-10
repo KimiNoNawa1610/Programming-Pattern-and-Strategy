@@ -7,13 +7,14 @@ import java.util.*;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Scanner;
-import passengers.PassengerFactory;
+import logging.StandardOutLogger;
+import passengers.*;
 
 public class Simulation {
 	private Random mRandom;
 	private PriorityQueue<SimulationEvent> mEvents = new PriorityQueue<>();
 	private long mCurrentTime;
-	private List<PassengerFactory> passengers;
+	private List<PassengerFactory> passengers=new ArrayList<>();
         private Building mBuilding;
         
 	/**
@@ -31,7 +32,7 @@ public class Simulation {
             return passengers;
         }
         
-	public void setPassenger(List<PassengerFactory> pas){
+	public void setPassengerFactory(List<PassengerFactory> pas){
             pas=passengers;
         }
         
@@ -63,9 +64,10 @@ public class Simulation {
 	}
 	
 	public void startSimulation(Scanner input) {
-                System.out.println("Please enter your building floors number");
+                StandardOutLogger singleton=new StandardOutLogger(this);
+                singleton.logString("Please enter your building floors number");
                 int floorcount=input.nextInt();
-                System.out.println("Please enter your elevator number");
+                singleton.logString("Please enter your elevator number");
                 int ele=input.nextInt();
 		mBuilding = new Building(floorcount, ele, this);
 		SpawnPassengerEvent ev = new SpawnPassengerEvent(0, mBuilding);
@@ -79,7 +81,7 @@ public class Simulation {
 		double realTimeScale = 1.0;
 		
 		// TODO: the simulation currently stops at 200s. Instead, ask the user how long they want to simulate.
-                System.out.println("Please Enter your simulation time.");
+                singleton.logString("Please Enter your simulation time.");
 		nextSimLength = input.nextInt();
 		while(nextSimLength!=-1){
 		long nextStopTime = mCurrentTime + nextSimLength;
@@ -88,7 +90,7 @@ public class Simulation {
 			mCurrentTime = nextStopTime;
 		}
 		
-		// As long as there are events that happen between "now" and the requested sim time, process those events and
+		// As long as there are events that happen between "now" and the requested sim time, process those events and-1
 		// advance the current time along the way.
 		while (!mEvents.isEmpty() && mEvents.peek().getScheduledTime() <= nextStopTime) {
 			SimulationEvent nextEvent = mEvents.poll();
@@ -104,18 +106,18 @@ public class Simulation {
 			
 			mCurrentTime += diffTime;
 			nextEvent.execute(this);
-			System.out.println(nextEvent);
+			singleton.logEvent(nextEvent);
                         
 		}
 		
 		// TODO: print the Building after simulating the requested time.
-		System.out.println(mBuilding.toString());
+		singleton.logString(mBuilding.toString());
 		
 		/*
 		 TODO: the simulation stops after one round of simulation. Write a loop that continues to ask the user
 		 how many seconds to simulate, simulates that many seconds, and stops only if they choose -1 seconds.
 		*/
-                System.out.println("Please Enter your simulation time. Enter -1 to exist");
+                singleton.logString("Please Enter your simulation time. Enter -1 to exist");
 		nextSimLength = input.nextInt();
                 
                 }
@@ -127,7 +129,26 @@ public class Simulation {
 		// TODO: ask the user for a seed value and change the line below.
                 System.out.println("Please enter your seed number.");
                 int seed=s.nextInt();
+                
+                VisitorFactory pass1=new VisitorFactory();
+                
+                WorkerFactory pass2=new WorkerFactory();
+          
+                Child pass3=new Child();
+           
+                DeliveryPerson pass4=new DeliveryPerson();
+           
+                Stoner pass5=new Stoner();
+          
+                Jerk pass6=new Jerk();
+         
 		Simulation sim = new Simulation(new Random(seed));
+                sim.addPassenger(pass1);
+                sim.addPassenger(pass2);
+                sim.addPassenger(pass3);
+                sim.addPassenger(pass4);
+                sim.addPassenger(pass5);
+                sim.addPassenger(pass6);
                 sim.startSimulation(s);
                 
 	}
