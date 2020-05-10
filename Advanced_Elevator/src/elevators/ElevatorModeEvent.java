@@ -29,7 +29,7 @@ public class ElevatorModeEvent extends SimulationEvent{
     public void execute(Simulation sim) {
         mElevator.setOperationMode(mNewMode);
         mElevator.setState(mNewState);
-        mNewMode.tick(mElevator);
+        mElevator.tick();
     }
     
     @Override
