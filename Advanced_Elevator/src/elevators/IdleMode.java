@@ -22,7 +22,6 @@ public class IdleMode implements OperationMode {
 	public void dispatchToFloor(Elevator elevator, Floor targetFloor, Elevator.Direction targetDirection) {
 		// Must remove ourselves as an observer of our floor, since we are moving on.
 		elevator.getCurrentFloor().removeObserver(elevator);
-		
 		// TODO: you will need to create this method in the Elevator class, along with ElevatorModeEvent to support it.
 		elevator.scheduleModeChange(new DispatchMode(targetFloor, targetDirection),
 		Elevator.ElevatorState.IDLE_STATE, 0);
