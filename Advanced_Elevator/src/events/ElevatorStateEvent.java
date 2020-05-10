@@ -21,7 +21,7 @@ public class ElevatorStateEvent extends SimulationEvent {
 	public void execute(Simulation sim) {
                 //System.out.println("Elevator State Event execute");
 		mElevator.setState(mNewState);
-		mMode.tick(mElevator);
+		mElevator.tick();
 	}
 	
 	@Override
