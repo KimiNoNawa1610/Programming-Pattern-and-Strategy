@@ -29,6 +29,16 @@ public class Floor implements ElevatorObserver {
             return mBuilding;
         }
 	
+        public Elevator.Direction getFloorDirection(){
+            Elevator.Direction floorDirection=Elevator.Direction.NOT_MOVING;
+            for(EnumMap.Entry<Elevator.Direction,Boolean> entry:PassengerDirection.entrySet()){
+                if(entry.getValue()==true){
+                    floorDirection= entry.getKey();
+                }
+                break;
+            }
+            return floorDirection;
+        }
 	
 	/**
 	 * Sets a flag that the given direction has been requested by a passenger on this floor. If the direction
@@ -105,6 +115,14 @@ public class Floor implements ElevatorObserver {
 	public List<Passenger> getWaitingPassengers() {
 		return mPassengers;
 	}
+        
+        public ArrayList<String> getShortPassenger(){
+            ArrayList<String> output= new ArrayList<>();
+            for (Passenger i:mPassengers){
+                output.add(i.getShortName()+i.getId());
+            }
+            return output;
+        }
 	
 	@Override
 	public String toString() {
@@ -128,9 +146,28 @@ public class Floor implements ElevatorObserver {
         public ArrayList<Integer> getDestinations(){
             ArrayList<Integer>output=new ArrayList<>();
             for(Passenger i:mPassengers){
-                output.add(i.getTravel().getDestination());
+                if(output.contains(i.getTravel().getDestination())==false){
+                    output.add(i.getTravel().getDestination());
+                }
             }
             return output;
+        }
+        
+        public String getUpDownIcon(){
+            String context="";
+            if(PassengerDirection.get(Elevator.Direction.MOVING_DOWN)==true&&PassengerDirection.get(Elevator.Direction.MOVING_UP)==false){
+                int[] surrogates={0x1F53D,0x23FF};
+                context=new String(surrogates,0,surrogates.length);
+            }
+            else if(PassengerDirection.get(Elevator.Direction.MOVING_DOWN)==false&&PassengerDirection.get(Elevator.Direction.MOVING_UP)==true){
+                int[] surrogates={0x1F53C,0x23FF};
+                context=new String(surrogates,0,surrogates.length);
+            }
+            else if(PassengerDirection.get(Elevator.Direction.MOVING_DOWN)==true&&PassengerDirection.get(Elevator.Direction.MOVING_UP)==true){
+                int[] surrogates={0x2195,0x23FF};
+                context=new String(surrogates,0,surrogates.length);
+            }
+            return context;
         }
 	
 	// Observer methods.
