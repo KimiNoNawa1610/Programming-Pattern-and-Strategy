@@ -6,22 +6,13 @@
 package passengers;
 
 import elevators.Simulation;
+import java.util.Random;
 
 /**
  *
  * @author votha
  */
 public class Child implements PassengerFactory{
-    private int destination;
-    private int schedule;
-    
-    public void setDestination(int des){
-        destination=des;
-    
-}
-    public void setSchedule(int sche){
-        schedule=sche;
-    }
 
     @Override
     public String factoryName() {
@@ -40,12 +31,14 @@ public class Child implements PassengerFactory{
 
     @Override
     public BoardingStrategy createBoardingStrategy(Simulation simulation) {
-        return new AwkwardBoarding();
+        return new AwkwardBoarding(4);
     }
 
     @Override
     public TravelStrategy createTravelStrategy(Simulation simulation) {
-        return new SingleDestinationTravel(destination,schedule);
+        Random ran=simulation.getRandom();
+        return new SingleDestinationTravel(2+ran.nextInt(simulation.getBuilding().getFloorCount()-1),
+                (long)(7200+ran.nextGaussian()*1800));
     }
 
     @Override
