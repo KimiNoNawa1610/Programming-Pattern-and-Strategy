@@ -6,6 +6,7 @@
 package passengers;
 
 import elevators.Elevator;
+import logging.StandardOutLogger;
 
 /**
  *
@@ -16,7 +17,7 @@ public class ConfusedDebarking implements DebarkingStrategy{
     @Override
     public boolean willLeaveElevator(Passenger passenger, Elevator elevator) {
         if(elevator.getCurrentFloor().getNumber()==1){
-            System.out.println(passenger.toString()+" is leaving the building");
+            
             return true;
         }
         return false;
@@ -24,7 +25,9 @@ public class ConfusedDebarking implements DebarkingStrategy{
 
     @Override
     public void departedElevator(Passenger passenger, Elevator elevator) {
-        
+        StandardOutLogger log=new StandardOutLogger(elevator.getBuilding().getSimulation());
+        log.logString(elevator.getBuilding().getSimulation().getTime()+"s: "+passenger.getName()+
+                    passenger.getId()+" is leaving the building at floor 1");
     }
     
 }
