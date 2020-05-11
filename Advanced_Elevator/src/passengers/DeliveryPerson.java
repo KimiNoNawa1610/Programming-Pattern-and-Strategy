@@ -44,6 +44,7 @@ public class DeliveryPerson implements PassengerFactory{
         int newFloor;
         int oldFloor=0;
         for(int i=1; i<(int)(FloorNeedVisit*(2/3));i++){
+            System.out.println((int)(FloorNeedVisit*(2/3)));
             newFloor=ran.nextInt(simulation.getBuilding().getFloorCount()-1)+2;
             while(destination.contains(newFloor)){
                 newFloor=ran.nextInt(simulation.getBuilding().getFloorCount()-1)+2;

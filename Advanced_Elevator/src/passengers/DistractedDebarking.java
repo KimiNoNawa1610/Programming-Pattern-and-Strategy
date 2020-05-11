@@ -24,7 +24,7 @@ public class DistractedDebarking implements DebarkingStrategy{
             return false;
             
         }
-        else if(mistake ==0 && elevator.getCurrentFloor().getNumber()!=passenger.getTravel().getDestination()){
+        else if(mistake ==0 && elevator.getCurrentFloor().getNumber()==passenger.getTravel().getDestination()){
             return true;
         }
         return false;

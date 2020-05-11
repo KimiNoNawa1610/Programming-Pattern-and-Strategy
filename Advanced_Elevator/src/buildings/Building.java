@@ -1,6 +1,5 @@
 package buildings;
 
-import elevators.DispatchMode;
 import elevators.Simulation;
 import elevators.Elevator;
 import elevators.ElevatorObserver;

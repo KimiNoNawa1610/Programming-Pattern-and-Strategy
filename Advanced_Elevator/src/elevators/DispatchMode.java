@@ -100,7 +100,6 @@ public class DispatchMode implements OperationMode {
             case DECELERATING:
                 elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]=false;
                 elevator.announceElevatorDecelerating();
-                
                 elevator.scheduleModeChange(new ActiveMode(), Elevator.ElevatorState.DOORS_OPENING, 3);
                 break;
         }
