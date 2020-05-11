@@ -31,14 +31,21 @@ public class SpawnPassengerEvent extends SimulationEvent {
 	public void execute(Simulation sim) {
 		Random ram = mBuilding.getSimulation().getRandom();
 		List<PassengerFactory> temp=sim.getPassengerFactories();
-                int total=20;
+                int total=0;
+                for(PassengerFactory i:temp){
+                    total=total+i.factoryWeight();
+                }
                 int tempweight=0;
-                int r=ram.nextInt(19)+1;
+                int r=ram.nextInt(total);
                 for(PassengerFactory pas: temp){
                     tempweight+=pas.factoryWeight();
-                    if(tempweight>total){
-                        mPassenger=new Passenger(pas.factoryName(),pas.shortName(),pas.createDebarkingStrategy(sim),
-                        pas.createBoardingStrategy(sim),pas.createEmbarkingStrategy(sim),pas.createTravelStrategy(sim));
+                    if(tempweight>r){
+                        mPassenger=new Passenger(pas.factoryName(),
+                                pas.shortName(),
+                                pas.createDebarkingStrategy(sim),
+                                pas.createBoardingStrategy(sim),
+                                pas.createEmbarkingStrategy(sim),
+                                pas.createTravelStrategy(sim));
                         break;
                     }
                 }
@@ -46,9 +53,6 @@ public class SpawnPassengerEvent extends SimulationEvent {
                 long nextTime=1+ sim.getRandom().nextInt(30)+sim.currentTime();
                 SpawnPassengerEvent ev=new SpawnPassengerEvent(nextTime, mBuilding);
                 sim.scheduleEvent(ev);
-                
-                
-		
 	}
         
         
