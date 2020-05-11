@@ -15,8 +15,11 @@ public class ResponsibleEmbarking implements EmbarkingStrategy{
 
     @Override
     public void enteredElevator(Passenger passenger, Elevator elevator) {
-        elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getDestination()));
+        elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getTravel().getDestination()));
     }
-    
+    @Override
+    public String toString(){
+        return "Responsibly";
+    }
     
 }
