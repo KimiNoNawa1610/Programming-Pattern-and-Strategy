@@ -56,11 +56,11 @@ public class Building implements ElevatorObserver, FloorObserver {
             }
                 if(i+1>=10){
                     x.add((i+1)+ ": "+String.join("",y)+mFloors.get(i).getUpDownIcon()+mFloors.get(i).getShortPassenger()
-                            +mFloors.get(i).getDestinations()+"\n");
+                            +" Destination Request: "+mFloors.get(i).getDestinations()+"\n");
                 }
                 else{
                     x.add(" "+(i+1)+": "+String.join("",y)+mFloors.get(i).getUpDownIcon()+mFloors.get(i).getShortPassenger()
-                            +mFloors.get(i).getDestinations()+"\n");
+                            +" Destination Request: "+mFloors.get(i).getDestinations()+"\n");
                 }
         }
         
