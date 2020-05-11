@@ -15,18 +15,12 @@ import events.PassengerNextDestinationEvent;
  */
 public class SingleDestinationTravel implements TravelStrategy{
     private int destination;
-    private Double schedule;
+    private long schedule;
     
-    
-    public SingleDestinationTravel(int des, Double sch){
+    public SingleDestinationTravel(int des, long sch){
         destination=des;
         schedule=sch;
     }
-    
-    public void setSchedule(Double sche){
-        schedule=sche;
-    }
-    
     @Override
     public int getDestination() {
         return destination;
@@ -36,7 +30,7 @@ public class SingleDestinationTravel implements TravelStrategy{
     public void scheduleNextDestination(Passenger passenger, Floor currentFloor) {
         this.destination=1;
         Simulation s=currentFloor.getBuilding().getSimulation();
-        PassengerNextDestinationEvent ev=new PassengerNextDestinationEvent((long) (s.currentTime()+schedule),
+        PassengerNextDestinationEvent ev=new PassengerNextDestinationEvent(s.currentTime()+schedule,
                     passenger,currentFloor);
         s.scheduleEvent(ev);
         
