@@ -25,6 +25,10 @@ public class Simulation {
 		mRandom = random;
 	}
         
+        public long getTime(){
+            return mCurrentTime;
+        }
+        
         public Building getBuilding(){
             return mBuilding;
         }
