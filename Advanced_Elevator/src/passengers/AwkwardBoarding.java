@@ -14,15 +14,17 @@ import elevators.Elevator;
 public class AwkwardBoarding implements BoardingStrategy{
     private int Threshold;
     
-    public AwkwardBoarding(){
+    public AwkwardBoarding(int threshold){
+        Threshold=threshold;
     }
 
     @Override
     public boolean willBoardElevator(Passenger passenger, Elevator elevator) {
-        if(passenger.getBoarding().willBoardElevator(passenger, elevator)!=true){
+        boolean result= Threshold>elevator.getPassengerCount();
+        if(result!=true){
             Threshold*=2;
         }
-        return Threshold>elevator.getPassengerCount();
+        return result;
         
     }
     
