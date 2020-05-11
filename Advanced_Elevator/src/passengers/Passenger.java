@@ -8,8 +8,7 @@ import elevators.ElevatorObserver;
 /**
  * A passenger that is either waiting on a floor or riding an elevator.
  */
-public abstract class Passenger implements FloorObserver, ElevatorObserver, DebarkingStrategy,BoardingStrategy,EmbarkingStrategy,TravelStrategy {
-    
+public class Passenger implements FloorObserver, ElevatorObserver{
 	// An enum for determining whether a Passenger is on a floor, an elevator, or busy (visiting a room in the building).
 	public enum PassengerState {
 		WAITING_ON_FLOOR,
@@ -26,6 +25,7 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver, Deba
         
 	// A cute trick for assigning unique IDs to each object that is created. (See the constructor.)
 	private static int mNextId;
+        
 	protected static int nextPassengerId() {
 		return ++mNextId;
 	}
@@ -33,9 +33,17 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver, Deba
 	private final int mIdentifier;
 	private PassengerState mCurrentState;
 	
-	public Passenger() {
-		mIdentifier = nextPassengerId();
-		mCurrentState = PassengerState.WAITING_ON_FLOOR;
+	public Passenger(String Name,String shortn,DebarkingStrategy debarking, BoardingStrategy boarding,
+                EmbarkingStrategy embarking, TravelStrategy travelling) {
+            PassengerName=Name; 
+            mIdentifier = nextPassengerId();
+            mCurrentState = PassengerState.WAITING_ON_FLOOR;
+            PassengerShortName=shortn;
+            Debark=debarking;
+            Boadring=boarding;
+            Embark=embarking;
+            Travel=travelling;
+         
 	}
 	
 	public void setState(PassengerState state) {
@@ -45,7 +53,13 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver, Deba
             return mCurrentState;
         }
 	
-       
+        public TravelStrategy getTravel(){
+            return Travel;
+        }
+        
+        public BoardingStrategy getBoarding(){
+            return Boadring;
+        }
 	/**
 	 * Gets the passenger's unique identifier.
          * @return 
@@ -53,6 +67,14 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver, Deba
 	public int getId() {
 		return mIdentifier;
 	}
+        
+        public String getName(){
+            return PassengerName;
+        }
+        
+        public String getShortName(){
+            return PassengerShortName;
+        }
 	
 	
 	/**
@@ -64,34 +86,59 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver, Deba
 		// This is a sanity check. A Passenger should never be observing a Floor they are not waiting on.
 		if (floor.getWaitingPassengers().contains(this) && mCurrentState == PassengerState.WAITING_ON_FLOOR) {
 			Elevator.Direction elevatorDirection = elevator.getCurrentDirection();
-			if(null!=elevatorDirection) 
+                        floor.clearDirection(elevatorDirection);
+                        if(elevatorDirection!=null){
+                            switch (elevatorDirection) {
+                        
+                                case NOT_MOVING:
+                                    elevator.addObserver(this);
+                                    break;
+                        
+                                case MOVING_UP:
+                                    if(this.getTravel().getDestination()>elevator.getCurrentFloor().getNumber()){
+                                
+                                        elevator.addObserver(this);
+                            
+                                    }
+                            
+                                    break;
+                        
+                                case MOVING_DOWN:
+                                    if(this.getTravel().getDestination()<elevator.getCurrentFloor().getNumber()){
+                                
+                                        elevator.addObserver(this);
+                            
+                                    }
+                            
+                                    break;
+                        
+                                default:
+                            
+                                    break;
+                    
+                            }
+		
+                        }
+                        
+                }
                     // TODO: check if the elevator is either NOT_MOVING, or is going in the direction that this passenger wants.
                     // If so, this passenger becomes an observer of the elevator.
-                    switch (elevatorDirection) {
-                        case NOT_MOVING:
-                            elevator.addObserver(this);
-                            break;
-                        case MOVING_UP:
-                            if(this.getDestination()>elevator.getCurrentFloor().getNumber()){
-                                elevator.addObserver(this);
-                            }
-                            break;
-                        case MOVING_DOWN:
-                            if(this.getDestination()<elevator.getCurrentFloor().getNumber()){
-                                elevator.addObserver(this);
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                        //System.out.println("Passenger: Elevator arriving");
-		}
+                
+                    
 		// This else should not happen if your code is correct. Do not remove this branch; it reveals errors in your code.
 		else {
 			throw new RuntimeException("Passenger " + toString() + " is observing Floor " + floor.getNumber() + " but they are " +
 			 "not waiting on that floor.");
 		}
 	}
+        @Override
+        public void elevatorDecelerating(Elevator sender) {
+            //ignore
+        }
+        
+        public EmbarkingStrategy getEmbarking(){
+            return Embark;
+        }
 	
 	/**
 	 * Handles an observed elevator opening its doors. Depart the elevator if we are on it; otherwise, enter the elevator.
@@ -101,71 +148,44 @@ public abstract class Passenger implements FloorObserver, ElevatorObserver, Deba
 	public void elevatorDoorsOpened(Elevator elevator) {
 		// The elevator is arriving at our destination. Remove ourselves from the elevator, and stop observing it.
 		// Does NOT handle any "next" destination...
-                //System.out.println("Passenger: Elevator doors opened");
 
-		if (mCurrentState == PassengerState.ON_ELEVATOR && elevator.getCurrentFloor().getNumber() == getDestination()) {
-			// TODO: remove this passenger from the elevator, and as an observer of the elevator. Call the
-			// leavingElevator method to allow a derived class to do something when the passenger departs.
-			// Set the current state to BUSY.
-                        
-			elevator.removePassenger(this);
+		if (mCurrentState == PassengerState.ON_ELEVATOR) {
+                    if(this.Debark.willLeaveElevator(this, elevator)==true){
                         elevator.removeObserver(this);
-                        this.leavingElevator(elevator);
-                        this.mCurrentState=PassengerState.BUSY;
-			//System.out.println("Passenger: leaving elevator");
-
+                        elevator.removePassenger(this);
+                        this.Debark.departedElevator(this, elevator);
+                    }
+			
 		}
 		// The elevator has arrived on the floor we are waiting on. If the elevator has room for us, remove ourselves
 		// from the floor, and enter the elevator.
 		else if (mCurrentState == PassengerState.WAITING_ON_FLOOR) {
-			// TODO: determine if the passenger will board the elevator using willBoardElevator.
-			// If so, remove the passenger from the current floor, and as an observer of the current floor;
-			// then add the passenger as an observer of and passenger on the elevator. Then set the mCurrentState
-			// to ON_ELEVATOR.
-                        if(this.willBoardElevator(elevator)==true){
-                            //System.out.println(elevator.getPassenger());
-                            //System.out.println(elevator.getCurrentFloor().getNumber());
-                            //System.out.println(elevator.getCurrentFloor().getobserver().size());
-                            elevator.getCurrentFloor().removeWaitingPassenger(this);
-                            elevator.getCurrentFloor().removeObserver(this);
+                    if(this.Boadring.willBoardElevator(this, elevator)==true){
+                        if(!elevator.getPassenger().contains(this)){
                             elevator.addPassenger(this);
-                            //elevator.addObserver(this);
-                            this.mCurrentState=PassengerState.ON_ELEVATOR;
+                            mCurrentState = PassengerState.ON_ELEVATOR;
                         }
-                        else{
-                            elevator.removeObserver(this);
+                        this.Embark.enteredElevator(this, elevator);
+                        elevator.getCurrentFloor().removeWaitingPassenger(this);
+                        elevator.getCurrentFloor().removeObserver(this);
+                    }
+                    else{
+                        elevator.removeObserver(this);
+                        if(elevator.getCurrentFloor().getNumber()<this.getTravel().getDestination()){
+                            elevator.getCurrentFloor().requestDirection(Elevator.Direction.MOVING_UP);
                         }
-                        //System.out.println(this.toString()+"Passenger: will board elevator");
-			
-			
-		}
-	}
-	
-	/**
-	 * Returns the passenger's current destination (what floor they are travelling to).
-         * @return 
-	 */
-        @Override
-	public abstract int getDestination();
-	
-	/**
-	 * Called to determine whether the passenger will board the given elevator that is moving in the direction the
-	 * passenger wants to travel.
-         * @param elevator
-         * @return 
-	 */
-	protected abstract boolean willBoardElevator(Elevator elevator);
-	
-	/**
-	 * Called when the passenger is departing the given elevator.
-         * @param elevator
-	 */
-	protected abstract void leavingElevator(Elevator elevator);
-	
+                        else if(elevator.getCurrentFloor().getNumber()>this.getTravel().getDestination()){
+                            elevator.getCurrentFloor().requestDirection(Elevator.Direction.MOVING_DOWN);
+                
+                        }
+                    
+                    }
+}
+        }
 	// This will be overridden by derived types.
 	@Override
 	public String toString() {
-		return Integer.toString(getDestination());
+		return this.getName()+" "+this.getId()+" [ ->"+Integer.toString(getTravel().getDestination())+"] ";
 	}
 	
 	@Override
