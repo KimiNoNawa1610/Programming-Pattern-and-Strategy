@@ -23,7 +23,6 @@ public class PassengerNextDestinationEvent extends SimulationEvent {
 	public void execute(Simulation sim) {
 		mPassenger.setState(Passenger.PassengerState.WAITING_ON_FLOOR);
 		mStartingFloor.addWaitingPassenger(mPassenger);
-                //System.out.println("passenger Next Destination execute");
 	}
 	
 	@Override
