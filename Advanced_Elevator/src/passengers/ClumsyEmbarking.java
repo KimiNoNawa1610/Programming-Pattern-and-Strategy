@@ -26,5 +26,9 @@ public class ClumsyEmbarking implements EmbarkingStrategy{
         }
         
     }
+    @Override
+    public String toString(){
+        return "clumsily";
+    }
     
 }
