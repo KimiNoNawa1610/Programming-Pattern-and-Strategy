@@ -44,7 +44,6 @@ public class ActiveMode implements OperationMode {
     public void tick(Elevator elevator) {
         List<ElevatorObserver> cache=new ArrayList<>(elevator.getObserver());
         Elevator.Direction tempDirection=elevator.getCurrentDirection();
-        Floor tempFloor=elevator.getCurrentFloor();
         Building tempBuilding=elevator.getBuilding();
         List<Passenger> temppas=elevator.getPassenger();
         switch (elevator.getCurrentState()) {
@@ -57,7 +56,7 @@ public class ActiveMode implements OperationMode {
                 
         case DOORS_OPEN:
                     
-            int PreviousPassengerOntheFloor= tempFloor.getWaitingPassengers().size();
+            int PreviousPassengerOntheFloor= elevator.getCurrentFloor().getWaitingPassengers().size();
                     
             int PreviousPassengerOntheElevator= temppas.size();
                     
@@ -67,7 +66,7 @@ public class ActiveMode implements OperationMode {
                     
             }
                     
-            int CurrentPassengerOntheFloor= tempFloor.getWaitingPassengers().size();
+            int CurrentPassengerOntheFloor= elevator.getCurrentFloor().getWaitingPassengers().size();
                     
             int CurrentPassengerOntheElevator=temppas.size();
                   
@@ -92,7 +91,7 @@ public class ActiveMode implements OperationMode {
                     
             if(null==elevator.getCurrentDirection()){
                         
-                tempDirection=Elevator.Direction.NOT_MOVING;
+                elevator.setCurrentDirection(Elevator.Direction.NOT_MOVING);
                         
                 elevator.scheduleModeChange(new IdleMode(),Elevator.ElevatorState.IDLE_STATE,2);
                     
@@ -101,10 +100,10 @@ public class ActiveMode implements OperationMode {
             else switch (tempDirection) {
                 
                 case MOVING_DOWN:
-                    if(elevator.nextRequestDown(tempFloor.getNumber())!=-1){
+                    if(elevator.nextRequestDown(elevator.getCurrentFloor().getNumber())!=-1){
                         elevator.scheduleStateChange(Elevator.ElevatorState.ACCELERATING,2);
                     }
-                    else if(elevator.nextRequestUp(tempFloor.getNumber())!=-1){
+                    else if(elevator.nextRequestUp(elevator.getCurrentFloor().getNumber())!=-1){
                         elevator.setCurrentDirection(Elevator.Direction.MOVING_UP);
                         elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_OPENING,2);
                     }
@@ -114,10 +113,10 @@ public class ActiveMode implements OperationMode {
                     }
                     break;
                 case MOVING_UP:
-                    if(elevator.nextRequestUp(tempFloor.getNumber())!=-1){
+                    if(elevator.nextRequestUp(elevator.getCurrentFloor().getNumber())!=-1){
                         elevator.scheduleStateChange(Elevator.ElevatorState.ACCELERATING,2);
                     }
-                    else if(elevator.nextRequestDown(tempFloor.getNumber())!=-1){
+                    else if(elevator.nextRequestDown(elevator.getCurrentFloor().getNumber())!=-1){
                         elevator.setCurrentDirection(Elevator.Direction.MOVING_DOWN);
                         elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_OPENING,2);
                     }
@@ -136,7 +135,7 @@ public class ActiveMode implements OperationMode {
                 
         case ACCELERATING:
                     
-            tempFloor.removeObserver(elevator);
+            elevator.getCurrentFloor().removeObserver(elevator);
                     
             elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,3);
                     
@@ -145,10 +144,9 @@ public class ActiveMode implements OperationMode {
         case MOVING:
                     
             if(tempDirection==Elevator.Direction.MOVING_UP){
-                elevator.setCurrentFloor(tempBuilding.getFloor(tempFloor.getNumber()+1));
-                
-                if(elevator.getRequestedFloor()[tempBuilding.getFloor(tempFloor.getNumber()+1).getNumber()-1]==true||
-                        tempFloor.directionIsPressed(tempDirection)){
+                elevator.setCurrentFloor(tempBuilding.getFloor(elevator.getCurrentFloor().getNumber()+1));
+                if(elevator.getRequestedFloor()[tempBuilding.getFloor(elevator.getCurrentFloor().getNumber()).getNumber()-1]==true||
+                        elevator.getCurrentFloor().directionIsPressed(tempDirection)){
                     elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);
                 }
                        
@@ -160,9 +158,10 @@ public class ActiveMode implements OperationMode {
                     
             else if(tempDirection==Elevator.Direction.MOVING_DOWN){
                 
-                elevator.setCurrentFloor(tempBuilding.getFloor(tempFloor.getNumber()-1));
+                elevator.setCurrentFloor(tempBuilding.getFloor(elevator.getCurrentFloor().getNumber()-1));
                                                                           
-                if(elevator.getRequestedFloor()[(tempFloor.getNumber()-1)-1]==true||tempFloor.directionIsPressed(tempDirection)){   
+                if(elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]==true||
+                        elevator.getCurrentFloor().directionIsPressed(tempDirection)){   
                     elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);    
                 }          
                 else{
@@ -176,17 +175,19 @@ public class ActiveMode implements OperationMode {
                 
         case DECELERATING:
                     
-            elevator.getRequestedFloor()[tempFloor.getNumber()-1]=false;
+            elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]=false;
                     
-            if(!tempFloor.directionIsPressed(tempDirection)){
+            if(!elevator.getCurrentFloor().directionIsPressed(tempDirection)){
                         
                 if(tempDirection==Elevator.Direction.MOVING_UP){
                     
-                    if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_UP)||elevator.nextRequestUp(tempFloor.getNumber())!=-1){
+                    if(elevator.getCurrentFloor().directionIsPressed(Elevator.Direction.MOVING_UP)||
+                            elevator.nextRequestUp(elevator.getCurrentFloor().getNumber())!=-1){
 
                         elevator.setCurrentDirection(Elevator.Direction.MOVING_UP);
                     }   
-                    else if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_DOWN)&& elevator.nextRequestUp(tempFloor.getNumber())==-1){
+                    else if(elevator.getCurrentFloor().directionIsPressed(Elevator.Direction.MOVING_DOWN)&& 
+                            elevator.nextRequestUp(elevator.getCurrentFloor().getNumber())==-1){
  
                         elevator.setCurrentDirection(Elevator.Direction.MOVING_DOWN);     
                     }    
@@ -195,10 +196,12 @@ public class ActiveMode implements OperationMode {
                     } 
                 }     
                 else if(tempDirection==Elevator.Direction.MOVING_DOWN){    
-                    if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_DOWN)||elevator.nextRequestDown(tempFloor.getNumber())!=-1){       
+                    if(elevator.getCurrentFloor().directionIsPressed(Elevator.Direction.MOVING_DOWN)||
+                            elevator.nextRequestDown(elevator.getCurrentFloor().getNumber())!=-1){       
                         elevator.setCurrentDirection(Elevator.Direction.MOVING_DOWN);   
                     }     
-                    else if(tempFloor.directionIsPressed(Elevator.Direction.MOVING_UP)&& elevator.nextRequestDown(tempFloor.getNumber())==-1){       
+                    else if(elevator.getCurrentFloor().directionIsPressed(Elevator.Direction.MOVING_UP)&& 
+                            elevator.nextRequestDown(elevator.getCurrentFloor().getNumber())==-1){       
                         elevator.setCurrentDirection(Elevator.Direction.MOVING_UP);   
                     }
                             
@@ -212,10 +215,8 @@ public class ActiveMode implements OperationMode {
                     
             }
              
-            for(ElevatorObserver i:cache){
-                        
-                i.elevatorDecelerating(elevator);
-                    
+            for(ElevatorObserver i:cache){  
+                i.elevatorDecelerating(elevator);    
             }
                     
             elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_OPENING,3);
