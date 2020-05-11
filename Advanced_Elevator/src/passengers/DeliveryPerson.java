@@ -13,17 +13,7 @@ import java.util.*;
  * @author votha
  */
 public class DeliveryPerson implements PassengerFactory{
-    private List<Integer> destination;
-    private List<Long> schedule;
     
-    public void setDestination(List<Integer> des){
-        destination=des;
-    
-}
-    public void setSchedule(List<Long> sche){
-        schedule=sche;
-    }
-
     @Override
     public String factoryName() {
         return"DeliveryPerson";
@@ -47,6 +37,24 @@ public class DeliveryPerson implements PassengerFactory{
 
     @Override
     public TravelStrategy createTravelStrategy(Simulation simulation) {
+        Random ran=simulation.getRandom();
+        ArrayList<Integer> destination=new ArrayList<>();
+        ArrayList<Long> schedule=new ArrayList<>();
+        int FloorNeedVisit=(ran.nextInt(4)+2);
+        int newFloor;
+        int oldFloor=0;
+        for(int i=1; i<(int)(FloorNeedVisit*(2/3));i++){
+            newFloor=ran.nextInt(simulation.getBuilding().getFloorCount()-1)+2;
+            while(destination.contains(newFloor)){
+                newFloor=ran.nextInt(simulation.getBuilding().getFloorCount()-1)+2;
+            }
+            destination.add(newFloor);
+            oldFloor=newFloor;
+        }
+        for(int i=0; i<FloorNeedVisit;i++){
+            double tempschedule=ran.nextGaussian()*60+10;
+            schedule.add((long)Math.round(tempschedule));
+        }
         return new MultipleDestinationTravel(destination,schedule);
     }
 
