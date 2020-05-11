@@ -8,6 +8,7 @@ package passengers;
 import elevators.Elevator;
 import elevators.Simulation;
 import events.PassengerNextDestinationEvent;
+import logging.StandardOutLogger;
 
 /**
  *
@@ -18,25 +19,13 @@ public class DistractedDebarking implements DebarkingStrategy{
     public DistractedDebarking(){}
     @Override
     public boolean willLeaveElevator(Passenger passenger, Elevator elevator) {
-        if(mistake==1){
-        if(elevator.getCurrentDirection()==Elevator.Direction.MOVING_UP){
-            if(elevator.getCurrentFloor().getNumber()<passenger.getTravel().getDestination()&&elevator.getCurrentState()==Elevator.ElevatorState.DOORS_OPEN){
-                mistake=0;
-                return true;
-                
-            }
+        if(mistake==1 && elevator.getCurrentFloor().getNumber()==passenger.getTravel().getDestination()){
+            mistake=0;
             return false;
+            
         }
-        else if(elevator.getCurrentDirection()==Elevator.Direction.MOVING_DOWN){
-            if(elevator.getCurrentFloor().getNumber()>passenger.getTravel().getDestination()&&elevator.getCurrentState()==Elevator.ElevatorState.DOORS_OPEN){
-                mistake=0;
-                return true;
-            }
-            return false;
-        }
-        else{
-            return false;
-        }
+        else if(mistake ==0 && elevator.getCurrentFloor().getNumber()!=passenger.getTravel().getDestination()){
+            return true;
         }
         return false;
     }
@@ -44,10 +33,15 @@ public class DistractedDebarking implements DebarkingStrategy{
     @Override
     public void departedElevator(Passenger passenger, Elevator elevator) {
         //next destination of the passenger
+        StandardOutLogger log=new StandardOutLogger(elevator.getBuilding().getSimulation());
         if(passenger.getTravel().getDestination()==elevator.getCurrentFloor().getNumber()){
             passenger.getTravel().scheduleNextDestination(passenger, elevator.getCurrentFloor());
+            log.logString(elevator.getBuilding().getSimulation().getTime()+"s: "+passenger.getName()
+                    +" "+passenger.getId()+" debarked at their destination "+elevator.getCurrentFloor().getNumber());
         }
         else if(passenger.getTravel().getDestination()!=elevator.getCurrentFloor().getNumber()){
+            log.logString(elevator.getBuilding().getSimulation().getTime()+"s: "+passenger.getName()
+                    +" "+passenger.getId()+" got off elevator "+elevator.getNumber()+" on the wrong floor");
             Simulation s=elevator.getCurrentFloor().getBuilding().getSimulation();
             PassengerNextDestinationEvent ev=new PassengerNextDestinationEvent((long) (s.currentTime()+5),
                     passenger,elevator.getCurrentFloor());
