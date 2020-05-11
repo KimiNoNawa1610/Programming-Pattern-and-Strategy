@@ -48,7 +48,8 @@ public class Floor implements ElevatorObserver {
 	public void requestDirection(Elevator.Direction direction) {
                 if(directionIsPressed(direction)==false){
                     PassengerDirection.put(direction, Boolean.TRUE);
-                    for(FloorObserver n: mObservers){
+                    ArrayList<FloorObserver> cache=new ArrayList<>(mObservers);
+                    for(FloorObserver n: cache){
                         n.directionRequested(this, direction);
                     }
                 }
@@ -156,16 +157,13 @@ public class Floor implements ElevatorObserver {
         public String getUpDownIcon(){
             String context="";
             if(PassengerDirection.get(Elevator.Direction.MOVING_DOWN)==true&&PassengerDirection.get(Elevator.Direction.MOVING_UP)==false){
-                int[] surrogates={0x1F53D,0x23FF};
-                context=new String(surrogates,0,surrogates.length);
+                context=new String("\u2B07\uFE0F");
             }
             else if(PassengerDirection.get(Elevator.Direction.MOVING_DOWN)==false&&PassengerDirection.get(Elevator.Direction.MOVING_UP)==true){
-                int[] surrogates={0x1F53C,0x23FF};
-                context=new String(surrogates,0,surrogates.length);
+                context=new String("\u2B06\uFE0F");
             }
             else if(PassengerDirection.get(Elevator.Direction.MOVING_DOWN)==true&&PassengerDirection.get(Elevator.Direction.MOVING_UP)==true){
-                int[] surrogates={0x2195,0x23FF};
-                context=new String(surrogates,0,surrogates.length);
+               context=new String("\u2195\uFE0F");
             }
             return context;
         }
