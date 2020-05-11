@@ -64,6 +64,7 @@ public class DispatchMode implements OperationMode {
                 elevator.scheduleStateChange(Elevator.ElevatorState.ACCELERATING,0);
                 break;
             case ACCELERATING:
+                elevator.getCurrentFloor().removeObserver(elevator);
                 elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,3);
                 break;
             case MOVING:
