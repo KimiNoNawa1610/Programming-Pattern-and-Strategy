@@ -72,8 +72,7 @@ public class DispatchMode implements OperationMode {
                        
                 elevator.setCurrentFloor(tempBuilding.getFloor(elevator.getCurrentFloor().getNumber()+1));
                        
-                if(elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]==true||
-                        elevator.getCurrentFloor().directionIsPressed(tempDirection)){
+                if(elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]==true){
                            
                     elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);
                     elevator.setCurrentDirection(mDesiredDirection);
@@ -85,9 +84,7 @@ public class DispatchMode implements OperationMode {
             else if(tempDirection==Elevator.Direction.MOVING_DOWN){ 
                 
                 elevator.setCurrentFloor(tempBuilding.getFloor(elevator.getCurrentFloor().getNumber()-1));
-                   
-                if(elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]==true||
-                        elevator.getCurrentFloor().directionIsPressed(tempDirection)){   
+                if(elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]==true){   
                     elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);  
                     elevator.setCurrentDirection(mDesiredDirection);
                 }          
