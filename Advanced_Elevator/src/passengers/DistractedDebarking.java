@@ -16,6 +16,7 @@ import logging.StandardOutLogger;
  */
 public class DistractedDebarking implements DebarkingStrategy{
     int mistake=1;
+    int board=1;
     public DistractedDebarking(){}
     @Override
     public boolean willLeaveElevator(Passenger passenger, Elevator elevator) {
@@ -24,9 +25,14 @@ public class DistractedDebarking implements DebarkingStrategy{
             return false;
             
         }
-        else if(mistake ==0 && elevator.getCurrentFloor().getNumber()==passenger.getTravel().getDestination()){
+        else if(board==1 &&mistake ==0 && elevator.getCurrentFloor().getNumber()!=passenger.getTravel().getDestination()){
+            board=0;
             return true;
         }
+        else if(board ==0&& elevator.getCurrentFloor().getNumber()==passenger.getTravel().getDestination()){
+            return true;
+        }
+        
         return false;
     }
 
