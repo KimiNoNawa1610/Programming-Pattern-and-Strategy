@@ -17,11 +17,10 @@
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/buildings/Building.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/elevators/ActiveMode.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/passengers/WorkerFactory.java</file>
-            <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/elevators/DispatchMode.java</file>
-            <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/passengers/Passenger.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/elevators/IdleMode.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/buildings/Floor.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/elevators/Elevator.java</file>
+            <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/passengers/SingleDestinationTravel.java</file>
             <file>file:/C:/Users/votha/Documents/GitHub/CECS277/Advanced_Elevator/src/events/ElevatorStateEvent.java</file>
         </group>
     </open-files>
