@@ -19,7 +19,7 @@ public class Passenger implements FloorObserver, ElevatorObserver{
 	private String PassengerName;
         private String PassengerShortName;
         private DebarkingStrategy Debark;
-        private BoardingStrategy Boadring;
+        private BoardingStrategy Boarding;
         private EmbarkingStrategy Embark;
         private TravelStrategy Travel;
         
@@ -40,7 +40,7 @@ public class Passenger implements FloorObserver, ElevatorObserver{
             mCurrentState = PassengerState.WAITING_ON_FLOOR;
             PassengerShortName=shortn;
             Debark=debarking;
-            Boadring=boarding;
+            Boarding=boarding;
             Embark=embarking;
             Travel=travelling;
          
@@ -58,7 +58,7 @@ public class Passenger implements FloorObserver, ElevatorObserver{
         }
         
         public BoardingStrategy getBoarding(){
-            return Boadring;
+            return Boarding;
         }
 	/**
 	 * Gets the passenger's unique identifier.
@@ -160,7 +160,7 @@ public class Passenger implements FloorObserver, ElevatorObserver{
 		// The elevator has arrived on the floor we are waiting on. If the elevator has room for us, remove ourselves
 		// from the floor, and enter the elevator.
 		else if (mCurrentState == PassengerState.WAITING_ON_FLOOR) {
-                    if(this.Boadring.willBoardElevator(this, elevator)==true){
+                    if(this.Boarding.willBoardElevator(this, elevator)==true){
                         if(!elevator.getPassenger().contains(this)){
                             elevator.addPassenger(this);
                             mCurrentState = PassengerState.ON_ELEVATOR;
