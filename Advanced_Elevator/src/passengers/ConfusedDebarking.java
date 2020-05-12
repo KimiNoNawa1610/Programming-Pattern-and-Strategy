@@ -17,7 +17,6 @@ public class ConfusedDebarking implements DebarkingStrategy{
     @Override
     public boolean willLeaveElevator(Passenger passenger, Elevator elevator) {
         if(elevator.getCurrentFloor().getNumber()==1){
-            
             return true;
         }
         return false;
