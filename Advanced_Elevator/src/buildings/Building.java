@@ -10,9 +10,26 @@ public class Building implements ElevatorObserver, FloorObserver {
 	private List<Elevator> mElevators = new ArrayList<>();
 	private List<Floor> mFloors = new ArrayList<>();
 	private Simulation mSimulation;
-	private Queue<Integer> mWaitingFloors = new ArrayDeque<>();
+	private Queue<FloorRequest> mWaitingFloors = new ArrayDeque<>();
 	
-        
+        private class FloorRequest{
+            private Floor mDestination;
+            private Elevator.Direction mDirection;
+            
+            public Floor getDestination(){
+                return mDestination;
+            }
+            
+            public Elevator.Direction getDirection(){
+                return mDirection;
+            }
+            
+            private FloorRequest(Floor destination, Elevator.Direction direction){
+                mDestination=destination;
+                mDirection=direction;
+            }
+                    
+        }
 	public Building(int floors, int elevatorCount, Simulation sim) {
 		mSimulation = sim;
 		
@@ -84,7 +101,7 @@ public class Building implements ElevatorObserver, FloorObserver {
 		return mSimulation;
 	}
 	
-        public Queue<Integer> GetWaitingFloor(){
+        public Queue<FloorRequest> GetWaitingFloor(){
             return mWaitingFloors;
         }
 	
@@ -102,28 +119,30 @@ public class Building implements ElevatorObserver, FloorObserver {
 	@Override
 	public void elevatorWentIdle(Elevator elevator) {
                 if(mWaitingFloors.isEmpty()!=true){
-                    int FirstEntry=mWaitingFloors.peek();
-                    elevator.getRequestedFloor()[FirstEntry-1]=true;
-                    if(elevator.getCurrentFloor().getNumber()>FirstEntry){
+                    FloorRequest FirstEntry=mWaitingFloors.peek();
+                    elevator.getRequestedFloor()[FirstEntry.getDestination().getNumber()-1]=true;
+                    if(elevator.getCurrentFloor().getNumber()>FirstEntry.getDestination().getNumber()){
                         elevator.setCurrentDirection(Elevator.Direction.MOVING_DOWN);
                     }
-                    else if(elevator.getCurrentFloor().getNumber()<FirstEntry){
+                    else if(elevator.getCurrentFloor().getNumber()<FirstEntry.getDestination().getNumber()){
                         elevator.setCurrentDirection(Elevator.Direction.MOVING_UP);
                     }
-                    elevator.getOperation().dispatchToFloor(elevator, this.getFloor(FirstEntry),this.getFloor(FirstEntry).getFloorDirection());
+                    elevator.getOperation().dispatchToFloor(elevator, FirstEntry.getDestination(),FirstEntry.getDestination().getFloorDirection());
                 }
         }
 	
 	
 	@Override
 	public void elevatorArriving(Floor sender, Elevator elevator) {
-                if(sender.getWaitingPassengers().isEmpty()==false){
-                    if(mWaitingFloors.contains(sender)!=true){
-                        mWaitingFloors.add(sender.getNumber());
-                    }
-                }
+            mWaitingFloors.removeIf(f -> f.mDestination.getNumber() == sender.getNumber() &&
+            
+                    (elevator.getCurrentDirection() == Elevator.Direction.NOT_MOVING ||
+            
+                            elevator.getCurrentDirection() == f.mDirection));
+
+        }
                 
-	}
+	
 	
 	@Override
 	public void directionRequested(Floor floor, Elevator.Direction direction) {
@@ -135,7 +154,7 @@ public class Building implements ElevatorObserver, FloorObserver {
                         break;
                     }
                     else{
-                        mWaitingFloors.add(floor.getNumber());
+                        mWaitingFloors.add(new FloorRequest(floor,direction));
                     }  
                 }
                 
