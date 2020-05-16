@@ -3,7 +3,6 @@ package elevators;
 import buildings.Building;
 import buildings.Floor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import passengers.Passenger;
 /**
