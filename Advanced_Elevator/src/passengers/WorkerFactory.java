@@ -53,7 +53,7 @@ public class WorkerFactory implements PassengerFactory{
         }
         for(int i=0; i<FloorNeedVisit;i++){
             double tempschedule=180*ran.nextGaussian()+600;
-            schedule.add((long)Math.round(tempschedule));
+            schedule.add((long)tempschedule);
         }
         return new MultipleDestinationTravel(destination,schedule);
     }
