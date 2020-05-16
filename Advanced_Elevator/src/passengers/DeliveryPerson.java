@@ -40,9 +40,9 @@ public class DeliveryPerson implements PassengerFactory{
         Random ran=simulation.getRandom();
         ArrayList<Integer> destination=new ArrayList<>();
         ArrayList<Long> schedule=new ArrayList<>();
-        int FloorNeedVisit=(simulation.getBuilding().getFloorCount()*2)/3;
+        int FloorNeedVisit=ran.nextInt(simulation.getBuilding().getFloorCount()*2/3)+1;
         int newFloor;
-        for(int i=1; i<FloorNeedVisit;i++){
+        for(int i=0; i<FloorNeedVisit;i++){
             newFloor=ran.nextInt(simulation.getBuilding().getFloorCount()-1)+2;
             while(destination.contains(newFloor)){
                 newFloor=ran.nextInt(simulation.getBuilding().getFloorCount()-1)+2;
@@ -50,13 +50,11 @@ public class DeliveryPerson implements PassengerFactory{
             destination.add(newFloor);
             
         }
-        for(int i=0; i<FloorNeedVisit-1;i++){
+        for(int i=0; i<FloorNeedVisit;i++){
             double tempschedule=10*ran.nextGaussian()+60;
-            schedule.add((long)Math.round(tempschedule));
+            schedule.add((long)tempschedule);
         }
         
-        System.out.println(destination);
-        System.out.println(schedule);
         return new MultipleDestinationTravel(destination,schedule);
     }
 
