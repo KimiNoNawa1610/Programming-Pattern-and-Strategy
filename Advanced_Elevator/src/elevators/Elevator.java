@@ -1,6 +1,7 @@
 package elevators;
 
 
+import events.ElevatorModeEvent;
 import buildings.Building;
 import buildings.Floor;
 import buildings.FloorObserver;
@@ -34,14 +35,14 @@ public class Elevator implements FloorObserver {
 	private Building mBuilding;
         private OperationMode mOperation;
 
-	private ElevatorState mCurrentState = ElevatorState.IDLE_STATE;
-	private Direction mCurrentDirection = Direction.NOT_MOVING;
+	private ElevatorState mCurrentState;
+	private Direction mCurrentDirection;
 	private Floor mCurrentFloor;
 	private List<Passenger> mPassengers = new ArrayList<>();
-	
 	private List<ElevatorObserver> mObservers = new ArrayList<>();
     // TODO: declare a field to keep track of which floors have been requested by passengers.
 	private boolean[] RequestedFloor;
+        private boolean isDispatching=false;
         
 	public Elevator(int number, Building bld) {
                 mBuilding = bld;
@@ -52,9 +53,15 @@ public class Elevator implements FloorObserver {
                 }
 		mCurrentFloor = bld.getFloor(1);
                 mOperation=new IdleMode();
+                this.setCurrentDirection(Elevator.Direction.NOT_MOVING);
+                this.scheduleStateChange(Elevator.ElevatorState.IDLE_STATE, 0);
                 mCurrentFloor.addObserver(this);
                 
 	}
+        
+        public void setIsdispatching(boolean o){
+            isDispatching=o;
+        }
         
         public void tick(){
             getOperation().tick(this);
@@ -83,8 +90,30 @@ public class Elevator implements FloorObserver {
                 StandardOutLogger log=new StandardOutLogger(this.getBuilding().getSimulation());
 		mPassengers.add(passenger);
                 RequestedFloor[passenger.getTravel().getDestination()-1]=true;
-                log.logString(this.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+passenger.getEmbarking().toString()+" request floor "+
-                        passenger.getTravel().getDestination()+" on elevator "+this.getNumber());
+                if(passenger.getEmbarking().toString().equals("clumsily") &&
+                        passenger.getTravel().getDestination()>this.getCurrentFloor().getNumber()){
+                    log.logString(this.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
+                            passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+" and "
+                            +(passenger.getTravel().getDestination()-1)+" on elevator "+this.getNumber());
+                }
+                else if(passenger.getEmbarking().toString().equals("clumsily") &&
+                        passenger.getTravel().getDestination()<this.getCurrentFloor().getNumber()){
+                    log.logString(this.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
+                            passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+" and "
+                            +(passenger.getTravel().getDestination()+1)+" on elevator "+this.getNumber());
+                    
+                }
+                else if(passenger.getEmbarking().toString().equals("Disruptively")){
+                    log.logString(this.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
+                            passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+
+                            " and everything above it on elevator "+this.getNumber());
+                }
+                else{
+                    log.logString(this.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
+                            passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+
+                            " on elevator "+this.getNumber());
+                }
+                
                 
 	}
 	
@@ -95,9 +124,9 @@ public class Elevator implements FloorObserver {
 	
 	public int nextRequestUp(int FromFloor){
             int smallestmax=-1;
-            for (Passenger i: this.mPassengers){
-                if(i.getTravel().getDestination()>FromFloor){
-                    smallestmax=i.getTravel().getDestination();
+            for (int i=0;i<RequestedFloor.length;i++){
+                if(RequestedFloor[i]==true && (i+1)>FromFloor){
+                    smallestmax=i+1;
                 }
                 
             }
@@ -106,10 +135,10 @@ public class Elevator implements FloorObserver {
         
         public int nextRequestDown(int FromFloor){
             int biggestmin=-1;
-            for (Passenger i: this.mPassengers){
-                if(i.getTravel().getDestination()<FromFloor){
-                     biggestmin=i.getTravel().getDestination();
-                }
+            for (int i=0;i<RequestedFloor.length;i++){
+                if(RequestedFloor[i]==true && (i+1)<FromFloor){
+                    biggestmin=i+1;
+                }  
             }
             return biggestmin;
         }
@@ -133,8 +162,25 @@ public class Elevator implements FloorObserver {
         }
         public void requestFloor(Floor floor){
             if(floor!=mCurrentFloor){
-            RequestedFloor[floor.getNumber()-1]=true;
+                RequestedFloor[floor.getNumber()-1]=true;
             }
+        }
+        public void unrequestFloor(Floor floor){
+            RequestedFloor[floor.getNumber()-1]=false;
+        }
+        
+        public ArrayList<Integer> getRequestFloor(){
+            ArrayList<Integer> output=new ArrayList<>();
+            if(!this.isIdle() && isDispatching==false){
+                for(int i=0;i<RequestedFloor.length;i++){
+                    if(RequestedFloor[i]==true){
+                        output.add(i+1);
+                    }
+                }
+            }
+            return output;
+    
+
         }
 	
 	// Simple accessors
@@ -210,6 +256,10 @@ public class Elevator implements FloorObserver {
         public int getNumber(){
             return mNumber;
         }
+        
+        public boolean isDispatchingto(Floor floor){
+            return RequestedFloor[floor.getNumber()-1];
+        }
 	
 	// FloorObserver methods
 	
@@ -236,7 +286,7 @@ public class Elevator implements FloorObserver {
 	public String toString() {
 		return "Elevator " + mNumber + "["+this.getOperation()+"]" +" - " + mCurrentFloor + " - " + mCurrentState + " - " + mCurrentDirection + " - "
 		 + "[" + mPassengers.stream().map(p -> p.getShortName()+p.getId()).collect(Collectors.joining(", "))
-		 + "]";
+		 + "]"+this.getRequestFloor();
 	}
 	
 }
