@@ -47,7 +47,7 @@ public class ActiveMode implements OperationMode {
         List<Passenger> temppas=elevator.getPassenger();
         switch (elevator.getCurrentState()) {
         case DOORS_OPENING:
-                    
+            elevator.setIsdispatching(false);
             elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_OPEN,2);
             
                     
@@ -59,11 +59,9 @@ public class ActiveMode implements OperationMode {
                     
             int PreviousPassengerOntheElevator= temppas.size();
                     
-            for(ElevatorObserver i:cache){
-                        
+            cache.forEach((i) -> {
                 i.elevatorDoorsOpened(elevator);
-                    
-            }
+        });
                     
             int CurrentPassengerOntheFloor= elevator.getCurrentFloor().getWaitingPassengers().size();
                     
@@ -87,16 +85,7 @@ public class ActiveMode implements OperationMode {
                 
         case DOORS_CLOSING:
                     
-                    
-            if(null==elevator.getCurrentDirection()){
-                        
-                elevator.setCurrentDirection(Elevator.Direction.NOT_MOVING);
-                        
-                elevator.scheduleModeChange(new IdleMode(),Elevator.ElevatorState.IDLE_STATE,2);
-                    
-            }
-                    
-            else switch (tempDirection) {
+            switch (tempDirection) {
                 
                 case MOVING_DOWN:
                     if(elevator.nextRequestDown(elevator.getCurrentFloor().getNumber())!=-1){
@@ -125,7 +114,6 @@ public class ActiveMode implements OperationMode {
                     }
                     break;
                 default:
-                    tempDirection=Elevator.Direction.NOT_MOVING;
                     elevator.scheduleModeChange(new IdleMode(),Elevator.ElevatorState.IDLE_STATE,2);
                     break;
             
@@ -174,7 +162,7 @@ public class ActiveMode implements OperationMode {
                 
         case DECELERATING:
                     
-            elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]=false;
+            elevator.unrequestFloor(elevator.getCurrentFloor());
                     
             if(!elevator.getCurrentFloor().directionIsPressed(tempDirection)){
                         
@@ -195,12 +183,13 @@ public class ActiveMode implements OperationMode {
                     } 
                 }     
                 else if(tempDirection==Elevator.Direction.MOVING_DOWN){    
-                    if(elevator.getCurrentFloor().directionIsPressed(Elevator.Direction.MOVING_DOWN)||
-                            elevator.nextRequestDown(elevator.getCurrentFloor().getNumber())!=-1){       
+                    if(elevator.getCurrentFloor().directionIsPressed(Elevator.Direction.MOVING_DOWN)==true||
+                            
+                            elevator.nextRequestDown(elevator.getCurrentFloor().getNumber())!=-1){ 
                         elevator.setCurrentDirection(Elevator.Direction.MOVING_DOWN);   
                     }     
                     else if(elevator.getCurrentFloor().directionIsPressed(Elevator.Direction.MOVING_UP)&& 
-                            elevator.nextRequestDown(elevator.getCurrentFloor().getNumber())==-1){       
+                            elevator.nextRequestDown(elevator.getCurrentFloor().getNumber())==-1){ 
                         elevator.setCurrentDirection(Elevator.Direction.MOVING_UP);   
                     }
                             
@@ -214,9 +203,9 @@ public class ActiveMode implements OperationMode {
                     
             }
              
-            for(ElevatorObserver i:cache){  
-                i.elevatorDecelerating(elevator);    
-            }
+            cache.forEach((i) -> {
+                i.elevatorDecelerating(elevator);
+        });
                     
             elevator.scheduleStateChange(Elevator.ElevatorState.DOORS_OPENING,3);
                     
