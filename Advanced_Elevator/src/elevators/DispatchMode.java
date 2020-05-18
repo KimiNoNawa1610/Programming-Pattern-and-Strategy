@@ -2,7 +2,6 @@ package elevators;
 
 import buildings.Building;
 import buildings.Floor;
-import java.util.Arrays;
 
 /**
  * A DispatchMode elevator is in the midst of a dispatch to a target floor in order to handle a request in a target
@@ -18,6 +17,7 @@ public class DispatchMode implements OperationMode {
 	public DispatchMode(Floor destination, Elevator.Direction desiredDirection) {
 		mDestination = destination;
 		mDesiredDirection = desiredDirection;
+                
 	}
 	
 	// TODO: implement the other methods of the OperationMode interface.
@@ -47,7 +47,7 @@ public class DispatchMode implements OperationMode {
     @Override
     public void dispatchToFloor(Elevator elevator, Floor targetFloor, Elevator.Direction targetDirection) {
         elevator.setCurrentDirection(targetDirection);
-        elevator.getRequestedFloor()[targetFloor.getNumber()-1]=true;
+        elevator.requestFloor(targetFloor);
     }
 
     @Override
@@ -61,6 +61,14 @@ public class DispatchMode implements OperationMode {
         Building tempBuilding=elevator.getBuilding();
         switch(elevator.getCurrentState()){
             case IDLE_STATE:
+                elevator.setIsdispatching(true);
+                if(this.mDestination.getNumber()<elevator.getCurrentFloor().getNumber()){
+                    elevator.setCurrentDirection(Elevator.Direction.MOVING_DOWN);
+                }
+                
+                else if(this.mDestination.getNumber()>elevator.getCurrentFloor().getNumber()){
+                    elevator.setCurrentDirection(Elevator.Direction.MOVING_UP);
+                }
                 elevator.scheduleStateChange(Elevator.ElevatorState.ACCELERATING,0);
                 break;
             case ACCELERATING:
@@ -75,18 +83,17 @@ public class DispatchMode implements OperationMode {
                 if(elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]==true){
                            
                     elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);
-                    elevator.setCurrentDirection(mDesiredDirection);
                 }  
                 else{    
                     elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,2); 
                 }  
             }   
-            else if(tempDirection==Elevator.Direction.MOVING_DOWN){ 
+            else if(tempDirection==Elevator.Direction.MOVING_DOWN){
                 
                 elevator.setCurrentFloor(tempBuilding.getFloor(elevator.getCurrentFloor().getNumber()-1));
+                
                 if(elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]==true){   
                     elevator.scheduleStateChange(Elevator.ElevatorState.DECELERATING,2);  
-                    elevator.setCurrentDirection(mDesiredDirection);
                 }          
                 else{
                     elevator.scheduleStateChange(Elevator.ElevatorState.MOVING,2); 
@@ -95,7 +102,8 @@ public class DispatchMode implements OperationMode {
                 break;
                 
             case DECELERATING:
-                elevator.getRequestedFloor()[elevator.getCurrentFloor().getNumber()-1]=false;
+                elevator.unrequestFloor(elevator.getCurrentFloor());
+                elevator.setCurrentDirection(mDesiredDirection);
                 elevator.announceElevatorDecelerating();
                 elevator.scheduleModeChange(new ActiveMode(), Elevator.ElevatorState.DOORS_OPENING, 3);
                 break;
