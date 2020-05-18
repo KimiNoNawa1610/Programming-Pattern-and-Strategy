@@ -3,6 +3,7 @@ package buildings;
 import elevators.Simulation;
 import elevators.Elevator;
 import elevators.ElevatorObserver;
+import events.SimulationEvent;
 
 import java.util.*;
 
@@ -28,7 +29,18 @@ public class Building implements ElevatorObserver, FloorObserver {
                 mDestination=destination;
                 mDirection=direction;
             }
-                    
+            
+            @Override
+            public String toString(){
+                return mDestination+" "+mDirection;
+            }
+            
+            public boolean equals(FloorRequest o){
+                if(this.mDestination.equals(o.getDestination())&&this.mDirection.equals(o.getDirection())){
+                    return true;
+                }
+                return false;
+            }
         }
 	public Building(int floors, int elevatorCount, Simulation sim) {
 		mSimulation = sim;
@@ -53,7 +65,9 @@ public class Building implements ElevatorObserver, FloorObserver {
 		}
 	}
 	
-
+        public List<Elevator> getElevators(){
+            return mElevators;
+        }
 	// TODO: recreate your toString() here.
         @Override
 	public String toString(){
@@ -71,12 +85,10 @@ public class Building implements ElevatorObserver, FloorObserver {
                 else{y.set(z,"|   |");}
             }
                 if(i+1>=10){
-                    x.add((i+1)+ ": "+String.join("",y)+mFloors.get(i).getUpDownIcon()+mFloors.get(i).getShortPassenger()
-                            +" Destination Request: "+mFloors.get(i).getDestinations()+"\n");
+                    x.add((i+1)+ ": "+String.join("",y)+mFloors.get(i).getUpDownIcon()+mFloors.get(i).getShortPassenger()+"\n");
                 }
                 else{
-                    x.add(" "+(i+1)+": "+String.join("",y)+mFloors.get(i).getUpDownIcon()+mFloors.get(i).getShortPassenger()
-                            +" Destination Request: "+mFloors.get(i).getDestinations()+"\n");
+                    x.add(" "+(i+1)+": "+String.join("",y)+mFloors.get(i).getUpDownIcon()+mFloors.get(i).getShortPassenger()+"\n");
                 }
         }
         
@@ -100,6 +112,10 @@ public class Building implements ElevatorObserver, FloorObserver {
 	public Simulation getSimulation() {
 		return mSimulation;
 	}
+        
+        public void addWaitingFloor(Floor floor, Elevator.Direction direction){
+            mWaitingFloors.add(new FloorRequest(floor,direction));
+        }
 	
         public Queue<FloorRequest> GetWaitingFloor(){
             return mWaitingFloors;
@@ -118,17 +134,17 @@ public class Building implements ElevatorObserver, FloorObserver {
 	
 	@Override
 	public void elevatorWentIdle(Elevator elevator) {
-                if(mWaitingFloors.isEmpty()!=true){
-                    FloorRequest FirstEntry=mWaitingFloors.peek();
-                    elevator.getRequestedFloor()[FirstEntry.getDestination().getNumber()-1]=true;
-                    if(elevator.getCurrentFloor().getNumber()>FirstEntry.getDestination().getNumber()){
-                        elevator.setCurrentDirection(Elevator.Direction.MOVING_DOWN);
-                    }
-                    else if(elevator.getCurrentFloor().getNumber()<FirstEntry.getDestination().getNumber()){
-                        elevator.setCurrentDirection(Elevator.Direction.MOVING_UP);
-                    }
-                    elevator.getOperation().dispatchToFloor(elevator, FirstEntry.getDestination(),FirstEntry.getDestination().getFloorDirection());
-                }
+            
+            if(mWaitingFloors.isEmpty()!=true){ 
+                FloorRequest FirstEntry=mWaitingFloors.peek();
+                elevator.requestFloor(FirstEntry.getDestination());
+                elevator.getOperation().dispatchToFloor(elevator, FirstEntry.getDestination(),
+                        FirstEntry.getDestination().getFloorDirection());
+                mWaitingFloors.remove(FirstEntry);
+                
+                
+            }
+                
         }
 	
 	
@@ -150,14 +166,31 @@ public class Building implements ElevatorObserver, FloorObserver {
 		// TODO: if no elevators are idle, then add the floor number to the mWaitingFloors queue.
                 for(Elevator ele:mElevators){
                     if(ele.getOperation().canBeDispatchedToFloor(ele, floor)==true){
+                        ele.requestFloor(floor);
                         ele.getOperation().dispatchToFloor(ele, floor, direction);
                         break;
                     }
                     else{
-                        mWaitingFloors.add(new FloorRequest(floor,direction));
-                    }  
-                }
+                        FloorRequest newrequest=new FloorRequest(floor,direction);
+                        for(FloorRequest i:mWaitingFloors){
+                            if(i.equals(newrequest)){
+                                mWaitingFloors.remove(i);
+                            }
+                        }
+                        mWaitingFloors.add(newrequest);
+                        
+                        }
+                        
+                        
+                    }
+                        
+                        
+                    
+                }  
+                
+        }
                 
 		
-	}
-}
+	
+
+
