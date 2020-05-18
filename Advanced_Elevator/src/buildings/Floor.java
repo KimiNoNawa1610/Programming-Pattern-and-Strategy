@@ -31,10 +31,10 @@ public class Floor implements ElevatorObserver {
         public Elevator.Direction getFloorDirection(){
             Elevator.Direction floorDirection=Elevator.Direction.NOT_MOVING;
             for(EnumMap.Entry<Elevator.Direction,Boolean> entry:PassengerDirection.entrySet()){
-                if(entry.getValue()==true){
+                if(entry.getValue().equals(true)){
                     floorDirection= entry.getKey();
+                    
                 }
-                break;
             }
             return floorDirection;
         }
@@ -45,14 +45,20 @@ public class Floor implements ElevatorObserver {
 	 * @param direction
 	 */
 	public void requestDirection(Elevator.Direction direction) {
-                if(directionIsPressed(direction)==false){
-                    PassengerDirection.put(direction, Boolean.TRUE);
-                    ArrayList<FloorObserver> cache=new ArrayList<>(mObservers);
-                    for(FloorObserver n: cache){
-                        n.directionRequested(this, direction);
-                    }
+            
+            if(!directionIsPressed(direction)){
+                
+                PassengerDirection.put(direction, Boolean.TRUE);
+                    
+                ArrayList<FloorObserver> cache=new ArrayList<>(mObservers);
+                    
+                for(FloorObserver n: cache){
+                        
+                    n.directionRequested(this, direction);
+                    
                 }
-    
+                
+            }
 	}
 	
 	/**
@@ -62,7 +68,7 @@ public class Floor implements ElevatorObserver {
 	 */
 	public boolean directionIsPressed(Elevator.Direction direction) {
 		// TODO: complete this method.
-                if(PassengerDirection.get(direction)==true){
+                if(PassengerDirection.get(direction).equals(true)){
                     return true;
                 }
 		return false;
@@ -85,15 +91,19 @@ public class Floor implements ElevatorObserver {
 		mPassengers.add(p);
 		addObserver(p);
 		p.setState(Passenger.PassengerState.WAITING_ON_FLOOR);
-                
+               
 		// TODO: call requestDirection with the appropriate direction for this passenger's destination.
                 int destination=p.getTravel().getDestination();
+                
                 if(this.getNumber()<destination){
-                    requestDirection(Elevator.Direction.MOVING_UP);
+                    if(directionIsPressed(Elevator.Direction.MOVING_UP)==false){
+                    requestDirection(Elevator.Direction.MOVING_UP);}
                 }
                 else if(this.getNumber()>destination){
-                    requestDirection(Elevator.Direction.MOVING_DOWN);
+                    if(directionIsPressed(Elevator.Direction.MOVING_DOWN)==false){
+                    requestDirection(Elevator.Direction.MOVING_DOWN);}
                 }
+                
     
 	}
 
