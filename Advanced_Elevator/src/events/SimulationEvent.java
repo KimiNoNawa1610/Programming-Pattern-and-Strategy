@@ -10,15 +10,22 @@ import java.util.Queue;
 public abstract class SimulationEvent implements Comparable<SimulationEvent> {
 	// The time at which this event is scheduled to be executed.
 	private long mScheduledTime;
-        private static int order=0; 
-        private int priority=0;
+        protected int priority;
 	/**
 	 * Sets the scheduled time of the event.
 	 */
 	public SimulationEvent(long scheduledTime) {
 		mScheduledTime = scheduledTime;
-                priority=order++;
-	}       
+                
+	}
+        
+        public void setPriority(int num){
+            priority=num;
+        }
+        
+        public int getPriority(){
+            return priority;
+        }
 	
 	/**
 	 * Gets the time at which this event should be executed. The start of the simulation is at time 0. Each unit of time
@@ -36,13 +43,16 @@ public abstract class SimulationEvent implements Comparable<SimulationEvent> {
 	
 	/**
 	 * Used for sorting a priority queue, with the smallest scheduled time coming out first.
+         * @param other
 	 */
 	@Override
-	public int compareTo(SimulationEvent o) {
-            if(this.mScheduledTime==o.mScheduledTime){
-                return Integer.compare(order, o.order);
+	public int compareTo(SimulationEvent other) {
+            if(this.mScheduledTime==other.mScheduledTime){
+                return Integer.compare(priority, other.priority);
             }
-		return Long.compare(mScheduledTime, o.mScheduledTime);
+            else{
+		return Long.compare(mScheduledTime, other.mScheduledTime);
+            }
 	}
 	
 	@Override
