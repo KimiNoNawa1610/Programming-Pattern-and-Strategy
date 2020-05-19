@@ -164,8 +164,8 @@ public class Simulation {
                 sim.addPassenger(pass4);
                 sim.addPassenger(pass5);
                 sim.addPassenger(pass6);
-                //sim.addPassenger(pass7);
-                //sim.addPassenger(pass8);
+                sim.addPassenger(pass7);
+                sim.addPassenger(pass8);
                 sim.startSimulation(s);
                 
 	}
