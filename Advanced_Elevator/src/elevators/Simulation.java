@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Scanner;
+import logging.Logger;
 import logging.StandardOutLogger;
 import passengers.*;
 
@@ -69,11 +70,15 @@ public class Simulation {
 	
 	public void startSimulation(Scanner input) {
                 StandardOutLogger singleton=new StandardOutLogger(this);
+                Logger.setInstance(singleton);
                 singleton.logString("Please enter your building floors number");
                 int floorcount=input.nextInt();
                 singleton.logString("Please enter your elevator number");
                 int ele=input.nextInt();
 		mBuilding = new Building(floorcount, ele, this);
+                for(PassengerFactory i:passengers){
+                    singleton.logString(i.factoryName()+", weight "+i.factoryWeight());
+                }
 		SpawnPassengerEvent ev = new SpawnPassengerEvent(0, mBuilding);
 		scheduleEvent(ev);
 		
@@ -83,7 +88,7 @@ public class Simulation {
 		boolean simulateRealTime = false;
 		// Change the scale below to less than 1 to speed up the "real time".
 		double realTimeScale = 1.0;
-		
+		singleton.logString(" ");
 		// TODO: the simulation currently stops at 200s. Instead, ask the user how long they want to simulate.
                 singleton.logString("Please Enter your simulation time.");
 		nextSimLength = input.nextInt();
@@ -110,7 +115,8 @@ public class Simulation {
 			
 			mCurrentTime += diffTime;
 			nextEvent.execute(this);
-			singleton.logEvent(nextEvent);
+                        singleton.logEvent(nextEvent);
+			
                         
 		}
 		
@@ -131,6 +137,7 @@ public class Simulation {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		// TODO: ask the user for a seed value and change the line below.
+                
                 System.out.println("Please enter your seed number.");
                 int seed=s.nextInt();
                 
@@ -145,6 +152,10 @@ public class Simulation {
                 Stoner pass5=new Stoner();
           
                 Jerk pass6=new Jerk();
+                
+                joyrider pass7=new joyrider();
+                
+                prankster pass8=new prankster();
          
 		Simulation sim = new Simulation(new Random(seed));
                 sim.addPassenger(pass1);
@@ -153,6 +164,8 @@ public class Simulation {
                 sim.addPassenger(pass4);
                 sim.addPassenger(pass5);
                 sim.addPassenger(pass6);
+                //sim.addPassenger(pass7);
+                //sim.addPassenger(pass8);
                 sim.startSimulation(s);
                 
 	}
