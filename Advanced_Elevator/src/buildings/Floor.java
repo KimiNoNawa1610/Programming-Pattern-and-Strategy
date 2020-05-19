@@ -129,7 +129,7 @@ public class Floor implements ElevatorObserver {
         public ArrayList<String> getShortPassenger(){
             ArrayList<String> output= new ArrayList<>();
             for (Passenger i:mPassengers){
-                output.add(i.getShortName()+i.getId());
+                output.add(i.getShortName()+i.getId()+"->"+i.getTravel().getDestination());
             }
             return output;
         }
