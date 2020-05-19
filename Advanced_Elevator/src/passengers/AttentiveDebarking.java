@@ -6,6 +6,7 @@
 package passengers;
 
 import elevators.Elevator;
+import logging.Logger;
 import logging.StandardOutLogger;
 
 /**
@@ -13,6 +14,7 @@ import logging.StandardOutLogger;
  * @author votha
  */
 public class AttentiveDebarking implements DebarkingStrategy{
+    public AttentiveDebarking(){}
 
     @Override
     public boolean willLeaveElevator(Passenger passenger, Elevator elevator) {
@@ -25,6 +27,7 @@ public class AttentiveDebarking implements DebarkingStrategy{
     @Override
     public void departedElevator(Passenger passenger, Elevator elevator) {
         StandardOutLogger log=new StandardOutLogger(elevator.getBuilding().getSimulation());
+        Logger.setInstance(log);
         log.logString(elevator.getBuilding().getSimulation().getTime()+"s: "+passenger.getName()
                     +" "+passenger.getId()+" debarked at their destination "+elevator.getCurrentFloor().getNumber());
         passenger.getTravel().scheduleNextDestination(passenger, elevator.getCurrentFloor());
