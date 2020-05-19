@@ -16,6 +16,7 @@ public class ElevatorStateEvent extends SimulationEvent {
 		super(scheduledTime);
 		mNewState = newState;
 		mElevator = elevator;
+                this.setPriority(2);
 	}
 	@Override
 	public void execute(Simulation sim) {
