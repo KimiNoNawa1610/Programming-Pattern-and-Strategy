@@ -10,6 +10,7 @@ import passengers.Passenger;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import logging.Logger;
 import logging.StandardOutLogger;
 
 public class Elevator implements FloorObserver {
@@ -88,33 +89,8 @@ public class Elevator implements FloorObserver {
 	public void addPassenger(Passenger passenger) {
 		// TODO: add the passenger's destination to the set of requested floors.
                 StandardOutLogger log=new StandardOutLogger(this.getBuilding().getSimulation());
+                Logger.setInstance(log);
 		mPassengers.add(passenger);
-                RequestedFloor[passenger.getTravel().getDestination()-1]=true;
-                if(passenger.getEmbarking().toString().equals("clumsily") &&
-                        passenger.getTravel().getDestination()>this.getCurrentFloor().getNumber()){
-                    log.logString(this.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
-                            passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+" and "
-                            +(passenger.getTravel().getDestination()-1)+" on elevator "+this.getNumber());
-                }
-                else if(passenger.getEmbarking().toString().equals("clumsily") &&
-                        passenger.getTravel().getDestination()<this.getCurrentFloor().getNumber()){
-                    log.logString(this.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
-                            passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+" and "
-                            +(passenger.getTravel().getDestination()+1)+" on elevator "+this.getNumber());
-                    
-                }
-                else if(passenger.getEmbarking().toString().equals("Disruptively")){
-                    log.logString(this.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
-                            passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+
-                            " and everything above it on elevator "+this.getNumber());
-                }
-                else{
-                    log.logString(this.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
-                            passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+
-                            " on elevator "+this.getNumber());
-                }
-                
-                
 	}
 	
 	public void removePassenger(Passenger passenger) {
