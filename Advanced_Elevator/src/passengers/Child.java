@@ -13,6 +13,11 @@ import java.util.Random;
  * @author votha
  */
 public class Child implements PassengerFactory{
+    private int weight=3;
+    
+    public void setWeight(int num){
+        weight=num;
+    }
 
     @Override
     public String factoryName() {
@@ -26,7 +31,7 @@ public class Child implements PassengerFactory{
 
     @Override
     public int factoryWeight() {
-        return 3;
+        return weight;
     }
 
     @Override
