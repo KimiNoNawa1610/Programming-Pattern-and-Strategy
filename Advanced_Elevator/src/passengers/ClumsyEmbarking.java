@@ -6,6 +6,8 @@
 package passengers;
 
 import elevators.Elevator;
+import logging.Logger;
+import logging.StandardOutLogger;
 
 /**
  *
@@ -16,12 +18,24 @@ public class ClumsyEmbarking implements EmbarkingStrategy{
 
     @Override
     public void enteredElevator(Passenger passenger, Elevator elevator) {
+        StandardOutLogger log=new StandardOutLogger(elevator.getBuilding().getSimulation());
+        Logger.setInstance(log);
         elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getTravel().getDestination()));
         if(passenger.getTravel().getDestination()>elevator.getCurrentFloor().getNumber()){
             elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getTravel().getDestination()-1));
+            log.logString(elevator.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
+                            
+                    passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+" and "
+                            
+                    +(passenger.getTravel().getDestination()-1)+" on elevator "+elevator.getNumber());
         }
         else if(passenger.getTravel().getDestination()<elevator.getCurrentFloor().getNumber()){
             elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getTravel().getDestination()+1));
+            log.logString(elevator.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
+                            
+                    passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+" and "
+                            
+                    +(passenger.getTravel().getDestination()+1)+" on elevator "+elevator.getNumber());
             
         }
         
