@@ -6,6 +6,8 @@
 package passengers;
 
 import elevators.Elevator;
+import logging.Logger;
+import logging.StandardOutLogger;
 
 /**
  *
@@ -20,11 +22,19 @@ public class AwkwardBoarding implements BoardingStrategy{
 
     @Override
     public boolean willBoardElevator(Passenger passenger, Elevator elevator) {
-        boolean result= Threshold>elevator.getPassengerCount();
-        if(result!=true){
-            Threshold*=2;
+        
+        if((Threshold>=elevator.getPassengerCount())==true){
+            return true;
         }
-        return result;
+        else if((Threshold>=elevator.getPassengerCount())!=true){
+            Threshold+=2;
+            StandardOutLogger singleton=new StandardOutLogger(elevator.getBuilding().getSimulation());
+            Logger.setInstance(singleton);
+            singleton.logString(elevator.getBuilding().getSimulation().getTime()+"s: "+passenger.getName()+" "+
+                    passenger.getId()+" was to awkward to board the elevator "+elevator.getNumber()+", now has threshold "+Threshold);
+            return false;
+        }
+        return false;
         
     }
     
