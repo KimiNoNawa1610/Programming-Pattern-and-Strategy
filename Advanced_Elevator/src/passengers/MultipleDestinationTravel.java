@@ -33,12 +33,20 @@ public class MultipleDestinationTravel implements TravelStrategy{
 
     @Override
     public void scheduleNextDestination(Passenger passenger, Floor currentFloor) {
-        this.destination.remove(0);
-        Simulation s=currentFloor.getBuilding().getSimulation();
-        PassengerNextDestinationEvent ev=new PassengerNextDestinationEvent(s.currentTime()+this.schedule.get(0),
+        if(destination.isEmpty()==false){
+        
+            this.destination.remove(0);
+        
+            Simulation s=currentFloor.getBuilding().getSimulation();
+        
+            PassengerNextDestinationEvent ev=new PassengerNextDestinationEvent(s.currentTime()+this.schedule.get(0),
+                    
                     passenger,currentFloor);
-        this.schedule.remove(0);
-        s.scheduleEvent(ev);
+        
+            this.schedule.remove(0);
+        
+            s.scheduleEvent(ev);
+    }
     }
     
 }
