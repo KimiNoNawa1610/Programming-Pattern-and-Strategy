@@ -86,7 +86,6 @@ public class Passenger implements FloorObserver, ElevatorObserver{
 		// This is a sanity check. A Passenger should never be observing a Floor they are not waiting on.
 		if (floor.getWaitingPassengers().contains(this) && mCurrentState == PassengerState.WAITING_ON_FLOOR) {
 			Elevator.Direction elevatorDirection = elevator.getCurrentDirection();
-                        floor.clearDirection(elevatorDirection);
                         if(elevatorDirection!=null){
                             switch (elevatorDirection) {
                         
@@ -105,7 +104,7 @@ public class Passenger implements FloorObserver, ElevatorObserver{
                         
                                 case MOVING_DOWN:
                                     if(this.getTravel().getDestination()<elevator.getCurrentFloor().getNumber()){
-                                
+                                        
                                         elevator.addObserver(this);
                             
                                     }
@@ -161,13 +160,16 @@ public class Passenger implements FloorObserver, ElevatorObserver{
 		// from the floor, and enter the elevator.
 		else if (mCurrentState == PassengerState.WAITING_ON_FLOOR) {
                     if(this.Boarding.willBoardElevator(this, elevator)==true){
-                        if(!elevator.getPassenger().contains(this)){
-                            elevator.addPassenger(this);
-                            mCurrentState = PassengerState.ON_ELEVATOR;
-                        }
+                        elevator.addPassenger(this);
+                        mCurrentState = PassengerState.ON_ELEVATOR;
                         this.Embark.enteredElevator(this, elevator);
                         elevator.getCurrentFloor().removeWaitingPassenger(this);
                         elevator.getCurrentFloor().removeObserver(this);
+                        for(Elevator m:elevator.getBuilding().getElevators()){
+                            if(!m.equals(elevator)){
+                                m.removeObserver(this);
+                            }
+                        }
                     }
                     else{
                         elevator.removeObserver(this);
