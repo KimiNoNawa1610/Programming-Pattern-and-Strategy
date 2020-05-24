@@ -6,6 +6,8 @@
 package passengers;
 
 import elevators.Elevator;
+import logging.Logger;
+import logging.StandardOutLogger;
 
 /**
  *
@@ -15,7 +17,14 @@ public class ResponsibleEmbarking implements EmbarkingStrategy{
 
     @Override
     public void enteredElevator(Passenger passenger, Elevator elevator) {
+        StandardOutLogger log =new StandardOutLogger(elevator.getBuilding().getSimulation());
+        Logger.setInstance(log);
         elevator.requestFloor(elevator.getBuilding().getFloor(passenger.getTravel().getDestination()));
+        log.logString(elevator.getBuilding().getSimulation().getTime()+"s: "+passenger.toString()+
+                            
+                passenger.getEmbarking().toString()+" request floor "+passenger.getTravel().getDestination()+
+                            
+                " on elevator "+elevator.getNumber());
     }
     @Override
     public String toString(){
