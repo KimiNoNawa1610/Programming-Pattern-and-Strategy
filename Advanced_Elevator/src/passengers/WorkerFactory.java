@@ -13,6 +13,11 @@ import java.util.*;
  * @author votha
  */
 public class WorkerFactory implements PassengerFactory{
+    private int weight=2;
+    
+    public void setWeight(int num){
+        weight=num;
+    }
 
     @Override
     public String factoryName() {
@@ -26,7 +31,7 @@ public class WorkerFactory implements PassengerFactory{
 
     @Override
     public int factoryWeight() {
-        return 2;
+        return weight;
     }
 
     @Override
