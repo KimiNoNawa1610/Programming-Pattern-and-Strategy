@@ -1,3 +1,5 @@
-# CECS277-California State University of Long Beach
+# Object-oriented programing
 
-Object-oriented programing
+# include:Factory, Strategy, interface, and Decorator Pattern
+
+
